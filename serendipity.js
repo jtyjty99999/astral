@@ -203,3 +203,40 @@ function getUrlParam(name){//Another way upstair
 	return   null;      
      }     
 //getUrlParam("type") //operation
+
+// 元素ID， 商品结束时间 endtime, 当前时间 btime
+function time(elem,endtime,btime) {
+	this.elem=elem;
+	this.endtime=new Date(endtime).getTime();
+	this.getId=document.getElementById(this.elem);
+	this.btime=new Date(btime).getTime();
+	this.reg=/\s+/g;
+}
+time.prototype.SetTime=function(){
+	var _this=this;
+	setInterval(function(){
+		_this.DownTime();
+	},1000)
+}
+time.prototype.DownTime= function() {
+	var leave=parseInt((this.endtime-this.btime)/1000);
+	this.btime+=1000;
+	var timeBoole=true;
+	var day,hour,mints,second;
+	if(leave<=0) {
+		timeBoole=false;
+	}
+	if(timeBoole==true) {
+		day=parseInt(leave/3600/24)+"天";
+		hour=parseInt((leave/3600)%24)+"小时 ";
+		mints=parseInt((leave/60)%60)+"分 ";
+		second=parseInt(leave%60)+"秒 ";
+	} else {
+		day=0+"天";
+		hour=0+"小时 ";
+		mints=0+"分 ";
+		second=0+"秒 ";
+	}
+	TiemText=day+hour+mints+second;
+	this.getId.innerHTML=TiemText.replace(this.reg, "");
+}
