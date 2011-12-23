@@ -188,15 +188,48 @@ var UI = {
 };  
 
 
+/**one by one type in **/
+function typein(time,string1,objectid){
+    var textarea = document.getElementById(objectid)
+    var i = 1;
+    var time,string1;
+    var trans = string1.toString()
+    var xunhuan = setInterval(change, time);
+    function change(){
+    textarea.value=trans.slice(0,i);  //这里使用value
+    i = i+1;
+    if(i==trans.length){
+    clearInterval(xunhuan)};
+    }
+    }
 
+/*-------------------------- +
+limit max length of a string and change extra to ...
+ +-------------------------- */
 
+function ellipsis (limit){
+var _limit=limit || 10;
+var len=this.length;
+var str="";
+if(len>limit){
+str=this.substring(0,limit);
+}
+str+="...";
+return str;
 
+} 
 
-
-
-
-
-
+/*-------------------------- +
+join in 2 strings more effiency
+ +-------------------------- */
+ 
+function joint(string1,string2){
+var temp=[],i=0;
+var string1, string2 
+     temp[i++]= string1;     temp[i++]=string2 
+     var text=temp.join("");
+return text
+}
 /*-------------------------- +
   get the number of a field(type/id)
  +-------------------------- */
