@@ -135,6 +135,18 @@ document.onkeydown=function(e){
 /*                                                        UI                                          */
 
 /**
+get css attribute (from sanshuiqing)
+ */ 
+function getCss(elem, css){
+	if (window.getComputedStyle) {
+		return window.getComputedStyle(elem, null)[css];
+	}else if (elem.currentStyle) {
+		return elem.currentStyle[css];
+	}else {
+		return elem.style[css];
+	}
+}
+/**
 get an element the absolute position of the window 
  */ 
 function getPos(obj)
