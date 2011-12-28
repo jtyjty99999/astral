@@ -7,6 +7,15 @@ function allStart(){
 /*                                      Dom operation                             */
 
 /*-------------------------- +
+  if not ie
+ +-------------------------- */
+function notie(){
+	if(-[1,]){
+		alert('这货不是ie')	
+	}
+} 
+ 
+/*-------------------------- +
   selector
  +-------------------------- */
 function $id(id){
@@ -245,6 +254,11 @@ var string1, string2
      var text=temp.join("");
 return text
 }
+/*-------------------------- +
+exchange
+ +-------------------------- */
+function change(a,b){}a= [b, b=a][0]}
+
 /*-------------------------- +
   get the number of a field(type/id)
  +-------------------------- */
