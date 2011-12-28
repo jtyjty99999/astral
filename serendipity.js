@@ -257,8 +257,20 @@ return text
 /*-------------------------- +
 exchange
  +-------------------------- */
-function change(a,b){}a= [b, b=a][0]}
-
+function change(a,b){
+	a= [b, b=a][0]
+	
+}
+/*-------------------------- +
+get a random number from a range
+ +-------------------------- */
+ function GetRandomNum(Min,Max)
+{   
+var Range = Max - Min;   
+var Rand = Math.random();   
+return(Min + Math.round(Rand * Range));   
+}   
+ 
 /*-------------------------- +
   get the number of a field(type/id)
  +-------------------------- */
