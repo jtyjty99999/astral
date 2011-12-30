@@ -172,6 +172,27 @@ function getCss(elem, css){
 }
 
 /**
+has css attribute (from Mr.Think)
+ */ 
+ 
+function hasClass(element, className){
+	var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+	return element.className.match(reg);
+}
+/**
+remove css attribute (from Mr.Think)
+ */ 
+function removeClass(element, className){
+	if (hasClass(element, className)) {
+		var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+		element.className = element.className.replace(reg, ' ');
+	}
+}
+
+
+
+
+/**
 setOpacity
  */ 
  
