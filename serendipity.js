@@ -172,6 +172,33 @@ function getCss(elem, css){
 }
 
 /**
+get css attribute (from Ferris)
+ */ 
+function css(obj, attr, value)
+{
+	switch (arguments.length)
+	{
+		case 2:
+			if(typeof arguments[1] == "object")
+			{	//二个参数, 如果第二个参数是对象, 批量设置属性
+				for (var i in attr)obj.style[i] = attr[i]
+			}
+			else
+			{	//二个参数, 如果第二个参数是字符串, 读取属性值
+				return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj, null)[attr]
+			}
+			break;
+		case 3:
+			//三个参数, 单一设置属性
+			obj.style[attr] = value;
+			break;
+		default:
+			alert("参数错误！")
+	}
+}
+
+
+/**
 has css attribute (from Mr.Think)
  */ 
  
