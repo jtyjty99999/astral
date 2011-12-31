@@ -302,6 +302,20 @@ var UI = {
     }  
 };  
 
+/**crashCheck **/
+
+function crashCheck(elem1,elem2){
+        x1=elem1.offsetLeft;  
+  y1=elem1.offsetTop;  
+        x2=elem2.offsetLeft;  
+  y2=elem2.offsetTop;  
+        w1=elem1.offsetWidth;   
+        h1=elem1.offsetHeight;   
+        w2=elem2.offsetWidth;   
+        h2=elem2.offsetHeight;   
+        return ((x1-x2<=0)&&(x2-x1<w1)&&(y1-y2<=0)&&(y2-y1<h1)||(x1-x2<=0)&&(x2-x1<w1)&&(y1-y2>0)&&(y1-y2<h2)||(x1-x2>0)&&(x1-x2<w2)&&(y1-y2<=0)&&(y2-y1<h1)||(x1-x2>0)&&(x1-x2<w2)&&(y1-y2>0)&&(y1-y2<h2));   
+}
+
 
 /**one by one type in **/
 function typein(time,string1,objectid){
