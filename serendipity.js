@@ -352,6 +352,19 @@ function change(a,b){
 	a= [b, b=a][0]
 	
 }
+
+/*-------------------------- +
+get a random Array from an Array
+ +-------------------------- */
+ 
+ function resortArray(arr){
+	var newArr = [];
+	do{
+		newArr[newArr.length] = arr.splice(parseInt(Math.random() * arr.length), 1);
+	}while(arr.length);
+	return newArr;
+}
+
 /*-------------------------- +
 get a random number from a range
  +-------------------------- */
