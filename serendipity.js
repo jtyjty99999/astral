@@ -307,6 +307,22 @@ function getPos(obj)
 		}
 		
 /**
+more accurate get a position
+ */		
+ var getCoords = function(el){
+    var box = el.getBoundingClientRect(),
+    doc = el.ownerDocument,
+    body = doc.body,
+    html = doc.documentElement,
+    clientTop = html.clientTop || body.clientTop || 0,
+    clientLeft = html.clientLeft || body.clientLeft || 0,
+    top  = box.top  + (self.pageYOffset || html.scrollTop  ||  body.scrollTop ) - clientTop,
+    left = box.left + (self.pageXOffset || html.scrollLeft ||  body.scrollLeft) - clientLeft
+    return { 'top': top, 'left': left };
+  };
+		
+		
+/**
 compatibility type of height
  */ 
 var UI = {  
