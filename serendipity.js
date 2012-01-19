@@ -18,8 +18,8 @@ function notie(){
 /*-------------------------- +
   selector
  +-------------------------- */
-function $id(id){
-	return document.getElementById(id)
+$ = function(id){
+	return typeof id == "string"?document.getElementById(id):id
 }
 function $tag(tag){
 	return document.getElementsByTagName(tag)
