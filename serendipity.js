@@ -421,6 +421,25 @@ get a random Array from an Array
 	}while(arr.length);
 	return newArr;
 }
+/*-------------------------- +
+ bubble sort
+ +-------------------------- */
+
+function bubbleSort(ary) {
+    var i, j, temp, len = ary.length;
+     
+    for(var i=1; i<len; i++) {
+        for(j=len-1; j>=i; j--) {
+            temp = ary[j];
+            if(temp < ary[j-1]) {
+                ary[j] = ary[j-1];
+                ary[j-1] = temp;
+            }
+        }
+    }
+     
+    return ary;
+}
 
 /*-------------------------- +
 get a random number from a range
