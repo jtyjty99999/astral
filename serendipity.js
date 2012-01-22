@@ -18,8 +18,8 @@ function notie(){
 /*-------------------------- +
   selector
  +-------------------------- */
-$ = function(id){
-	return typeof id == "string"?document.getElementById(id):id
+function $id(id){
+	return document.getElementById(id)
 }
 function $tag(tag){
 	return document.getElementsByTagName(tag)
@@ -420,25 +420,6 @@ get a random Array from an Array
 		newArr[newArr.length] = arr.splice(parseInt(Math.random() * arr.length), 1);
 	}while(arr.length);
 	return newArr;
-}
-/*-------------------------- +
- bubble sort
- +-------------------------- */
-
-function bubbleSort(ary) {
-    var i, j, temp, len = ary.length;
-     
-    for(var i=1; i<len; i++) {
-        for(j=len-1; j>=i; j--) {
-            temp = ary[j];
-            if(temp < ary[j-1]) {
-                ary[j] = ary[j-1];
-                ary[j-1] = temp;
-            }
-        }
-    }
-     
-    return ary;
 }
 
 /*-------------------------- +
