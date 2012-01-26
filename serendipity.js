@@ -65,11 +65,9 @@ function trim(str) { //remove both sides space
 }
 function ltrim(str) { //remove lefr space
 	return str.replace(/(^\s*)/g, "");
-	　　
 }
 function rtrim(str) { //remove right space
-	　　return str.replace(/(\s*$)/g, "");
-	　　
+	return str.replace(/(\s*$)/g, "");　
 }
 　　
 /*-------------------------- +
@@ -279,198 +277,198 @@ function fadeOut(elem, speed, opacity) {
 		}
 	})();
 }
-	/**
-	get an element the absolute position of the window
-	 */
-	
-	function getPos(obj) {
-		var left = 0;
-		var top = 0;
-		while (obj.offsetParent) {
-			left += obj.offsetLeft;
-			top += obj.offsetTop;
-			
-			obj = obj.offsetParent;
-		}
+/**
+get an element the absolute position of the window
+ */
+
+function getPos(obj) {
+	var left = 0;
+	var top = 0;
+	while (obj.offsetParent) {
+		left += obj.offsetLeft;
+		top += obj.offsetTop;
+		
+		obj = obj.offsetParent;
+	}
+	return {
+		x : left,
+		y : top
+	};
+}
+
+/**
+more accurate get a position
+ */
+var getCoords = function (el) {
+	var box = el.getBoundingClientRect(),
+	doc = el.ownerDocument,
+	body = doc.body,
+	html = doc.documentElement,
+	clientTop = html.clientTop || body.clientTop || 0,
+	clientLeft = html.clientLeft || body.clientLeft || 0,
+	top = box.top + (self.pageYOffset || html.scrollTop || body.scrollTop) - clientTop,
+	left = box.left + (self.pageXOffset || html.scrollLeft || body.scrollLeft) - clientLeft
 		return {
-			x : left,
-			y : top
+		'top' : top,
+		'left' : left
+	};
+};
+
+/**
+compatibility type of height
+ */
+var UI = {
+	wholeHeight : function () {
+		return document.body.scrollHeight || document.documentElement.scrollHeight
+	},
+	windowHeight : function () {
+		var a = document.documentElement;
+		return self.innerHeight || a && a.clientHeight || document.body.clientHeight
+	},
+	scrollY : function (a) {
+		var b = document.documentElement;
+		if (a) {
+			var c = a.parentNode,
+			e = a.scrollTop || 0;
+			if (a == b)
+				e = UI.scrollY();
+			return c ? e + UI.scrollY(c) : e
+		}
+		return self.pageYOffset || b && b.scrollTop || document.body.scrollTop
+	}
+};
+
+/**crashCheck **/
+
+function crashCheck(elem1, elem2) {
+	x1 = elem1.offsetLeft;
+	y1 = elem1.offsetTop;
+	x2 = elem2.offsetLeft;
+	y2 = elem2.offsetTop;
+	w1 = elem1.offsetWidth;
+	h1 = elem1.offsetHeight;
+	w2 = elem2.offsetWidth;
+	h2 = elem2.offsetHeight;
+	return ((x1 - x2 <= 0) && (x2 - x1 < w1) && (y1 - y2 <= 0) && (y2 - y1 < h1) || (x1 - x2 <= 0) && (x2 - x1 < w1) && (y1 - y2 > 0) && (y1 - y2 < h2) || (x1 - x2 > 0) && (x1 - x2 < w2) && (y1 - y2 <= 0) && (y2 - y1 < h1) || (x1 - x2 > 0) && (x1 - x2 < w2) && (y1 - y2 > 0) && (y1 - y2 < h2));
+}
+
+/**one by one type in **/
+function typein(time, string1, objectid) {
+	var textarea = document.getElementById(objectid)
+		var i = 1;
+	var time,
+	string1;
+	var trans = string1.toString()
+		var xunhuan = setInterval(change, time);
+	function change() {
+		textarea.value = trans.slice(0, i); //这里使用value
+		i = i + 1;
+		if (i == trans.length) {
+			clearInterval(xunhuan)
 		};
 	}
-	
-	/**
-	more accurate get a position
-	 */
-	var getCoords = function (el) {
-		var box = el.getBoundingClientRect(),
-		doc = el.ownerDocument,
-		body = doc.body,
-		html = doc.documentElement,
-		clientTop = html.clientTop || body.clientTop || 0,
-		clientLeft = html.clientLeft || body.clientLeft || 0,
-		top = box.top + (self.pageYOffset || html.scrollTop || body.scrollTop) - clientTop,
-		left = box.left + (self.pageXOffset || html.scrollLeft || body.scrollLeft) - clientLeft
-			return {
-			'top' : top,
-			'left' : left
-		};
-	};
-	
-	/**
-	compatibility type of height
-	 */
-	var UI = {
-		wholeHeight : function () {
-			return document.body.scrollHeight || document.documentElement.scrollHeight
-		},
-		windowHeight : function () {
-			var a = document.documentElement;
-			return self.innerHeight || a && a.clientHeight || document.body.clientHeight
-		},
-		scrollY : function (a) {
-			var b = document.documentElement;
-			if (a) {
-				var c = a.parentNode,
-				e = a.scrollTop || 0;
-				if (a == b)
-					e = UI.scrollY();
-				return c ? e + UI.scrollY(c) : e
-			}
-			return self.pageYOffset || b && b.scrollTop || document.body.scrollTop
-		}
-	};
-	
-	/**crashCheck **/
-	
-	function crashCheck(elem1, elem2) {
-		x1 = elem1.offsetLeft;
-		y1 = elem1.offsetTop;
-		x2 = elem2.offsetLeft;
-		y2 = elem2.offsetTop;
-		w1 = elem1.offsetWidth;
-		h1 = elem1.offsetHeight;
-		w2 = elem2.offsetWidth;
-		h2 = elem2.offsetHeight;
-		return ((x1 - x2 <= 0) && (x2 - x1 < w1) && (y1 - y2 <= 0) && (y2 - y1 < h1) || (x1 - x2 <= 0) && (x2 - x1 < w1) && (y1 - y2 > 0) && (y1 - y2 < h2) || (x1 - x2 > 0) && (x1 - x2 < w2) && (y1 - y2 <= 0) && (y2 - y1 < h1) || (x1 - x2 > 0) && (x1 - x2 < w2) && (y1 - y2 > 0) && (y1 - y2 < h2));
+}
+
+/*-------------------------- +
+limit max length of a string and change extra to ...
++-------------------------- */
+
+function ellipsis(limit) {
+	var _limit = limit || 10;
+	var len = this.length;
+	var str = "";
+	if (len > limit) {
+		str = this.substring(0, limit);
 	}
+	str += "...";
+	return str;
 	
-	/**one by one type in **/
-	function typein(time, string1, objectid) {
-		var textarea = document.getElementById(objectid)
-			var i = 1;
-		var time,
-		string1;
-		var trans = string1.toString()
-			var xunhuan = setInterval(change, time);
-		function change() {
-			textarea.value = trans.slice(0, i); //这里使用value
-			i = i + 1;
-			if (i == trans.length) {
-				clearInterval(xunhuan)
-			};
-		}
-	}
+}
+
+/*-------------------------- +
+join in 2 strings more effiency
++-------------------------- */
+
+function joint(string1, string2) {
+	var temp = [],
+	i = 0;
+	var string1,
+	string2
+	temp[i++] = string1;
+	temp[i++] = string2
+		var text = temp.join("");
+	return text
+}
+/*-------------------------- +
+exchange
++-------------------------- */
+function change(a, b) {
+	a = [b, b = a][0]
 	
-	/*-------------------------- +
-	limit max length of a string and change extra to ...
-	+-------------------------- */
+}
+
+/*-------------------------- +
+get a random Array from an Array
++-------------------------- */
+
+function resortArray(arr) {
+	var newArr = [];
+	do {
+		newArr[newArr.length] = arr.splice(parseInt(Math.random() * arr.length), 1);
+	} while (arr.length);
+	return newArr;
+}
+/*-------------------------- +
+bubble sort
++-------------------------- */
+
+function bubbleSort(ary) {
+	var i,
+	j,
+	temp,
+	len = ary.length;
 	
-	function ellipsis(limit) {
-		var _limit = limit || 10;
-		var len = this.length;
-		var str = "";
-		if (len > limit) {
-			str = this.substring(0, limit);
-		}
-		str += "...";
-		return str;
-		
-	}
-	
-	/*-------------------------- +
-	join in 2 strings more effiency
-	+-------------------------- */
-	
-	function joint(string1, string2) {
-		var temp = [],
-		i = 0;
-		var string1,
-		string2
-		temp[i++] = string1;
-		temp[i++] = string2
-			var text = temp.join("");
-		return text
-	}
-	/*-------------------------- +
-	exchange
-	+-------------------------- */
-	function change(a, b) {
-		a = [b, b = a][0]
-		
-	}
-	
-	/*-------------------------- +
-	get a random Array from an Array
-	+-------------------------- */
-	
-	function resortArray(arr) {
-		var newArr = [];
-		do {
-			newArr[newArr.length] = arr.splice(parseInt(Math.random() * arr.length), 1);
-		} while (arr.length);
-		return newArr;
-	}
-	/*-------------------------- +
-	bubble sort
-	+-------------------------- */
-	
-	function bubbleSort(ary) {
-		var i,
-		j,
-		temp,
-		len = ary.length;
-		
-		for (var i = 1; i < len; i++) {
-			for (j = len - 1; j >= i; j--) {
-				temp = ary[j];
-				if (temp < ary[j - 1]) {
-					ary[j] = ary[j - 1];
-					ary[j - 1] = temp;
-				}
+	for (var i = 1; i < len; i++) {
+		for (j = len - 1; j >= i; j--) {
+			temp = ary[j];
+			if (temp < ary[j - 1]) {
+				ary[j] = ary[j - 1];
+				ary[j - 1] = temp;
 			}
 		}
-		
-		return ary;
 	}
 	
-	/*-------------------------- +
-	get a random number from a range
-	+-------------------------- */
-	function GetRandomNum(Min, Max) {
-		var Range = Max - Min;
-		var Rand = Math.random();
-		return (Min + Math.round(Rand * Range));
-	}
-	
-	/*-------------------------- +
-	get the number of a field(type/id)
-	+-------------------------- */
-	function getUrlPara(paraName) {
-		var sUrl = location.href;
-		var sReg = "(?:\\?|&){1}" + paraName + "=([^&]*)"
-			var re = new RegExp(sReg, "gi");
-		re.exec(sUrl);
-		return RegExp.$1;
-	}
-	function getUrlParam(name) { //Another way upstair
-		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-		var r = window.location.search.substr(1).match(reg);
-		if (r != null)
-			return unescape(r[2]);
-		return null;
-	}
-	//getUrlParam("type") //operation
-	window.jty = $
+	return ary;
+}
+
+/*-------------------------- +
+get a random number from a range
++-------------------------- */
+function GetRandomNum(Min, Max) {
+	var Range = Max - Min;
+	var Rand = Math.random();
+	return (Min + Math.round(Rand * Range));
+}
+
+/*-------------------------- +
+get the number of a field(type/id)
++-------------------------- */
+function getUrlPara(paraName) {
+	var sUrl = location.href;
+	var sReg = "(?:\\?|&){1}" + paraName + "=([^&]*)"
+		var re = new RegExp(sReg, "gi");
+	re.exec(sUrl);
+	return RegExp.$1;
+}
+function getUrlParam(name) { //Another way upstair
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null)
+		return unescape(r[2]);
+	return null;
+}
+//getUrlParam("type") //operation
+window.jty = $
 })(window.jty, window, document);
 
 
