@@ -1,6 +1,6 @@
 /**
 作者：jty
-时间：2011年1月1日
+时间：2012年1月1日
 网址：http://chaosgeeker.com
 电子邮箱：jtyjty99999@126.com
  */
@@ -55,7 +55,7 @@
 		return document.getElementById(id).contentDocument || document.frames[id].document;
 	}
 	
-	/*                                               validator and transform                          */
+	/*                                              useful function                         */
 	
 	/*-------------------------- +
 	remove space
@@ -70,7 +70,19 @@
 		return str.replace(/(\s*$)/g, "");
 		　
 	}
-	　　
+	/*-------------------------- +
+	getTime
+	+-------------------------- */
+	function getDateTime() {
+		var now = new Date();
+		var year = now.getYear();
+		var month = now.getMonth() + 1;
+		var day = now.getDate();
+		var hour = now.getHours();
+		var minute = now.getMinutes();
+		var second = now.getSeconds();
+		return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
+	}
 	/*-------------------------- +
 	check all checked
 	+-------------------------- */
@@ -92,6 +104,32 @@
 	//HtmlDecode(d) // "<script>alert("sssssssssssss")</script>"
 	
 	/*                                                AJAX                     */
+	
+	/*-------------------------- +
+	changeinnerHTML Ajax package
+	+-------------------------- */	
+	
+	function Ajax(url, obj) {
+		var request = null;
+		if (window.XMLHttpRequest) {
+			request = new XMLHttpRequest();
+		} else if (window.ActiveXObject) {
+			request = new ActiveXObject("Microsoft.XMLHttp");
+		}
+		if (request) {
+			request.open("POST", url, true);
+			request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+			request.setRequestHeader("If-Modified-Since", "0");
+			request.onreadystatechange = function () {
+				if (request.readyState == 4 && request.status == 200) {
+					obj.innerHTML = request.responseText;
+				} else {
+					obj.innerHTML = "Loading....";
+				}
+			}
+			request.send(null);
+		}
+	}
 	
 	/*-------------------------- +
 	load xml doc
@@ -190,6 +228,23 @@
 			alert("参数错误！")
 		}
 	}
+	/**
+	preloadImage 图片预加载
+	 */	
+	function preloadImage() {
+		if (document.images) {
+			var arr = new Array();
+			var asgus = preloadImage.arguments;
+			for (var i = 0; i < asgus.length; i++) {
+				var image = new Image();
+				image.src = asgus[i];
+				arr[i] = image;
+			}
+		}
+	}
+	/**
+	插入样式 
+	 */	
 	function includeStyleElement(styles, styleId) {
 		if (document.getElementById(styleId)) {
 			return
