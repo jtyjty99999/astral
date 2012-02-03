@@ -1,14 +1,9 @@
-/**
-作者：jty
-时间：2012年1月1日
-网址：http://chaosgeeker.com
-电子邮箱：jtyjty99999@126.com
- */
 (
 	function ($, win, doc, undefined) {
 	if (!window.jty) {
 		window['jty'] = {}
 	}
+	var $ = {};
 	/*                                      Dom operation                             */
 	
 	/*-------------------------- +
@@ -21,7 +16,7 @@
 	}
 	
 	/*-------------------------- +
-	/* selector */
+	/* selector 
 	+-------------------------- */
 	$.get = {
 		byId : function (id) {
@@ -101,7 +96,7 @@
 		return t.innerText || t.textContent
 	}
 	//var d =  '&lt;script&gt;alert("sssssssssssss")&lt;/script&gt;'
-	//HtmlDecode(d) // "<script>alert("sssssssssssss")</script>"
+	//HtmlDecode(d) // ["<script>alert("sssssssssssss")</sc>"
 	
 	/*                                                AJAX                     */
 	
@@ -278,7 +273,7 @@
 	add css attribute
 	 */	
 	function addClass(ele, cls) {
-		if (!this.hasClass(ele, cls)
+		if (!this.hasClass(ele, cls))
 			ele.className += " " + cls;
 	}
 
@@ -456,7 +451,9 @@
 			return false
 		};
 	}
-	/**crashCheck **/
+	/**
+	crashCheck 
+	*/
 	
 	function crashCheck(elem1, elem2) {
 		x1 = elem1.offsetLeft;
@@ -469,13 +466,13 @@
 		h2 = elem2.offsetHeight;
 		return ((x1 - x2 <= 0) && (x2 - x1 < w1) && (y1 - y2 <= 0) && (y2 - y1 < h1) || (x1 - x2 <= 0) && (x2 - x1 < w1) && (y1 - y2 > 0) && (y1 - y2 < h2) || (x1 - x2 > 0) && (x1 - x2 < w2) && (y1 - y2 <= 0) && (y2 - y1 < h1) || (x1 - x2 > 0) && (x1 - x2 < w2) && (y1 - y2 > 0) && (y1 - y2 < h2));
 	}
-	
-	/**one by one type in **/
+	/**
+	one by one type in 
+	*/
 	function typein(time, string1, objectid) {
 		var textarea = document.getElementById(objectid)
-			var i = 1;
-		var time,
-		string1;
+		var i = 1;
+		var time,string1;
 		var trans = string1.toString()
 			var xunhuan = setInterval(change, time);
 		function change() {
@@ -585,180 +582,7 @@
 		return null;
 	}
 	//getUrlParam("type") //operation
-	/*-------------------------- +
-	Validator
-	+-------------------------- */
-	
-	//判断是否为空
-	$.check = {
-		isNull : function (str) {
-			if (str == "")
-				return true;
-			var regu = "^[ ]+$";
-			var re = new RegExp(regu);
-			return re.test(str);
-		}
-		//验证时间格式 例如：2007-03-08 12:01:09
-		strDateTime : function (str) {
-			var reg = /^(\d{4})(-)(\d{2})\2(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
-			//var reg = /^([0-9]{4})\-(1[0-2]|0[1-9])\-(3[0-1]|[1-2][0-9]|0[1-9])\ (2[0-3]|[0-1][0-9])\:([0-5][0-9])\:([0-5][0-9])$/;
-			var r = str.match(reg);
-			if (r == null)
-				return false;
-			var d = new Date(r[1], r[3] - 1, r[4], r[5], r[6], r[7]);
-			return (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4] && d.getHours() == r[5] && d.getMinutes() == r[6] && d.getSeconds() == r[7]);
-		}
-		/*检测字母数字下划线*/
-		check_info : function (info) {
-			var reg = /^[a-zA-Z0-9_]+$/;
-			if (info.length < 3 || info.length > 16)
-				return false;
-			return reg.test(info);
-		}
-		//验证是否ip
-		isIP : function (ip) {
-			var reg = /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.(25[0-4]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[1-9])$/;
-			var re = new RegExp(reg);
-			return re.test(ip);
-		}
-		//返回传入参数对应的8位二进制值
-		_checkIput_formatIP : function (ip) {
-			return (ip + 256).toString(2).substring(1); //格式化输出(补零)
-		}
-		//检查子网掩码
-		check_mask : function (maskvalue) {
-			/*有效性校验*/
-			var reg = /^(\d{1,3})(\.\d{1,3}){3}$/;
-			flag = reg.test(maskvalue);
-			if (!flag)
-				return false;
-			/*检查域值*/
-			var IPArray = maskvalue.split(".");
-			var ip1 = parseInt(IPArray[0]);
-			var ip2 = parseInt(IPArray[1]);
-			var ip3 = parseInt(IPArray[2]);
-			var ip4 = parseInt(IPArray[3]);
-			if (ip1 < 0 || ip1 > 255 || ip2 < 0 || ip2 > 255 || ip3 < 0 || ip3 > 255 || ip4 < 0 || ip4 > 255)
-				/*每个域值范围0-255*/
-				return false;
-			/* 检查二进制值是否合法 */
-			//拼接二进制字符串
-			var ip_binary = _checkIput_formatIP(ip1) + _checkIput_formatIP(ip2) + _checkIput_formatIP(ip3) + _checkIput_formatIP(ip4);
-			if (-1 != ip_binary.indexOf("01"))
-				return false;
-			return true;
-		}
-		//检查端口
-		check_port : function (portvalue) {
-			var reg = /^\d{1,5}$/;
-			if (!reg.test(portvalue))
-				return false;
-			if (portvalue < 1 || portvalue > 65535) {
-				//alert("端口范围1~65535");
-				return false;
-			} else
-				return true;
-		}
-		//检测手机号码
-		checkphone : function (str) {
-			var reg = /^1\d{10}$/;
-			if (!(reg.test(str))) {
-				alert("请输入正确的手机号码！");
-				return false;
-			}
-			return true;
-		}
-		/*检测mail*/
-		check_mail : function (mail) {
-			var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
-			return reg.test(mail);
-		}
-		//验证数字
-		isNumber : function (s) {
-			var regu = "^[0-9]+$";
-			var re = new RegExp(regu);
-			if (s.search(re) != -1)
-				return true;
-			else
-				return false;
-		}
-		//验证session是否超时
-		check_session : function () {
-			var key = false;
-			$.ajax({
-				url : "/engine/judgesession",
-				type : "get",
-				async : false,
-				cache : false,
-				success : function (msg) {
-					if (1 == msg)
-						key = true;
-				}
-			});
-			return key;
-		}
-		//验证MAC地址
-		check_mac : function (str) {
-			var pattern = /^([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})$/;
-			return pattern.test(str);
-		}
-		//验证密码
-		check_password : function (str) {
-			//var reg = /(?:(?:[^\u4e00-\u9fa5\d\w]+\d+[\w\W]+[^\u4e00-\u9fa5]*)|(?:[^\u4e00-\u9fa5\d\w]+[\w\W]+\d+[^\u4e00-\u9fa5]*)|(?:\d+[^\u4e00-\u9fa5\d\w]+[\w\W]+[^\u4e00-\u9fa5]*)|(?:\d+[\w\W]+[^\u4e00-\u9fa5\d\w]+[^\u4e00-\u9fa5]*)|(?:[\w\W]+\d+[^\u4e00-\u9fa5\d\w]+[^\u4e00-\u9fa5]*){10,}|(?:[\w\W]+[^\u4e00-\u9fa5\d\w]+\d+[^\u4e00-\u9fa5]*))/;
-			var reg = /^(([a-zA-Z]+)([0-9]+)([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*))|(([a-zA-Z]+)([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*)([0-9]+))|(([0-9]+)([a-zA-Z]+)([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*))|(([0-9]+)([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*)([a-zA-Z]+))|(([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*)([a-zA-Z]+)([0-9]+))|(([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*)([0-9]+)([a-zA-Z]+))$/;
-			if (str.length < 6 || str.length > 16) {
-				alert("密码长度不符合要求");
-				return false;
-			} else {
-				if (!reg.test(str)) {
-					alert("输入的密码太简单，要求至少包含1个数字、1个字母和1个特殊字符");
-					return false;
-				} else
-					return true;
-			}
-		}
-	}
+
 	window.jty = $;
-})(window.jty, window, document);
-
-
-		// 元素ID， 商品结束时间 endtime, 当前时间 btime
-		function time(elem, endtime, btime) {
-			this.elem = elem;
-			this.endtime = new Date(endtime).getTime();
-			this.getId = document.getElementById(this.elem);
-			this.btime = new Date(btime).getTime();
-			this.reg = /\s+/g;
-		}
-		time.prototype.SetTime = function () {
-			var _this = this;
-			setInterval(function () {
-				_this.DownTime();
-			}, 1000)
-		}
-		time.prototype.DownTime = function () {
-			var leave = parseInt((this.endtime - this.btime) / 1000);
-			this.btime += 1000;
-			var timeBoole = true;
-			var day,
-			hour,
-			mints,
-			second;
-			if (leave <= 0) {
-				timeBoole = false;
-			}
-			if (timeBoole == true) {
-				day = parseInt(leave / 3600 / 24) + "天";
-				hour = parseInt((leave / 3600) % 24) + "小时 ";
-				mints = parseInt((leave / 60) % 60) + "分 ";
-				second = parseInt(leave % 60) + "秒 ";
-			} else {
-				day = 0 + "天";
-				hour = 0 + "小时 ";
-				mints = 0 + "分 ";
-				second = 0 + "秒 ";
-			}
-			TiemText = day + hour + mints + second;
-			this.getId.innerHTML = TiemText.replace(this.reg, "");
-		}
-		
+}
+)(window.jty, window, document);
