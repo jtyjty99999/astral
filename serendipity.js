@@ -14,7 +14,15 @@
 			alert('这货不是ie')
 		}
 	}
-	
+	$.getOS = function () {
+		var __Agt = navigator.userAgent.toLowerCase();
+		var __If = /(firefox|netscape|opera).?[\/| ](.)\.([^;\)]+|[^\)]+\))$/.exec(__Agt);
+		if (!__If)
+			__If = /(msie) (.)\.[^;]+;/.exec(__Agt);
+		var _Br = __If[1],
+		_Ver = __If[2];
+		return (_Br + _Ver);
+	}
 	/*-------------------------- +
 	/* selector 
 	+-------------------------- */
@@ -265,14 +273,14 @@
 	/**
 	has css attribute (from Mr.Think)
 	 */
-	function hasClass(element, className) {
+	$.hasClass = function (element, className) {
 		var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
 		return element.className.match(reg);
 	}
 	/**
 	add css attribute
 	 */	
-	function addClass(ele, cls) {
+	$.addClass = function (ele, cls) {
 		if (!this.hasClass(ele, cls))
 			ele.className += " " + cls;
 	}
@@ -280,7 +288,7 @@
 	/**
 	remove css attribute (from Mr.Think)
 	 */
-	function removeClass(element, className) {
+	$.removeClass = function (element, className) {
 		if (hasClass(element, className)) {
 			var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
 			element.className = element.className.replace(reg, ' ');
@@ -296,16 +304,6 @@
 	/**
 	set opacity fadeIn fadeOut effect @Mr.Think
 	 */
-	//底层共用
-	var iBase = {
-		Id : function (name) {
-			return document.getElementById(name);
-		},
-		//设置元素透明度,透明度值按IE规则计,即0~100
-		SetOpacity : function (ev, v) {
-			ev.filters ? ev.style.filter = 'alpha(opacity=' + v + ')' : ev.style.opacity = v / 100;
-		}
-	}
 	//淡入效果(含淡入到指定透明度)
 	function fadeIn(elem, speed, opacity) {
 		/*
@@ -318,12 +316,12 @@
 		opacity = opacity || 100;
 		//显示元素,并将元素值为0透明度(不可见)
 		elem.style.display = 'block';
-		iBase.SetOpacity(elem, 0);
+		$.setOpacity(elem, 0);
 		//初始化透明度变化值为0
 		var val = 0;
 		//循环将透明值以5递增,即淡入效果
 		(function () {
-			iBase.SetOpacity(elem, val);
+			$.setOpacity(elem, val);
 			val += 5;
 			if (val <= opacity) {
 				setTimeout(arguments.callee, speed)
@@ -345,7 +343,7 @@
 		var val = 100;
 		//循环将透明值以5递减,即淡出效果
 		(function () {
-			iBase.SetOpacity(elem, val);
+			$.setOpacity(elem, val);
 			val -= 5;
 			if (val >= opacity) {
 				setTimeout(arguments.callee, speed);
@@ -376,22 +374,39 @@
 	
 	/**
 	more accurate get a position
+	*/
+	function getCoords(el) {
+	 	var box = el.getBoundingClientRect(),
+	 	doc = el.ownerDocument,
+	 	body = doc.body,
+	 	html = doc.documentElement,
+	 	clientTop = html.clientTop || body.clientTop || 0,
+	 	clientLeft = html.clientLeft || body.clientLeft || 0,
+	 	top = box.top + (self.pageYOffset || html.scrollTop || body.scrollTop) - clientTop,
+	 	left = box.left + (self.pageXOffset || html.scrollLeft || body.scrollLeft) - clientLeft
+	 		return {
+	 		'top' : top,
+	 		'left' : left
+	 	};
+	 };
+	/**
+	get mouse position
 	 */
-	var getCoords = function (el) {
-		var box = el.getBoundingClientRect(),
-		doc = el.ownerDocument,
-		body = doc.body,
-		html = doc.documentElement,
-		clientTop = html.clientTop || body.clientTop || 0,
-		clientLeft = html.clientLeft || body.clientLeft || 0,
-		top = box.top + (self.pageYOffset || html.scrollTop || body.scrollTop) - clientTop,
-		left = box.left + (self.pageXOffset || html.scrollLeft || body.scrollLeft) - clientLeft
-			return {
-			'top' : top,
-			'left' : left
-		};
-	};
-	
+	function getMousePosition(e) {
+		var scrollx,
+		scrolly;
+		if (typeof(window.pageXOffset) == 'number') {
+			scrollx = window.pageXOffset;
+			scrolly = window.pageYOffset;
+		} else {
+			scrollx = document.documentElement.scrollLeft;
+			scrolly = document.documentElement.scrollTop;
+		}
+		return {
+			x : e.clientX + scrollx,
+			y : e.clientY + scrolly
+		}
+	}
 	/**
 	compatibility type of height
 	 */
@@ -582,7 +597,140 @@
 		return null;
 	}
 	//getUrlParam("type") //operation
-
+	/*-------------------------- +
+	Validator
+	+-------------------------- */
+	
+	//判断是否为空
+	$.check = {
+		isNull : function (str) {
+			if (str == "")
+				return true;
+			var regu = "^[ ]+$";
+			var re = new RegExp(regu);
+			return re.test(str);
+		},
+		//验证时间格式 例如：2007-03-08 12:01:09
+		strDateTime : function (str) {
+			var reg = /^(\d{4})(-)(\d{2})\2(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+			//var reg = /^([0-9]{4})\-(1[0-2]|0[1-9])\-(3[0-1]|[1-2][0-9]|0[1-9])\ (2[0-3]|[0-1][0-9])\:([0-5][0-9])\:([0-5][0-9])$/;
+			var r = str.match(reg);
+			if (r == null){
+				return false;
+				}
+			var d = new Date(r[1], r[3] - 1, r[4], r[5], r[6], r[7]);
+			return (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4] && d.getHours() == r[5] && d.getMinutes() == r[6] && d.getSeconds() == r[7]);
+		},
+		/*检测字母数字下划线*/
+		check_info : function (info) {
+			var reg = /^[a-zA-Z0-9_]+$/;
+			if (info.length < 3 || info.length > 16){
+				return false;}
+			return reg.test(info);
+			},
+		//验证是否ip
+		isIP : function (ip) {
+			var reg = /^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[1-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.(25[0-4]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[1-9])$/;
+			var re = new RegExp(reg);
+			return re.test(ip);
+		},
+		//返回传入参数对应的8位二进制值
+		_checkIput_formatIP : function (ip) {
+			return (ip + 256).toString(2).substring(1); //格式化输出(补零)
+		},
+		//检查子网掩码
+		check_mask : function (maskvalue) {
+			/*有效性校验*/
+			var reg = /^(\d{1,3})(\.\d{1,3}){3}$/;
+			flag = reg.test(maskvalue);
+			if (!flag)
+				return false;
+			/*检查域值*/
+			var IPArray = maskvalue.split(".");
+			var ip1 = parseInt(IPArray[0]);
+			var ip2 = parseInt(IPArray[1]);
+			var ip3 = parseInt(IPArray[2]);
+			var ip4 = parseInt(IPArray[3]);
+			if (ip1 < 0 || ip1 > 255 || ip2 < 0 || ip2 > 255 || ip3 < 0 || ip3 > 255 || ip4 < 0 || ip4 > 255)
+				/*每个域值范围0-255*/
+				return false;
+			/* 检查二进制值是否合法 */
+			//拼接二进制字符串
+			var ip_binary = _checkIput_formatIP(ip1) + _checkIput_formatIP(ip2) + _checkIput_formatIP(ip3) + _checkIput_formatIP(ip4);
+			if (-1 != ip_binary.indexOf("01"))
+				return false;
+			return true;
+		},
+		//检查端口
+		check_port : function (portvalue) {
+			var reg = /^\d{1,5}$/;
+			if (!reg.test(portvalue))
+				return false;
+			if (portvalue < 1 || portvalue > 65535) {
+				//alert("端口范围1~65535");
+				return false;
+			} else
+				return true;
+		},
+		//检测手机号码
+		checkphone : function (str) {
+			var reg = /^1\d{10}$/;
+			if (!(reg.test(str))) {
+				alert("请输入正确的手机号码！");
+				return false;
+			}
+			return true;
+		},
+		/*检测mail*/
+		check_mail : function (mail) {
+			var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+			return reg.test(mail);
+		},
+		//验证数字
+		isNumber : function (s) {
+			var regu = "^[0-9]+$";
+			var re = new RegExp(regu);
+			if (s.search(re) != -1)
+				return true;
+			else
+				return false;
+		},
+		//验证session是否超时
+		check_session : function () {
+			var key = false;
+			$.ajax({
+				url : "/engine/judgesession",
+				type : "get",
+				async : false,
+				cache : false,
+				success : function (msg) {
+					if (1 == msg)
+						key = true;
+				}
+			});
+			return key;
+		},
+		//验证MAC地址
+		check_mac : function (str) {
+			var pattern = /^([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})\:([0-9A-Fa-f]{2})$/;
+			return pattern.test(str);
+		},
+		//验证密码
+		check_password : function (str) {
+			//var reg = /(?:(?:[^\u4e00-\u9fa5\d\w]+\d+[\w\W]+[^\u4e00-\u9fa5]*)|(?:[^\u4e00-\u9fa5\d\w]+[\w\W]+\d+[^\u4e00-\u9fa5]*)|(?:\d+[^\u4e00-\u9fa5\d\w]+[\w\W]+[^\u4e00-\u9fa5]*)|(?:\d+[\w\W]+[^\u4e00-\u9fa5\d\w]+[^\u4e00-\u9fa5]*)|(?:[\w\W]+\d+[^\u4e00-\u9fa5\d\w]+[^\u4e00-\u9fa5]*){10,}|(?:[\w\W]+[^\u4e00-\u9fa5\d\w]+\d+[^\u4e00-\u9fa5]*))/;
+			var reg = /^(([a-zA-Z]+)([0-9]+)([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*))|(([a-zA-Z]+)([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*)([0-9]+))|(([0-9]+)([a-zA-Z]+)([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*))|(([0-9]+)([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*)([a-zA-Z]+))|(([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*)([a-zA-Z]+)([0-9]+))|(([a-zA-Z0-9]*[~!@#$%\^&*()_+|{}:"<>?`\-=\\\[\];',.\/]+[a-zA-Z0-9]*)([0-9]+)([a-zA-Z]+))$/;
+			if (str.length < 6 || str.length > 16) {
+				alert("密码长度不符合要求");
+				return false;
+			} else {
+				if (!reg.test(str)) {
+					alert("输入的密码太简单，要求至少包含1个数字、1个字母和1个特殊字符");
+					return false;
+				} else
+					return true;
+			}
+		},
+	}
 	window.jty = $;
 }
 )(window.jty, window, document);
