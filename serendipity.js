@@ -1,3 +1,9 @@
+/**
+作者：jty
+时间：2012年1月1日
+网址：http://chaosgeeker.com
+电子邮箱：jtyjty99999@126.com
+ */
 (
 	function ($, win, doc, undefined) {
 	if (!window.jty) {
@@ -15,13 +21,45 @@
 		}
 	}
 	$.getOS = function () {
-		var __Agt = navigator.userAgent.toLowerCase();
-		var __If = /(firefox|netscape|opera).?[\/| ](.)\.([^;\)]+|[^\)]+\))$/.exec(__Agt);
-		if (!__If)
-			__If = /(msie) (.)\.[^;]+;/.exec(__Agt);
-		var _Br = __If[1],
-		_Ver = __If[2];
+		var a = navigator.userAgent.toLowerCase();
+		var b = /(firefox|netscape|opera).?[\/| ](.)\.([^;\)]+|[^\)]+\))$/.exec(a);
+		if (!b)
+			b = /(msie) (.)\.[^;]+;/.exec(a);
+		var _Br = b[1],
+		_Ver = b[2];
 		return (_Br + _Ver);
+	}
+	//Dom加载完成事件
+	$.ready = function (loadEvent) {
+		var init = function () {
+			if (arguments.callee.done)
+				return;
+			arguments.callee.done = true;
+			loadEvent.apply(document, arguments);
+		}
+		
+		if (document.addEventListener) {
+			document.addEventListener('DOMContentLoaded', init, false);
+		}
+		
+		if (/WebKit/i.test(navigator.userAgent)) {
+			var _timer = setInterval(function () {
+					if (/loaded|complete/.test(document.readyState)) {
+						clearInterval(_timer);
+						init();
+					}
+				}, 10)
+		}
+		/*@if(@_win32)*/
+		document.write('<script id=__ie_onload defer src=javascript:void(0)><\/script>');
+		var script = document.getElementById('__ie_onload');
+		script.onreadystatechange = function () {
+			if (this.readyState == 'complete') {
+				init();
+			}
+		}
+		/*@end @*/
+		return true;
 	}
 	/*-------------------------- +
 	/* selector 
@@ -734,3 +772,45 @@
 	window.jty = $;
 }
 )(window.jty, window, document);
+
+/*
+		// 元素ID， 商品结束时间 endtime, 当前时间 btime
+		function time(elem, endtime, btime) {
+			this.elem = elem;
+			this.endtime = new Date(endtime).getTime();
+			this.getId = document.getElementById(this.elem);
+			this.btime = new Date(btime).getTime();
+			this.reg = /\s+/g;
+		}
+		time.prototype.SetTime = function () {
+			var _this = this;
+			setInterval(function () {
+				_this.DownTime();
+			}, 1000)
+		}
+		time.prototype.DownTime = function () {
+			var leave = parseInt((this.endtime - this.btime) / 1000);
+			this.btime += 1000;
+			var timeBoole = true;
+			var day,
+			hour,
+			mints,
+			second;
+			if (leave <= 0) {
+				timeBoole = false;
+			}
+			if (timeBoole == true) {
+				day = parseInt(leave / 3600 / 24) + "天";
+				hour = parseInt((leave / 3600) % 24) + "小时 ";
+				mints = parseInt((leave / 60) % 60) + "分 ";
+				second = parseInt(leave % 60) + "秒 ";
+			} else {
+				day = 0 + "天";
+				hour = 0 + "小时 ";
+				mints = 0 + "分 ";
+				second = 0 + "秒 ";
+			}
+			TiemText = day + hour + mints + second;
+			this.getId.innerHTML = TiemText.replace(this.reg, "");
+		}
+		*/
