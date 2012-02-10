@@ -235,6 +235,18 @@
 	
 	/*                                                        UI                                          */
 	
+	/*-------------------------- +
+	mouseWheel
+	+-------------------------- */
+	
+	function getWheelValue(e) {
+		e = e || window.event;
+		return (e.wheelDelta ? e.wheelDelta / 120 :  - (e.detail % 3 == 0 ? e.detail : e.detail / 3)); //取得滚轮坐标
+	}
+	/* 		
+	addHandler(elem, "mousewheel", function);
+	addHandler(elem, "DOMMouseScroll", function); */ 
+		
 	/**
 	get css attribute (from sanshuiqing)
 	 */
@@ -247,7 +259,12 @@
 			return elem.style[css];
 		}
 	}
-	
+	/**
+	get css attribute (simple)
+	 */
+	function getStyle(obj, attr) {
+		return parseFloat(obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj, null)[attr])
+	}
 	/**
 	get css attribute (from Ferris)
 	 */
@@ -504,6 +521,31 @@
 			return false
 		};
 	}
+	/**                  Useful function collection                                */	
+
+	/* add favourite*/
+	function addCookie() {
+		if (document.all) {
+			window.external.addFavorite('www.baidu.com', '百度');
+		} else if (window.sidebar) {
+			window.sidebar.addPanel('百度', 'www.baidu.com', "");
+		}
+	}
+	/* set to homepage */
+	function setHomepage() {
+		if (document.all) {
+			document.body.style.behavior = 'url(#default#homepage)';
+			document.body.setHomePage('www.baidu.com');
+		} else if (window.sidebar) {
+			if (window.netscape) {
+				try {
+					netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+				} catch (e) {}
+			}
+			var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
+			prefs.setCharPref('browser.startup.homepage', 'www.baidu.com');
+		}
+	}
 	/**
 	crashCheck 
 	*/
@@ -536,7 +578,20 @@
 			};
 		}
 	}
-	
+	/*-------------------------- +
+	get selectTXT
+	+-------------------------- */
+	function getSelectTxt() {
+		var selectTxt;
+		if (window.getSelection) {
+			//标准浏览器支持的方法
+			selectTxt = window.getSelection();
+		} else if (document.selection) {
+			//IE浏览器支持的方法
+			selectTxt = document.selection.createRange().text;
+		}
+		return selectTxt;
+		}  
 	/*-------------------------- +
 	limit max length of a string and change extra to ...
 	+-------------------------- */
@@ -560,11 +615,10 @@
 	function joint(string1, string2) {
 		var temp = [],
 		i = 0;
-		var string1,
-		string2
+		var string1,string2
 		temp[i++] = string1;
-		temp[i++] = string2
-			var text = temp.join("");
+		temp[i++] = string2;
+		var text = temp.join("");
 		return text
 	}
 	/*-------------------------- +
@@ -772,6 +826,33 @@
 	window.jty = $;
 }
 )(window.jty, window, document);
+/* fix IE6 PNG problem */
+function correctPNG() {
+	for (var i = 0; i < document.images.length; i++) {
+		var img = document.images[i]
+			var imgName = img.src.toUpperCase()
+			if (imgName.substring(imgName.length - 3, imgName.length) == "PNG") {
+				var imgID = (img.id) ? "id='" + img.id + "' " : ""
+				var imgClass = (img.className) ? "class='" + img.className + "' " : ""
+				var imgTitle = (img.title) ? "title='" + img.title + "' " : "title='" + img.alt + "' "
+				var imgStyle = "display:inline-block;" + img.style.cssText
+					if (img.align == "left")
+						imgStyle = "float:left;" + imgStyle
+							if (img.align == "right")
+								imgStyle = "float:right;" + imgStyle
+									if (img.parentElement.href)
+										imgStyle = "cursor:hand;" + imgStyle
+											var strNewHTML = "<span " + imgID + imgClass + imgTitle
+											 + " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+											 + "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+											 + "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"
+											img.outerHTML = strNewHTML
+											i = i - 1
+			}
+	}
+}
+window.attachEvent("onload", correctPNG);
+
 
 /*
 		// 元素ID， 商品结束时间 endtime, 当前时间 btime
