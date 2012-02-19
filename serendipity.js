@@ -234,7 +234,34 @@ return Browser;
 			this.addHandler(window, "load", fnHandler)
 		}
 	};
-	
+		
+	/*-------------------------- +
+	stop event capture or bubble
+	eg:   Dom :document.body.addEventListener('click', function(event){event.stopPropagation();}, true);
+
+	+-------------------------- */
+	function someHandle(event) {
+		event = event || window.event;
+		if (event.stopPropagation)
+			event.stopPropagation();
+		else
+			event.cancelBubble = true;
+	}
+	/*-------------------------- +
+	cancel the default handle when event ended
+	eg:input element prevent type in after the "keydown"  event
+	+-------------------------- */
+	function someHandle(event) {
+		event = event || window.event;
+		if (event.preventDefault)
+			event.preventDefault();
+		else
+			event.returnValue = false;
+	}
+
+	/*-------------------------- +
+	press event function model
+	+-------------------------- */
 	function buttonEnter() {
 		document.onkeydown = function (e) {
 			e = e || window.event;
@@ -256,6 +283,7 @@ return Browser;
 	
 	/*-------------------------- +
 	mouseWheel
+	wheelDelta==>ie 
 	+-------------------------- */
 	
 	function getWheelValue(e) {
