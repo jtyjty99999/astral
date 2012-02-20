@@ -23,31 +23,32 @@
 	/*-------------------------- +
 	Browser navigation from QWARP
 	+-------------------------- */
-	$. Browser = (function() {
-var na = window.navigator,
-ua = na.userAgent.toLowerCase(),
-browserTester = /(msie|webkit|gecko|presto|opera|safari|firefox|chrome|maxthon|android|ipad|iphone|webos|hpwos)[ \/os]*([\d_.]+)/ig,
-Browser = {
-platform: na.platform
-};
-ua.replace(browserTester, function(a, b, c) {
-var bLower = b.toLowerCase();
-if (!Browser[bLower]) {
-Browser[bLower] = c;
-}
-});
-if (Browser.opera) { //Opera9.8后版本号位置变化
-ua.replace(/opera.*version\/([\d.]+)/, function(a, b) {
-Browser.opera = b;
-});
-}
-if (Browser.msie) {
-Browser.ie = Browser.msie;
-var v = parseInt(Browser.msie, 10);
-Browser['ie' + v] = true;
-}
-return Browser;
-}());
+	$.Browser = (function () {
+		var na = window.navigator,
+		ua = na.userAgent.toLowerCase(),
+		browserTester = /(msie|webkit|gecko|presto|opera|safari|firefox|chrome|maxthon|android|ipad|iphone|webos|hpwos)[ \/os]*([\d_.]+)/ig,
+		Browser = {
+			platform : na.platform
+		};
+		ua.replace(browserTester, function (a, b, c) {
+			var bLower = b.toLowerCase();
+			if (!Browser[bLower]) {
+				Browser[bLower] = c;
+			}
+		});
+		if (Browser.opera) { //Opera9.8后版本号位置变化
+			ua.replace(/opera.*version\/([\d.]+)/, function (a, b) {
+				Browser.opera = b;
+			});
+		}
+		if (Browser.msie) {
+			Browser.ie = Browser.msie;
+			var v = parseInt(Browser.msie, 10);
+			Browser['ie' + v] = true;
+		}
+		return Browser;
+	}
+		());
 	//Dom加载完成事件
 	$.ready = function (loadEvent) {
 		var init = function () {
@@ -100,6 +101,29 @@ return Browser;
 		}
 	};
 	/*-------------------------- +
+	IE prototype node operation compatible
+	+-------------------------- */
+/*	Node.prototype.replaceNode = function (Node) { // 替换指定节点
+		this.parentNode.replaceChild(Node, this);
+	}
+	Node.prototype.removeNode = function (removeChildren) { // 删除指定节点
+		if (removeChildren)
+			return this.parentNode.removeChild(this);
+		else {
+			var range = document.createRange();
+			range.selectNodeContents(this);
+			return this.parentNode.replaceChild(range.extractContents(), this);
+		}
+	}
+	Node.prototype.swapNode = function (Node) { // 交换节点
+		var nextSibling = this.nextSibling;
+		var parentNode = this.parentNode;
+		node.parentNode.replaceChild(this, Node);
+		parentNode.insertBefore(node, nextSibling);
+	}
+	}  
+*/
+	/*-------------------------- +
 	/delete current element node
 	+-------------------------- */
 	$.rmnode = function removeElement(_element) {
@@ -108,6 +132,59 @@ return Browser;
 			parentElement.removeChild(_element);
 		}
 	}
+	/*-------------------------- +
+	Find slibling Nodes
+	+-------------------------- */
+	function slibling() {
+		var a = []; //定义一个数组，用来存o的兄弟元素
+		var p = o.previousSibling;
+		while (p) { //先取o的哥哥们 判断有没有上一个哥哥元素，如果有则往下执行 p表示previousSibling
+			if (p.nodeType === 1) {
+				a.push(p);
+			}
+			p = p.previousSibling //最后把上一个节点赋给p
+		}
+		a.reverse() //把顺序反转一下 这样元素的顺序就是按先后的了
+		var n = o.nextSibling; //再取o的弟弟
+		while (n) { //判断有没有下一个弟弟结点 n是nextSibling的意思
+			if (n.nodeType === 1) {
+				a.push(n);
+			}
+			n = n.nextSibling;
+		}
+		return a //最后按从老大到老小的顺序，把这一组元素返回
+	}
+	
+	/*-------------------------- +
+	strong funtion "isArray"
+	+-------------------------- */
+	function isArray(arr) {
+		return Object.prototype.toString.call(arr) === "[object Array]";
+	}
+	/**
+	 * Returns internal [[Class]] property of an object
+	 *
+	 * Ecma-262, 15.2.4.2
+	 * Object.prototype.toString( )
+	 *
+	 * When the toString method is called, the following steps are taken:
+	 * 1. Get the [[Class]] property of this object.
+	 * 2. Compute a string value by concatenating the three strings "[object ", Result (1), and "]".
+	 * 3. Return Result (2).
+	 *
+	 * __getClass(5); // => "Number"
+	 * __getClass({}); // => "Object"
+	 * __getClass(/foo/); // => "RegExp"
+	 * __getClass(''); // => "String"
+	 * __getClass(true); // => "Boolean"
+	 * __getClass([]); // => "Array"
+	 * __getClass(undefined); // => "Window"
+	 * __getClass(Element); // => "Constructor"
+	 *
+	 */
+	function __getClass(object) {
+		return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
+	};
 	/*-------------------------- +
 	GetIframe
 	+-------------------------- */
@@ -151,6 +228,12 @@ return Browser;
 		for (var i = 0; i < boxs.length; i++) {
 			boxs[i].checked = obj.checked;
 		}
+	}
+	/*-------------------------- +
+	convert html to txt without html tags
+	+-------------------------- */
+	function noHtml(elem) {
+		elem.innerHTML.replace(/<.+?>/gim, '')
 	}
 	/*-------------------------- +
 	to html
@@ -900,6 +983,26 @@ function correctPNG() {
 }
 window.attachEvent("onload", correctPNG);
 
+if (navigator.platform == "Win32" && navigator.appName == "Microsoft Internet Explorer" && window.attachEvent) {
+	window.attachEvent("onload", alphaBackgrounds);
+}
+
+function alphaBackgrounds() {
+	var rslt = navigator.appVersion.match(/MSIE (d+.d+)/, '');
+	var itsAllGood = (rslt != null && Number(rslt[1]) >= 5.5);
+	for (i = 0; i < document.all.length; i++) {
+		var bg = document.all[i].currentStyle.backgroundImage;
+		if (itsAllGood && bg) {
+			if (bg.match(/.png/i) != null) {
+				var mypng = bg.substring(5, bg.length - 2);
+				document.all[i].style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + mypng + "', sizingMethod='scale')";
+				document.all[i].style.backgroundImage = "url('')";
+			}
+		}
+	}
+}
+
+alphaBackgrounds();
 
 /*
 		// 元素ID， 商品结束时间 endtime, 当前时间 btime
