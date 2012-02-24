@@ -214,9 +214,9 @@
 	/*-------------------------- +
 	remove space
 	+-------------------------- */
-	function trim(str) { //remove both sides space
-		return str.replace(/(^\s*)|(\s*$)/g, "");
-	}
+	function trim = function () { //high efficiency
+		return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+	}}
 	function ltrim(str) { //remove lefr space
 		return str.replace(/(^\s*)/g, "");
 	}
