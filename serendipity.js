@@ -253,6 +253,21 @@
 		elem.innerHTML.replace(/<.+?>/gim, '')
 	}
 	/*-------------------------- +
+	InnerText Compatible spelled
+	+-------------------------- */	
+	function getInnerText(elem) {
+		return (typeof elem.textContent == "string") ? elem.textContent : elem.innerText;
+	}
+	function setInnerText(elem, text) {
+		if (typeof elem.textContent == "string") {
+			elem.textContent = text
+		};
+		else {
+			elem.innerText = text;
+		}
+	}
+	
+	/*-------------------------- +
 	to html
 	+-------------------------- */
 	function HtmlDecode(str) {
@@ -318,9 +333,6 @@
 	
 	/*                                         Event                                  */
 	
-	/*-------------------------- +
-	event binding, deleting
-	+-------------------------- */
 	$.eop = {
 		addHandler : function (oElement, sEvent, fnHandler) {
 			oElement.addEventListener ? oElement.addEventListener(sEvent, fnHandler, false) : (oElement["_" + sEvent + fnHandler] = fnHandler, oElement[sEvent + fnHandler] = function () {
@@ -332,6 +344,12 @@
 		},
 		addLoadHandler : function (fnHandler) {
 			this.addHandler(window, "load", fnHandler)
+		},
+		getEvent : function (event) {
+			return event ? event : window.event;
+		},
+		getTarget : function (event) {
+			return event.target || event.srcElement;
 		}
 	};
 		
