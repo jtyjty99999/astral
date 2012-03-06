@@ -214,7 +214,7 @@
 	/*-------------------------- +
 	remove space
 	+-------------------------- */
-	function trim = function () { //high efficiency
+	function trim (str) { //high efficiency
 		return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 	}
 	function ltrim(str) { //remove lefr space
