@@ -350,6 +350,17 @@
 		},
 		getTarget : function (event) {
 			return event.target || event.srcElement;
+		},
+		getRelatedTarget : function (event) {
+			if (event.relatedTarget) {
+				return event.related;
+			} else if (event.toElement) {
+				return event.toElement;
+			} else if (event.fromElement; ) {
+					return event.fromElement;
+			} else {
+				return null;
+			}
 		}
 	};
 		
