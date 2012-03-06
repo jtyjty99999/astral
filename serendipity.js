@@ -351,41 +351,31 @@
 		getTarget : function (event) {
 			return event.target || event.srcElement;
 		},
-		getRelatedTarget : function (event) {
-			if (event.relatedTarget) {
-				return event.related;
-			} else if (event.toElement) {
-				return event.toElement;
-			} else if (event.fromElement; ) {
-					return event.fromElement;
-			} else {
-				return null;
+		getClip : function (event) {
+			var clipboardData = (event.clipboardData || window.clipboardData);
+			return clipboardData.getData("text")
+		},
+		setClip : function (event, value) {
+			if (event.clipboardData) {
+				return clipboardData.setData("text/plain", value);
+			} else if (window.clipboardData) {
+				return window.clipboardData.setData("text", value);
 			}
-		}
-	};
-		
+		},
 	/*-------------------------- +
 	stop event capture or bubble
-	eg:   Dom :document.body.addEventListener('click', function(event){event.stopPropagation();}, true);
-
+	eg:   Dom :document.body.addEventListener('click',$.eop.stopPropagation(), true);
 	+-------------------------- */
-	function someHandle(event) {
-		event = event || window.event;
-		if (event.stopPropagation)
-			event.stopPropagation();
-		else
-			event.cancelBubble = true;
-	}
+		stopPropagation : function (event) {
+			event.stopPropagation ? event.stopPropagation() : event.cancelBubble = true;
+		},
 	/*-------------------------- +
 	cancel the default handle when event ended
 	eg:input element prevent type in after the "keydown"  event
 	+-------------------------- */
-	function someHandle(event) {
-		event = event || window.event;
-		if (event.preventDefault)
-			event.preventDefault();
-		else
-			event.returnValue = false;
+		preventDefault : function (event) {
+			ievent.preventDefault ? event.preventDefault() : event.returnValue = false;
+		}
 	}
 
 	/*-------------------------- +
