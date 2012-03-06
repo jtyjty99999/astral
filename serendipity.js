@@ -135,7 +135,7 @@
 	/*-------------------------- +
 	Find slibling Nodes
 	+-------------------------- */
-	function slibling() {
+	function sibling() {
 		var a = []; //定义一个数组，用来存o的兄弟元素
 		var p = o.previousSibling;
 		while (p) { //先取o的哥哥们 判断有没有上一个哥哥元素，如果有则往下执行 p表示previousSibling
@@ -216,7 +216,7 @@
 	+-------------------------- */
 	function trim = function () { //high efficiency
 		return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-	}}
+	}
 	function ltrim(str) { //remove lefr space
 		return str.replace(/(^\s*)/g, "");
 	}
