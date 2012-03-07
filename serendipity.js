@@ -836,7 +836,25 @@
 		var Rand = Math.random();
 		return (Min + Math.round(Rand * Range));
 	}
-	
+	/*-------------------------- +
+	get a search url args
+	eg:qs = "?q=java&num=10" var args = getUrlArgs(url1) console.log(args["num"]) //10
+	+-------------------------- */
+	function getUrlArgs() {
+	var qs = (location.search.length > 0 ? location.search.substring(1) : "")
+	var args = {};
+	var items = qs.split("&");
+	var item = null;
+	name = null;
+	value = null;
+	for (var i = 0; i < items.length; i++) {
+		item = items[i].split("=");
+		name = decodeURIComponent(item[0]);
+		value = decodeURIComponent(item[1]);
+		args[name] = value;
+	}
+	return args;
+}
 	/*-------------------------- +
 	get the number of a field(type/id)
 	+-------------------------- */
