@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+	<title></title>
+	<style type="text/css">
+	body{margin:0; font:12px/1.5 tahoma,'\5b8b\4f53',sans-serif; color:#333;background:#fff;}
+    h1,h2,h3,h5,p,ul,ol,dl,dd{margin:0;}
+    button{padding:0;}
+	.main{margin:0 auto;width:650px;height:500px;}
+	#bg{
+	float:left;width:502px;height:402px;border:1px solid #000;
+	}
+	#bg table{ width:501px; height:401px; border-collapse:collapse;background:#FFF; }
+#bg table td{width:9px; height:9px; line-height:9px;overflow:hidden; border:1px solid #F0F8FF;}
+
+	#control{float:right;margin-top:180px;}
+.body{background-color:red;}
+.food{background-color:blue;}
+	</style>
+	<script type="text/javascript">
+	function $(id) { //选择器
+		return typeof id == "string" ? document.getElementById(id) : id;
+	}
+	var eatSnake = {
+		createBg : function () { //背景方法
+			$("bg").innerHTML = "<table cellpadding='0' cellspacing='0' border='0'>" + new Array(41).join("<tr>" + new Array(51).join("<td>&nbsp;</td>") + "</tr>") + "</table>";
+		},
+		painter : function (row, cell, classname) { //涂抹方法
+			this.table.rows[row].cells[cell].className = classname;
+		},
+		checker : function (row, cell, classname) { //检测方法
+			return this.table.rows[row].cells[cell].className;
+		},
+		createBody : function () { //身体方法
+			var bdlg = this.body.length;
+			for (var i = 0; i < bdlg; i++) {
+				this.painter(this.body[i][0], this.body[i][1], "body");
+			}
+		},
+		createFood : function () {
+			var body = this.body;
+			for (; ; ) {
+				var a = parseInt(Math.random() * 40);
+				b = parseInt(Math.random() * 50);
+				for (var i = 0; i < body.length; i++) {
+					if (body[i][0] == a && body[i][1] == b) {
+						break;
+					} else {
+						food = [a, b];
+						break;
+					}
+				}
+				if (food) {
+					break;
+				}
+			}
+			this.food = food;
+			this.painter(a, b, "food")
+		},
+		init : function () { //创造物件
+			this.createBg(); //涂抹背景
+			this.table = document.getElementsByTagName("table")[0];
+			this.body = [[5, 26], [5, 27], [5, 28], [5, 29]];
+			this.createBody(); //涂抹身体
+			this.createFood(); //制造食物
+		},
+		stop : function () {
+			clearInterval(this.run);
+		},
+		start : function () { //初始化
+			this.stop();
+			this.start = true;
+			this.to = 37;
+			this.step = 200;
+			var startthis = this; //保存一个this
+			
+			this.run = setInterval(function () {
+					startthis.go()
+				}, this.step) //利用匿名函数保存go需要的变量，利用存储this来避免this指针移动
+		},
+		go : function () {
+			var body = this.body;
+			var that = this
+				this.head = [body[0][0], body[0][1]]; //定位身体头部
+			var head = this.head;
+			document.onkeydown = function (event) {
+				//console.log(that.tow(event))
+				if (that.tow(event) >= 37 && that.tow(event) <= 40) { //排除莫名其妙的键干扰
+					if (Math.abs(that.tow(event) - that.to) == 2) { //注意this的作用域,that.to是上一个的to
+						body = body.reverse(); //反转身体
+						//console.log(body)
+					}
+					that.to = that.tow(event);
+				}
+			}
+			switch (this.to) { //转向，穿墙类型
+			case 37:
+				head[1] = head[1] - 1 < 0 ? 49 : (head[1] - 1); //向左cell减1
+				break
+			case 39:
+				head[1] = head[1] + 1 >= 50 ? 0 : (head[1] + 1); //向右cell加1
+				break;
+			case 38:
+				head[0] = head[0] - 1 < 0 ? 39 : (head[0] - 1); //向上row减1
+				break;
+			case 40:
+				head[0] = head[0] + 1 >= 40 ? 0 : head[0] + 1; //向下row加1
+				break;
+			}
+			if (that.judge() == "body") {
+				that.over();
+			}
+			if (that.judge() == "food") {
+				body.unshift(head);
+				that.createFood();
+				that.painter(head[0], head[1], "body") //涂抹头部
+			}
+			//console.log(that.judge())
+			//console.log(head[1])
+			//console.log(this.to)
+			var snail = body.pop();
+			this.painter(snail[0], snail[1], "") //抹掉尾巴
+			//console.log(snail[0])
+			this.painter(head[0], head[1], "body") //涂抹头部
+			//console.log(head)
+			body.unshift(head) //增加新头部
+		},
+		tow : function (event) { //方向方法
+			var event = event || window.event;
+			var to = event.keyCode;
+			return to;
+		},
+		judge : function () {//检测方法
+			var head = this.head;
+			var next = this.checker(head[0], head[1])
+				return next;
+		},
+		pause : function () { //暂停方法
+			var pausethis = this;
+			if (this.start) {
+				this.stop();
+				this.start = false;
+				$("stop").value = "continue";
+			} else {
+				this.run = setInterval(function () {
+						pausethis.go()
+					}, this.step);
+				this.start = true;
+				$("stop").value = "stop";
+			}
+		},
+		over : function () {
+			this.stop();
+			alert("you are foolish!");
+		}
+	}
+	window.onload = function () {
+		eatSnake.init();
+	}
+	</script>
+</head>
+<body>
+<div class="main">	<div id="bg"></div>
+	<div id="control">
+<input type="button" value="start" id="start" onclick="eatSnake.start()" />
+<input type="button" value="stop" id="stop"onclick="eatSnake.pause()"/>
+	</div>
+	</div>
+</body>
+</html>
