@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
-  <meta charset="UTF-8">
+	<meta charset="UTF-8">
 	<title></title>
 	<style type="text/css">
 	body{margin:0; font:12px/1.5 tahoma,'\5b8b\4f53',sans-serif; color:#333;background:#fff;}
@@ -9,11 +9,11 @@
     button{padding:0;}
 	.main{margin:0 auto;width:650px;height:500px;}
 	#bg{
-	float:left;width:502px;height:402px;border:1px solid #000;
+	float:left;width:502px;height:442px;border:1px solid #000;
 	}
-	#bg table{ width:501px; height:401px; border-collapse:collapse;background:#FFF; }
+	#bg table{ width:501px; height:438px; border-collapse:collapse;background:#FFF; }
 #bg table td{width:9px; height:9px; line-height:9px;overflow:hidden; border:1px solid #F0F8FF;}
-
+	.mention{padding:10px;text-align:center;font-size:20px;font-style:bold;}
 	#control{float:right;margin-top:180px;}
 .body{background-color:red;}
 .food{background-color:blue;}
@@ -74,15 +74,14 @@
 			this.to = 37;
 			this.step = 200;
 			var startthis = this; //保存一个this
-			
 			this.run = setInterval(function () {
 					startthis.go()
 				}, this.step) //利用匿名函数保存go需要的变量，利用存储this来避免this指针移动
 		},
 		go : function () {
 			var body = this.body;
-			var that = this
-				this.head = [body[0][0], body[0][1]]; //定位身体头部
+			var that = this;
+			this.head = [body[0][0], body[0][1]]; //定位身体头部
 			var head = this.head;
 			document.onkeydown = function (event) {
 				//console.log(that.tow(event))
@@ -91,7 +90,17 @@
 						body = body.reverse(); //反转身体
 						//console.log(body)
 					}
+					if (that.tow(event) == that.to) {//加速方法
+						that.step -= 10;
+						clearInterval(that.run);//重新循环以便更新step
+						that.run = setInterval(function () {
+								that.go()
+							}, that.step)
+							//console.log(that.step);
+					}
 					that.to = that.tow(event);
+					//console.log(that.step);
+					//console.log(that.to)
 				}
 			}
 			switch (this.to) { //转向，穿墙类型
@@ -131,7 +140,7 @@
 			var to = event.keyCode;
 			return to;
 		},
-		judge : function () {//检测方法
+		judge : function () { //检测方法
 			var head = this.head;
 			var next = this.checker(head[0], head[1])
 				return next;
@@ -161,11 +170,12 @@
 	</script>
 </head>
 <body>
-<div class="main">	<div id="bg"></div>
+<div class="main">
 	<div id="control">
 <input type="button" value="start" id="start" onclick="eatSnake.start()" />
 <input type="button" value="stop" id="stop"onclick="eatSnake.pause()"/>
 	</div>
-	</div>
+<div id="bg"></div></div><div class="mention"><p>说明：start开始，stop暂停，不可以碰到蛇的身体。连续按同方向键会加速，祝您玩的愉快^_^</p></div>	
+	
 </body>
 </html>
