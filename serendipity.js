@@ -23,7 +23,7 @@
 	/*-------------------------- +
 	Browser navigation from QWARP
 	+-------------------------- */
-	$.Browser = (function () {
+	$.Browser = function () {
 		var na = window.navigator,
 		ua = na.userAgent.toLowerCase(),
 		browserTester = /(msie|webkit|gecko|presto|opera|safari|firefox|chrome|maxthon|android|ipad|iphone|webos|hpwos)[ \/os]*([\d_.]+)/ig,
@@ -47,8 +47,7 @@
 			Browser['ie' + v] = true;
 		}
 		return Browser;
-	}
-		());
+	};
 	//Dom加载完成事件
 	$.ready = function (loadEvent) {
 		var init = function () {
@@ -266,7 +265,20 @@
 			elem.innerText = text;
 		}
 	}
-	
+	/*-------------------------- +
+	get selectTXT
+	+-------------------------- */
+	function getSelectTxt() {
+		var selectTxt;
+		if (window.getSelection) {
+			//标准浏览器支持的方法
+			selectTxt = window.getSelection();
+		} else if (document.selection) {
+			//IE浏览器支持的方法
+			selectTxt = document.selection.createRange().text;
+		}
+		return selectTxt;
+		}  	
 	/*-------------------------- +
 	to html
 	+-------------------------- */
@@ -330,7 +342,52 @@
 		}
 		return (null);
 	}
-	
+	/*-------------------------- +
+	get a search url args
+	eg:qs = "?q=java&num=10" var args = getUrlArgs(url1) console.log(args["num"]) //10
+	+-------------------------- */
+	function getUrlArgs() {
+	var qs = (location.search.length > 0 ? location.search.substring(1) : "")
+	var args = {};
+	var items = qs.split("&");
+	var item = null;
+	name = null;
+	value = null;
+	for (var i = 0; i < items.length; i++) {
+		item = items[i].split("=");
+		name = decodeURIComponent(item[0]);
+		value = decodeURIComponent(item[1]);
+		args[name] = value;
+	}
+	return args;
+}
+	/*-------------------------- +
+	get the number of a field(type/id)
+	+-------------------------- */
+	function getUrlPara(paraName) {
+		var sUrl = location.href;
+		var sReg = "(?:\\?|&){1}" + paraName + "=([^&]*)"
+			var re = new RegExp(sReg, "gi");
+		re.exec(sUrl);
+		return RegExp.$1;
+	}
+	function getUrlParam(name) { //Another way upstair
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null)
+			return unescape(r[2]);
+		return null;
+	}
+	//getUrlParam("type") //operation	
+	function addQueryUrlParam(url, name, value) {
+		if (url.indexOf("?") == -1) {
+			url += "?";
+		} else {
+			url += "&";
+		}
+		url += encodeURIComponent(name) + "=" + encodeURIComponent(value);
+		return url;
+	}
 	/*                                         Event                                  */
 	
 	$.eop = {
@@ -745,20 +802,6 @@
 		}
 	}
 	/*-------------------------- +
-	get selectTXT
-	+-------------------------- */
-	function getSelectTxt() {
-		var selectTxt;
-		if (window.getSelection) {
-			//标准浏览器支持的方法
-			selectTxt = window.getSelection();
-		} else if (document.selection) {
-			//IE浏览器支持的方法
-			selectTxt = document.selection.createRange().text;
-		}
-		return selectTxt;
-		}  
-	/*-------------------------- +
 	limit max length of a string and change extra to ...
 	+-------------------------- */
 	
@@ -836,43 +879,6 @@
 		var Rand = Math.random();
 		return (Min + Math.round(Rand * Range));
 	}
-	/*-------------------------- +
-	get a search url args
-	eg:qs = "?q=java&num=10" var args = getUrlArgs(url1) console.log(args["num"]) //10
-	+-------------------------- */
-	function getUrlArgs() {
-	var qs = (location.search.length > 0 ? location.search.substring(1) : "")
-	var args = {};
-	var items = qs.split("&");
-	var item = null;
-	name = null;
-	value = null;
-	for (var i = 0; i < items.length; i++) {
-		item = items[i].split("=");
-		name = decodeURIComponent(item[0]);
-		value = decodeURIComponent(item[1]);
-		args[name] = value;
-	}
-	return args;
-}
-	/*-------------------------- +
-	get the number of a field(type/id)
-	+-------------------------- */
-	function getUrlPara(paraName) {
-		var sUrl = location.href;
-		var sReg = "(?:\\?|&){1}" + paraName + "=([^&]*)"
-			var re = new RegExp(sReg, "gi");
-		re.exec(sUrl);
-		return RegExp.$1;
-	}
-	function getUrlParam(name) { //Another way upstair
-		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-		var r = window.location.search.substr(1).match(reg);
-		if (r != null)
-			return unescape(r[2]);
-		return null;
-	}
-	//getUrlParam("type") //operation
 	/*-------------------------- +
 	Validator
 	+-------------------------- */
