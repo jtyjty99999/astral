@@ -708,6 +708,17 @@
 			return self.pageYOffset || b && b.scrollTop || document.body.scrollTop
 		}
 	};
+	/**
+	MDN official
+	 */
+	function getScroll() {
+		var x = (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
+		var y = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+		return {
+			'x' : x,
+			'y' : y
+		}
+	}
 	$.dragInit = function (oDrag, handle) {
 		var disX = dixY = 0;
 		handle = handle || oDrag;
