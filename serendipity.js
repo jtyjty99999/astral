@@ -454,7 +454,14 @@
 		if (event.ctrlKey == true && event.keyCode == 13)
 			alert("Ctrl+Enter ");
 	}
-	
+	function escapeHTML(target) {
+    return target.replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 	/*                                                        UI                                          */
 	
 	/*-------------------------- +
