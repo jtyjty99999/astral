@@ -97,5 +97,76 @@ define(function () {
 			elem.innerText = text;
 		}
 	}
+	/**
+	 * 设置Iframe内容
+	 *
+	 * @param {object String} id iframe元素id
+	 * @param {object String} content
+	 * @return null
+	 * @public
+	 */	
+	
+	Node.writeIframe = function(id,content){
+		var iObj = document.getElementById(id).contentWindow;
+		iObj.document.designMode = 'On';
+		iObj.document.contentEditable = true;
+		iObj.document.open();
+		iObj.document.writeln(content);
+		iObj.document.close();
+	}
+	
+	var insertAdjacentNode = function (swhere, node) {
+		switch (swhere) {
+		case "beforeBegin":
+			this.parentNode.insertBefore(node, this);
+			break;
+		case "afterBegin":
+			this.insertBefore(node, this.firstChild);
+			break;
+		case "beforeEnd":
+			this.appendChild(node);
+			break;
+		case "afterEnd":
+			this.nextSibling ? this.parentNode.insertBefore(node, this.nextSibling) :
+			this.parentNode.appendChild(node);
+			break;
+		}
+	}
+	/**
+	 * 插入html标签
+	 *
+	 * @param {object String} swhere: 指定插入html标签语句的地方，有四种值可用：
+	 * 1. beforeBegin: 插入到标签开始前
+	 * 2. afterBegin:插入到标签开始标记之后
+     * 3. beforeEnd:插入到标签结束标记前
+     * 4. afterEnd:插入到标签结束标记后
+	 * @param {object String} html
+	 * @return null
+	 * @public
+	 */	
+
+	Node.insertAdjacentHTML = function (swhere, html) {
+		var r = document.createRange();
+		r.setStartBefore(this); //这里用selectNode也可以
+		var frag = r.createContextualFragment(html);
+		insertAdjacentNode(swhere, frag);
+	}
+	Node.insertAdjacentText = function (swhere, txt) {
+		var textNode = document.createTextNode(txt);
+		insertAdjacentNode(swhere, textNode);
+	}
+		/**
+	 * 判断节点是否包含另一个节点
+	 *
+	 * @param {object HTMLElement} a
+	 * @param {object HTMLElement} b
+	 * @return {object Boolean}
+	 * @public
+	 */	
+	Node.contains = function(a, b) { 
+	return a.contains ? a != b && a.contains(b) : !!(a.compareDocumentPosition(arg) & 16); 
+	}
+	
+	
 	return node
 });

@@ -29,7 +29,10 @@ define(function () {
 	Util.getType =function(object) {
 		return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
 	};
-	
+	Util.getType =function(object) {
+		return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
+	};
+
 	
 	return Util
 });
