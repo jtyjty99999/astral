@@ -15,6 +15,7 @@ define(function () {
 			return str.replace(/(\s*$)/g, "");
 			　
 		},
+		//此方法有危险会引发注入
 		removeHtml : function (elem) {
 			elem.innerHTML.replace(/<.+?>/gim, '')
 		},
@@ -57,6 +58,7 @@ define(function () {
 		underscored : function (target) {
 			return target.replace(/([a-z\d])([A-Z]+)/g, "$1_$2").replace(/\-/g, "_").toLowerCase();
 		},
+		//http://114.xixik.com/character/
 		escapeHTML : function (html) {
 			return String(html)
 			.replace(/&(?!\w+;)/g, '&amp;')
@@ -64,6 +66,7 @@ define(function () {
 			.replace(/>/g, '&gt;')
 			.replace(/"/g, '&quot;');
 		};
+		//fromCharCode() 可接受一个指定的 Unicode 值,然后返回一个字符串。
 		unescapeHTML : function (target) {
 			return target
 			.replace(/&quot;/g, '"')
