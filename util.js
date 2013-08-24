@@ -5,6 +5,7 @@
  */
 define(function () {
 	var Util = {};
+	var objProto = Object.prototype,hasOwn = objProto.hasOwnProperty;
 	/**
 	 * Returns internal [[Class]] property of an object
 	 *
@@ -27,7 +28,7 @@ define(function () {
 	 *
 	 */
 	Util.getType =function(object) {
-		return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
+		return objProto.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
 	};
 /**
 	 * 揉杂，合并对象
@@ -54,6 +55,51 @@ mixin({a:111,b:222,c:333},{a:222},true)//{a: 111, b: 222, c: 333}
 		}
 		return base;
 	}
+/**
+	 * 遍历器
+	 *
+	 * @param {"[object Object]"} O 被遍历对象
+	 * @param {"[object Function]"} 回调函数
+	 * @return {"[object Object]"} 
+	 * @public
+mixin({a:111,b:222,c:333},{a:222})//{a: 222, b: 222, c: 333}
+mixin({a:111,b:222,c:333},{a:222},true)//{a: 111, b: 222, c: 333}
+**/	
+	
+	Util.each=function( O, callbackfn ) {
+
+            var T, k = 0, kValue, len;
+
+            if ( O == null ) {  
+                throw new TypeError( 'this is null or not defined' );  
+            }
+
+            O = Object(O);
+            len = O.length >>> 0;
+
+            if( getType(callbackfn) != 'Function' ) {
+                throw new TypeError( callbackfn + ' is not a function' );
+            }
+
+            if( getType(O) == 'Array' ) {
+                while(k < len) {
+                    if( hasOwn.call( O, k ) ) {
+                        kValue = O[k];
+                        if( callbackfn.call( kValue, k + 1, kValue, O ) === false ) break;
+                    }
+                    k ++;
+                }
+            } else {
+                for( k in O ) {
+                    if( hasOwn.call(O, k) ) {
+                        kValue = O[k];
+                        if( callbackfn.call( kValue, kValue, k, O ) === false ) break;
+                    }
+                }
+            }
+            return undefined;
+        }
+
 
 	
 	return Util
