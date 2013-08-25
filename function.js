@@ -148,7 +148,22 @@ define(function () {
             console.log(" need time:"+(+new Date() - d));
             return apy;
        }
-	 }
+	 },
+	 	/**
+	 * 使某个函数执行n次
+	 *
+	 * @param {"[object Number]"} num 
+	 * @param {"[object Function]"} fun 
+	 * @return {"[object Object]"} 
+	 * @public
+	 */
+	 	times: function(num,fn) {
+      if(fn) {
+        for(var i = 0; i < num; i++) {
+          fn.call(num, i);
+        }
+      }
+    }
 	};
 	return FnHelper
 });

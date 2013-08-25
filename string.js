@@ -77,11 +77,11 @@ define(function () {
 				return String.fromCharCode(parseInt($1, 10));
 			});
 		},
-		startsWith : function (str) {
-			return this.indexOf(str) === 0;
+		startsWith : function (source,str) {
+			return source.indexOf(str) === 0;
 		},
 		endsWith : function (str) {
-			return this.lastIndexOf(str) === this.length - str.length;
+			return source.lastIndexOf(str) === source.length - str.length;
 		},
 	};
 

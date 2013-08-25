@@ -1,10 +1,10 @@
 /**
- * @module array
+ * @module NumberHelper
  *
  * 提供操作数组相关的方法
  */
 define(function () {
-	var arrayHelper = {
+	var NumberHelper = {
 		bigAdd : function (a, b) {
 			var m = a.split('').reverse();
 			var n = b.split('').reverse();
@@ -45,7 +45,10 @@ define(function () {
 		var Range = Max - Min;
 		var Rand = Math.random();
 		return (Min + Math.round(Rand * Range));
-	}
+	},
+	isInteger: function(num) {
+      return num % 1 == 0;
+    },
 	};
-	return array
+	return NumberHelper
 });

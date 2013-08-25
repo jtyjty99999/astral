@@ -134,15 +134,28 @@ define(function () {
         }
         return cache;
     },
-    timeTest = function(funName) {
-        var that = this;
+	/**
+	 * 给函数增加计时器,执行时会自动打印执行时间
+	 *
+	 * @param {"[object Function]"} fun 
+	 * @return {"[object Function]"} fun  
+	 * @public
+	 */
+	timeTest  = function(fun) {
         return function() {
-            var d = +new Date();
-            var apy = that.apply(this,arguments);
-            console.log(funName+" need time:"+(+new Date() - d));
+            var d = +new Date();console.log(d);
+            var apy = fun.apply(this,arguments);console.log(+new Date() - d);
+            console.log(" need time:"+(+new Date() - d));
             return apy;
        }
-	 }
+	 },
+	 	times: function(num,fn) {
+      if(fn) {
+        for(var i = 0; i < num; i++) {
+          fn.call(num, i);
+        }
+      }
+    }
 	};
 	return FnHelper
 });
