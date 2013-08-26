@@ -115,20 +115,20 @@ define(function () {
 		iObj.document.close();
 	}
 	
-	var insertAdjacentNode = function (swhere, node) {
+	var insertAdjacentNode = function (target,swhere, node) {
 		switch (swhere) {
 		case "beforeBegin":
-			this.parentNode.insertBefore(node, this);
+			target.parentNode.insertBefore(node, target);
 			break;
 		case "afterBegin":
-			this.insertBefore(node, this.firstChild);
+			target.insertBefore(node, target.firstChild);
 			break;
 		case "beforeEnd":
-			this.appendChild(node);
+			target.appendChild(node);
 			break;
 		case "afterEnd":
-			this.nextSibling ? this.parentNode.insertBefore(node, this.nextSibling) :
-			this.parentNode.appendChild(node);
+			target.nextSibling ? target.parentNode.insertBefore(node, target.nextSibling) :
+			target.parentNode.appendChild(node);
 			break;
 		}
 	}
@@ -145,17 +145,17 @@ define(function () {
 	 * @public
 	 */	
 
-	Node.insertAdjacentHTML = function (swhere, html) {
+	Node.insertAdjacentHTML = function (target,swhere, html) {
 		var r = document.createRange();
-		r.setStartBefore(this); //这里用selectNode也可以
+		r.setStartBefore(target); //这里用selectNode也可以
 		var frag = r.createContextualFragment(html);
-		insertAdjacentNode(swhere, frag);
+		insertAdjacentNode(target,swhere, frag);
 	}
-	Node.insertAdjacentText = function (swhere, txt) {
+	Node.insertAdjacentText = function (target,swhere, txt) {
 		var textNode = document.createTextNode(txt);
-		insertAdjacentNode(swhere, textNode);
+		insertAdjacentNode(target,swhere, textNode);
 	}
-		/**
+	/**
 	 * 判断节点是否包含另一个节点
 	 *
 	 * @param {object HTMLElement} a
@@ -165,6 +165,25 @@ define(function () {
 	 */	
 	Node.contains = function(a, b) { 
 	return a.contains ? a != b && a.contains(b) : !!(a.compareDocumentPosition(arg) & 16); 
+	}
+	/**
+	 * 获取节点的嵌套深度,用于测试
+	 *
+	 * @param {object HTMLElement} a
+	 * @return {object Object} 包含嵌套路径path及嵌套深度len
+	 * @public
+	 */	
+	//path:"BODY-->DIV-->P-->SPAN-->B",len:5
+	Node.deepth = function (el) {
+		var tbl = [],
+		deepth = 0;
+		do {
+			tbl.push(el.tagName);
+		} while ((el = el.parentNode) && (el !== document.documentElement));
+		return {
+			path : tbl.reverse().join('-->'),
+			len : tbl.length
+		}
 	}
 	
 	

@@ -5,7 +5,28 @@
  */
 define(function () {
 	var Browser = {
-	
+	/**
+	 * 判断浏览器是否支持某个事件
+	 * @param {object String} eventName 事件名 
+	 * @return {object Boolean} 
+	 */
+	 //可以通过in来检测一个事件是否存在于一个元素,ff不支持
+	 //将一个事件属性设置给要检测的元素.如果元素可以识别这个事件,
+	 //那么这个事件会有一个事件句柄
+	 //http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
+		eventSupported : function (eventName) {
+			var el = document.createElement("div");
+			eventName = "on" + eventName;
+
+			var isSupported = (eventName in el);
+			if (!isSupported) {
+				el.setAttribute(eventName, "return;");
+				isSupported = typeof el[eventName] === "function";
+			}
+			el = null;
+
+			return isSupported;
+		};
 	
 	};
 	/**

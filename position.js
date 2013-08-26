@@ -42,7 +42,7 @@ define(function () {
 		return self.innerHeight || html && html.clientHeight || body.clientHeight
 	}
 	
-	Position.cursorPos = {
+	Position.selection = {
 		getTxt : function (o) {
 			var start = this.getStart(o);
 			var end = this.getEnd(o);

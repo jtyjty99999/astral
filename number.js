@@ -41,14 +41,19 @@ define(function () {
 			return result;
 
 		},
-		getRandom :function (Min, Max) {
-		var Range = Max - Min;
-		var Rand = Math.random();
-		return (Min + Math.round(Rand * Range));
-	},
-	isInteger: function(num) {
-      return num % 1 == 0;
-    },
+		getRandom : function (Min, Max) {
+			var Range = Max - Min;
+			var Rand = Math.random();
+			return (Min + Math.round(Rand * Range));
+		},
+		isInteger : function (num) {
+			return num % 1 == 0;
+		},
+		//pad(222,5)  "00222"
+		pad : function (num, n) {
+			var l = ('' + num).length
+			return (new Array(n >l  ? (n - l + 1) : 0).join('0') + num);
+		},
 	};
 	return NumberHelper
 });
