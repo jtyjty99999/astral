@@ -3,15 +3,15 @@
  *
  * 数据交互模块,处理url与ajax数据交互
  */
-  (function(name, definition) {
-    if(typeof define == 'function') {
-        define(definition);
-    } else if(typeof module != 'undefined' && module.exports) {
-        module.exports = definition;
-    } else {
-        window[name] = definition;
-    }
-})('Connection',function () {
+(function (name, definition) {
+	if (typeof define == 'function') {
+		define(definition);
+	} else if (typeof module != 'undefined' && module.exports) {
+		module.exports = definition;
+	} else {
+		window[name] = definition;
+	}
+})('Connection', function () {
 	var Connection = {
 		/**
 		 * 发送数据(一般用于打点统计)
@@ -179,11 +179,46 @@
 				s += encodeURIComponent(index) + "=" + encodeURIComponent(obj[index]);
 			}
 			return s.replace(/%20/g, '+').substring(1);
-		}
+		},
+		parseJSON : function (data) {
+			var res = '';
+			if (typeof data !== "string" || !data) {
+				return null;
+			}
+
+			if (window.JSON && window.JSON.parse) {
+				return window.JSON.parse(data);
+			}
+			try {
+				res = (new Function("return" + data))()
+			} catch (e) {
+				throw new Error('parse error')
+				return
+			}
+			return res;
+
+		},
+		parseXML : function (data, xml, tmp) {
+
+			if (window.DOMParser) {
+				tmp = new DOMParser();
+				xml = tmp.parseFromString(data, "text/xml");
+			} else {
+				xml = new ActiveXObject("Microsoft.XMLDOM");
+				xml.async = "false";
+				xml.loadXML(data);
+			}
+
+			tmp = xml.documentElement;
+
+			if (!tmp || !tmp.nodeName || tmp.nodeName === "parsererror") {
+				throw new Error('Invalid XML')
+			}
+
+			return xml;
+		},
 
 	};
 
 	return Connection
-}
-)
- 
+}())
