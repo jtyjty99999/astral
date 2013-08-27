@@ -3,17 +3,26 @@
  *
  * 操作浏览器
  */
-define(function () {
+
+(function (name, definition) {
+	if (typeof define == 'function') {
+		define(definition);
+	} else if (typeof module != 'undefined' && module.exports) {
+		module.exports = definition;
+	} else {
+		window[name] = definition;
+	}
+})('Browser', function () {
 	var Browser = {
-	/**
-	 * 判断浏览器是否支持某个事件
-	 * @param {object String} eventName 事件名 
-	 * @return {object Boolean} 
-	 */
-	 //可以通过in来检测一个事件是否存在于一个元素,ff不支持
-	 //将一个事件属性设置给要检测的元素.如果元素可以识别这个事件,
-	 //那么这个事件会有一个事件句柄
-	 //http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
+		/**
+		 * 判断浏览器是否支持某个事件
+		 * @param {object String} eventName 事件名
+		 * @return {object Boolean}
+		 */
+		//可以通过in来检测一个事件是否存在于一个元素,ff不支持
+		//将一个事件属性设置给要检测的元素.如果元素可以识别这个事件,
+		//那么这个事件会有一个事件句柄
+		//http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
 		eventSupported : function (eventName) {
 			var el = document.createElement("div");
 			eventName = "on" + eventName;
@@ -27,15 +36,15 @@ define(function () {
 
 			return isSupported;
 		};
-	
+
 	};
 	/**
 	 * 添加收藏夹
-	 * @param {object String} title 
-	 * @param {object String} url 
-	 * @return {object Boolean} 
+	 * @param {object String} title
+	 * @param {object String} url
+	 * @return {object Boolean}
 	 */
-	Browser.addFavorite = function(title, url) {
+	Browser.addFavorite = function (title, url) {
 		title = title || document.title;
 		url = url || location.href;
 		if (window.sidebar) {
@@ -52,25 +61,25 @@ define(function () {
 	 * @param {String} url
 	 * @return {Boolean}
 	 */
-	Browser.setHomepage=function(url) {
+	Browser.setHomepage = function (url) {
 		url = url || location.href;
-		
+
 		if (document.body && document.body.setHomePage) {
 			document.body.style.behavior = "url(#default#homepage)";
 			document.body.setHomePage(url);
 			return true;
 		}
-		
+
 		return false;
 	}
 	/**
 	 *获取访问来源
 	 * @return {object String}
 	 */
-	Browser.ref=function() {
+	Browser.ref = function () {
 		return document.referrer;
 	}
-		/**
+	/**
 	 *判断页面是否最小化
 	 * @return {object Boolean}
 	 */
@@ -101,7 +110,6 @@ define(function () {
 		return window.outerWidth <= 160 && window.outerHeight <= 27;
 
 	}
-	
-	
+
 	return Browser
-});
+})

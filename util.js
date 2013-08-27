@@ -3,7 +3,16 @@
  *
  * 基础工具库,提供重要的几个方法
  */
-define(function () {
+ 
+  (function(name, definition) {
+    if(typeof define == 'function') {
+        define(definition);
+    } else if(typeof module != 'undefined' && module.exports) {
+        module.exports = definition;
+    } else {
+        window[name] = definition;
+    }
+})('Util',function () {
 	var Util = {};
 	var objProto = Object.prototype,hasOwn = objProto.hasOwnProperty;
 	/**
@@ -100,7 +109,59 @@ mixin({a:111,b:222,c:333},{a:222},true)//{a: 111, b: 222, c: 333}
             return undefined;
         }
 
+    /**
+     * 判定两个对象的值是否相同
+     * @param {Any} a
+     * @param {Any} b
+     * @return {Boolean}
+     * @public
+     */
 
+    Util.isEqual=function(a, b) {
+        if(a === b) {
+            return true;
+        } else if(a === null || b === null || typeof a === "undefined" || typeof b === "undefined" || $.type(a) !== $.type(b)) {
+            return false;
+        } else {
+            switch($.type(a)) {
+                case "String":
+                case "Boolean":
+                case "Number":
+                case "Null":
+                case "Undefined":
+                    //处理简单类型的伪对象与字面值相比较的情况,如1 v new Number(1)
+                    if(b instanceof a.constructor || a instanceof b.constructor) {
+                        return a == b;
+                    }
+                    return a === b;
+                case "NaN":
+                    return isNaN(b);
+                case "Date":
+                    return +a === +b;
+                case "NodeList":
+                case "Arguments":
+                case "Array":
+                    var len = a.length;
+                    if(len !== b.length) return false;
+                    for(var i = 0; i < len; i++) {
+                        if(!isEqual(a[i], b[i])) {
+                            return false;
+                        }
+                    }
+                    return true;
+                default:
+                    for(var key in b) {
+                        if(!isEqual(a[key], b[key])) {
+                            return false;
+                        }
+                    }
+                    return true;
+            }
+        }
+    }
 	
 	return Util
-});
+}
+
+)
+ 

@@ -3,7 +3,15 @@
  *
  * 数据交互模块,处理url与ajax数据交互
  */
-define(function () {
+  (function(name, definition) {
+    if(typeof define == 'function') {
+        define(definition);
+    } else if(typeof module != 'undefined' && module.exports) {
+        module.exports = definition;
+    } else {
+        window[name] = definition;
+    }
+})('Connection',function () {
 	var Connection = {
 		/**
 		 * 发送数据(一般用于打点统计)
@@ -176,4 +184,6 @@ define(function () {
 	};
 
 	return Connection
-});
+}
+)
+ 

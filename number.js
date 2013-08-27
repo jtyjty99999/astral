@@ -3,7 +3,15 @@
  *
  * 提供操作数组相关的方法
  */
-define(function () {
+  (function(name, definition) {
+    if(typeof define == 'function') {
+        define(definition);
+    } else if(typeof module != 'undefined' && module.exports) {
+        module.exports = definition;
+    } else {
+        window[name] = definition;
+    }
+})('NumberHelper',function () {
 	var NumberHelper = {
 		bigAdd : function (a, b) {
 			var m = a.split('').reverse();
@@ -56,4 +64,7 @@ define(function () {
 		},
 	};
 	return NumberHelper
-});
+}
+
+)
+ 

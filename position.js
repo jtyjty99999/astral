@@ -3,7 +3,16 @@
  *
  * 提供各种尺寸的操作方法(需要添加注释和兼容来源)
  */
-define(function () {
+ 
+  (function(name, definition) {
+    if(typeof define == 'function') {
+        define(definition);
+    } else if(typeof module != 'undefined' && module.exports) {
+        module.exports = definition;
+    } else {
+        window[name] = definition;
+    }
+})('Position',function () {
 	//tester http://jsbin.com/uluq/1
 	var Position = {}, doc = document, body = doc.body, html = doc.documentElement;
 	var pageXjudge = window.pageXOffset;
@@ -97,4 +106,7 @@ define(function () {
 	}
 	
 	return Position
-});
+}
+
+)
+ 

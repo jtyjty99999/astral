@@ -3,7 +3,16 @@
  *
  * 提供操作节点相关的方法
  */
-define(function () {
+ 
+  (function(name, definition) {
+    if(typeof define == 'function') {
+        define(definition);
+    } else if(typeof module != 'undefined' && module.exports) {
+        module.exports = definition;
+    } else {
+        window[name] = definition;
+    }
+})('Node',function () {
 	var Node = {};
 	/**
 	 * 获得元素的兄弟元素
@@ -188,4 +197,7 @@ define(function () {
 	
 	
 	return node
-});
+}
+}
+
+)
