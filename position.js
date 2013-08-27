@@ -3,18 +3,21 @@
  *
  * 提供各种尺寸的操作方法(需要添加注释和兼容来源)
  */
- 
-  (function(name, definition) {
-    if(typeof define == 'function') {
-        define(definition);
-    } else if(typeof module != 'undefined' && module.exports) {
-        module.exports = definition;
-    } else {
-        window[name] = definition;
-    }
-})('Position',function () {
+
+(function (name, definition) {
+	if (typeof define == 'function') {
+		define(definition);
+	} else if (typeof module != 'undefined' && module.exports) {
+		module.exports = definition;
+	} else {
+		window[name] = definition;
+	}
+})('Position', function () {
 	//tester http://jsbin.com/uluq/1
-	var Position = {}, doc = document, body = doc.body, html = doc.documentElement;
+	var Position = {},
+	doc = document,
+	body = doc.body,
+	html = doc.documentElement;
 	var pageXjudge = window.pageXOffset;
 	var pageYjudge = window.pageYOffset;
 	var clientTop = html.clientTop || body.clientTop || 0,
@@ -50,7 +53,7 @@
 	Position.windowHeight = function () {
 		return self.innerHeight || html && html.clientHeight || body.clientHeight
 	}
-	
+
 	Position.selection = {
 		getTxt : function (o) {
 			var start = this.getStart(o);
@@ -104,9 +107,7 @@
 			}
 		}
 	}
-	
+
 	return Position
 }
-
-)
- 
+	())

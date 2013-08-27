@@ -3,16 +3,16 @@
  *
  * 提供字符串相关的几个方法
  */
- 
-  (function(name, definition) {
-    if(typeof define == 'function') {
-        define(definition);
-    } else if(typeof module != 'undefined' && module.exports) {
-        module.exports = definition;
-    } else {
-        window[name] = definition;
-    }
-})('StringHelper',function () {
+
+(function (name, definition) {
+	if (typeof define == 'function') {
+		define(definition);
+	} else if (typeof module != 'undefined' && module.exports) {
+		module.exports = definition;
+	} else {
+		window[name] = definition;
+	}
+})('StringHelper', function () {
 	var StringHelper = {
 		/**
 		 * 字符串去空白
@@ -170,5 +170,4 @@
 
 	return StringHelper
 }
-)
- 
+	())
