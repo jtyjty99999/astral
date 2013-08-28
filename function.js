@@ -174,7 +174,31 @@
 					fn.call(num, i);
 				}
 			}
-		}
+		},
+		reload : function (elems, key, valOrFn, callback) {
+			var length = elems.length;
+
+			// 如果有多个属性，则迭代
+			if (typeof key === "object") {
+				for (var k in key) {
+					FnHelper.reload(elems, k, valOrFn, callback);
+				}
+				return elems;
+			}
+
+			if (value !== undefined) {
+				var isFn = Util.getType(valOrFn) == 'Function';
+
+				for (var i = 0; i < length; i++) {
+					callback(elems[i], key, isFn ? valOrFn.call(elems[i], i, callback(elems[i], key)) : valOrFn);
+				}
+
+				return elems;
+			}
+
+			// 读取属性
+			return length ? callback(elems[0], key) : undefined;
+		},
 	};
 	return FnHelper
 }
