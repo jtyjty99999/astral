@@ -106,6 +106,16 @@
 		}
 	}
 	/**
+	 * 获取iframe对象
+	 *
+	 * @param {object String} id iframe元素id
+	 * @return {object HTMLElement}
+	 * @public
+	 */
+	Node.getIframe = function (id) {
+		return document.getElementById(id).contentDocument || document.frames[id].document;
+	}
+	/**
 	 * 设置Iframe内容
 	 *
 	 * @param {object String} id iframe元素id
@@ -115,7 +125,7 @@
 	 */
 
 	Node.writeIframe = function (id, content) {
-		var iObj = document.getElementById(id).contentWindow;
+		var iObj = Node.getIframe(id);
 		iObj.document.designMode = 'On';
 		iObj.document.contentEditable = true;
 		iObj.document.open();
