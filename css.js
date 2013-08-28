@@ -123,6 +123,43 @@
 				'filter' : filter
 			}
 		};
+		
+	Css.setOpacity = function setOpacity(elem, opacity) {
+		elem.filters ? elem.style.filter = 'alpha(opacity=' + opacity + ')' : elem.style.opacity = opacity / 100;
+	}
+	Css.fadeIn = function(elem, speed, opacity) {
+		speed = speed || 20;
+		opacity = opacity || 100;
+		elem.style.display = 'block';
+		Css.setOpacity(elem, 0);
+		var val = 0;
+		(function () {
+			Css.setOpacity(elem, val);
+			val += 5;
+			if (val <= opacity) {
+				setTimeout(arguments.callee, speed)
+			}
+		})();
+	}
+
+	Css.fadeOut(elem, speed, opacity) {
+		speed = speed || 20;
+		opacity = opacity || 0;
+		var val = 100;
+		(function () {
+			$.setOpacity(elem, val);
+			val -= 5;
+			if (val >= opacity) {
+				setTimeout(arguments.callee, speed);
+			} else if (val < 0) {
+				elem.style.display = 'none';
+			}
+		})();
+	}
+	//#000000到#ffffff转为十进制后随机再转成十六进制
+	Css.getRandomColor = function () {
+		return '#' + Math.floor(Math.random() * 16777215).toString(16);
+	}
 
 		return Css
 	}())
