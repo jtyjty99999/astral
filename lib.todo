@@ -1,5 +1,17 @@
 模块:
  ☐ Array
+	☺min  2013.8.29
+	☺min  2013.8.29
+	☺max  2013.8.29
+	☺delRepeat  2013.8.29
+	☺unique  2013.8.29
+	☺contains  2013.8.29
+	☺removeAt  2013.8.29
+	☺remove  2013.8.29
+	☺resortArray  2013.8.29
+	☺merge  2013.8.29
+	☺union  2013.8.29
+	☺countToGroup  2013.8.29
  ☐ animate 2013.8.28
  ☐ Browser
 	 ☺eventSupported  2013.8.27
@@ -7,6 +19,7 @@
 	 ☺setHomepage
 	 ☺ref
 	 ☺isPageMinimized
+	 ☺detectOS 2013.8.29
  ☐ Connection
 	 ☺sendData
 	 ☺addQueryUrlParam
@@ -18,11 +31,20 @@
 	 ☺stringify
 	 ☺parseJSON 2013.8.28
 	 ☺parseXML 2013.8.28
+	 ☺AJAX 2013.8.29
+		☺失败重连 2013.8.29
+		☺缓存结果 2013.8.29
+		☺createXHR 2013.8.29
+		☺globalEval 2013.8.29
  ☐ Css
 	 ☺dynamicInsertCss
 	 ☺addCssRule
 	 ☺toHex
 	 ☺parseColor
+	 ☺setOpacity 2013.8.29
+	 ☺fadeIn 2013.8.29
+	 ☺fadeOut 2013.8.29
+	 ☺getRandomColor 2013.8.29
  ☐ FnHelper
 	 ☺throttle
 	 ☺uncurryThis
@@ -31,6 +53,7 @@
 	 ☺simpleAtQuene
 	 ☺memorize
 	 ☺timeTest
+	 ☺reload 2013.8.29
  ☐ html5
 	 ☺readFile
 	 ☺Stylesheet
@@ -47,12 +70,14 @@
 	 ☺contains
 	 ☺deepth 2013.8.27
 	 ☺isName 2013.8.28
+	 ☺getIframe 2013.8.29
  ☐ NumberHelper
 	 ☺bigAdd
 	 ☺bigMutple
 	 ☺getRandom
 	 ☺isInteger
 	 ☺pad 2013.8.27
+	 ☺isEqual 2013.8.29
  ☐ StringHelper
 	 ☺trim
 	 ☺ltrim
