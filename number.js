@@ -62,6 +62,10 @@
 			var l = ('' + num).length
 			return (new Array(n > l ? (n - l + 1) : 0).join('0') + num);
 		},
+		isEqual: (number1, number2, digits){
+			digits = digits == undefined? 10: digits; // 默认精度为10
+			return number1.toFixed(digits) === number2.toFixed(digits);
+		}
 	};
 	return NumberHelper
 }
