@@ -181,6 +181,11 @@
 			}
 			return s.replace(/%20/g, '+').substring(1);
 		},
+		/**
+		 * 将JSON字符串解析为对象
+		 * @param {object String} JSON字符串
+		 * @return {object Object} JSON对象
+		 */
 		parseJSON : function (data) {
 			var res = '';
 			if (typeof data !== "string" || !data) {
@@ -199,8 +204,13 @@
 			return res;
 
 		},
-		parseXML : function (data, xml, tmp) {
-
+		/**
+		 * 将XML字符串解析为对象
+		 * @param {object String} XML字符串
+		 * @return {object Object} XML对象
+		 */
+		parseXML : function (data, xml) {
+			var tmp;
 			if (window.DOMParser) {
 				tmp = new DOMParser();
 				xml = tmp.parseFromString(data, "text/xml");
@@ -220,7 +230,11 @@
 		},
 
 	};
-
+		/**
+		 * YUI2的创建xhr对象的封装
+		 * @return {object XmlHttpRequest} XHR对象
+		 * @private
+		 */
 	function createXHR() {
 		var msxml_progid = [
 			'MSXML2.XMLHTTP.6.0',
@@ -237,14 +251,18 @@
 					req = new ActiveXObject(msxml_progid[i]);
 					break
 				}
-				earch(e2) {}
+				catch(e2) {}
 			}
 		}
 		finally {
 			return req
 		}
 	}
-
+		/**
+		 *	全局eval
+		 * @return {object Object}
+		 * @private
+		 */
 	function globalEval(data) {
 		if (data && /\S/.test(data)) {
 			(window.execScript || function (data) {
@@ -252,14 +270,26 @@
 			})(data);
 		}
 	}
-	/*判断加载是否成功*/
+		/**
+		 *	判断加载是否成功
+		 * @param {object XmlHttpRequest}
+		 * @return {object Boolean}
+		 * @private
+		 */
+	
 	function httpSuccess(r) {
 		try {
 			return !r.status && location.protocl == 'file:' || (r.status >= 200 && r.status < 300) || r.status == 304 || navigator.userAgent.indexOf('Safari') >= 0 && typeof r.status == 'undefined';
 		} catch (e) {}
 		return false;
 	};
-	/*判断加载文件类型*/
+		/**
+		 *	处理ajax的返回数据
+		 * @param {object XmlHttpRequest}
+		 * @param {object String}
+		 * @return {object String}
+		 * @private
+		 */
 	function httpData(r, type) {
 		var ct = r.getResponseHeader('content-type');
 		var data = !type && ct && ct.indexOf('xml') >= 0;
@@ -268,7 +298,21 @@
 	}
 	//ajax部分
 	C.ajaxCache = {};
-
+		/**
+		 *	Ajax请求
+		 * @param {object Object}
+			@param {object String} type : ajax请求方式，默认为POST,
+			@param {object String} url : ajax请求地址 ,默认为空
+			@param {object Number} timeout 超时时间，默认为 5000,
+			@param {object Boolean} reSend : 是否开启失败重试,默认为false,
+			@param {object Number} reSendCount : 失败重试次数，默认为1,
+			@param {object Boolean} cache : 是否缓存此请求的数据 默认为 false,
+			@param {object Function} onComplete ajax请求结束后触发的函数 
+			@param {object Function} onError : ajax请求失败后触发的函数 
+			@param {object Function} onSuccess : ajax请求成功后触发的函数 
+			@param {object Function} onTimeout: ajax请求超时后触发的函数 
+			@param {object String} data : ajax数据
+		 */
 	C.ajax = function (options) {
 
 		var paramStore = {
@@ -288,6 +332,8 @@
 			function () {},
 			onSuccess : options.onSuccess ||
 			function () {},
+			onTimeout : options.onTimeout ||
+			function () {},
 			data : options.data || ''
 		};
 		//缓存
@@ -301,21 +347,25 @@
 		var xml = createXHR();
 		xml.open(paramStore.type, paramStore.url, true);
 		var timeoutLength = paramStore.timeout;
-		var requestDone = false;
-		setTimeout(function () {
-			requestDone = true;
-		},
-			timeoutLength);
+		//超时处理
+		var requestTimeout = false, timeoutTimer =
+			setTimeout(function () {
+				requestTimeout = true;
+				paramStore.onTimeout();
+				xml = null;
+			},
+				timeoutLength);
 		xml.onreadystatechange = function () {
 			if (xml.readyState == 4 && !requestDone) {
+				clearTimeout(timeoutTimer);
 				if (httpSuccess(xml)) {
 					var data = httpData(xml, paramStore.type);
 					paramStore.onSuccess(data);
 					paramStore.cache && C.ajaxCache[paramStore.url] = data;
 				} else if (paramStore.reSend && C.ajaxCache[paramStore.url]['reSendCount'] !== 0) {
 					setTimeout(function () {
-						C.ajax(paramStore);
 						C.ajaxCache[paramStore.url]['reSendCount'] -= 1;
+						C.ajax(paramStore);
 						console.log('剩余' + C.ajaxCache[paramStore.url]['reSendCount'] + '次执行');
 					}, 1000)
 
@@ -330,7 +380,7 @@
 		xml.send();
 
 	}
-
+//http://www.cnblogs.com/heyuquan/archive/2013/05/13/3076465.html
 	return C
 }
 	())

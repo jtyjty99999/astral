@@ -165,7 +165,30 @@
 			var l = str.length,
 			num = num || 0;
 			return str.substring(0, l - num)
+		},
+		/**
+		 * 将多余字符转为规定的省略符号
+		 *
+		 * @param {object String} str 
+		 * @param {object Number} num 字符个数
+		 * @param {object String} elli 省略符号
+		 * @return {object String}
+		 * @public
+		 */
+		ellipsis: function (str,limit,elli) {
+		var _limit = limit || 10;
+		var elli = elli || '...';
+		var len = str.length;
+		var str = "";
+		if (len > limit) {
+			str = this.substring(0, limit);
 		}
+		str += elli;
+		return str;
+
+	}
+		
+		
 	};
 
 	return StringHelper
