@@ -65,6 +65,16 @@
 		isEqual: (number1, number2, digits){
 			digits = digits == undefined? 10: digits; // 默认精度为10
 			return number1.toFixed(digits) === number2.toFixed(digits);
+		},
+		sign : function (value) {
+			value = Number(value);
+			if (isNaN(value) || (value === 0)) {
+				return value;
+			}
+			return (value > 0) ? 1 : -1;
+		},
+		toUint32 : function (value) {
+			return value >>> 0;
 		}
 	};
 	return NumberHelper
