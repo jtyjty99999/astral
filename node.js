@@ -208,6 +208,25 @@
 		// 忽略大小写
 		return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
 	},
+	Node.hasClass = function (node, class_name) {
+		var regex;
+		regex = new RegExp(class_name, 'i');
+		return node.className.match(regex);
+	};
+
+	Node.addClass = function (class_name) {
+		if (!Node.hasClass(class_name)) {
+			return node.className += " " + class_name;
+		}
+	};
+
+	Node.removeClass = function (class_name) {
+		if (Node.hasClass(class_name)) {
+			return node.className = node.className.replace(class_name, "");
+		}
+	};
+	
+	
 
 	return node
 }
