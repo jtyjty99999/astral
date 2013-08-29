@@ -82,6 +82,7 @@
 	/**
 	 *判断页面是否最小化
 	 * @return {object Boolean}
+	 * thanks to franky
 	 */
 	Browser.isPageMinimized = function () { //判断窗口是否最小化.
 		/*
@@ -110,12 +111,28 @@
 		return window.outerWidth <= 160 && window.outerHeight <= 27;
 
 	};
+	var sUserAgent = navigator.userAgent;
+	/**
+	 * 查询ua字符串
+	 * @param {String} 字符串
+	 * @return {Boolean} 
+	 * @private
+	 */
+	function find(feature) {
+		if (sUserAgent.indexOf(feature) !== -1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	/**
 	 * 检测操作系统
 	 * @return {String} 操作系统
 	 */
+
 	Browser.detectOS = function () {
-		var sUserAgent = navigator.userAgent;
+
+		//iphone ipod ipad android
 		var isWin = (navigator.platform == "Win32") || (navigator.platform == "Windows");
 		var isMac = (navigator.platform == "Mac68K") || (navigator.platform == "MacPPC") || (navigator.platform == "Macintosh") || (navigator.platform == "MacIntel");
 		if (isMac)
@@ -127,24 +144,105 @@
 		if (isLinux)
 			return "Linux";
 		if (isWin) {
-			var isWin2K = sUserAgent.indexOf("Windows NT 5.0") > -1 || sUserAgent.indexOf("Windows 2000") > -1;
+			var isWin2K = find("Windows NT 5.0") || find("Windows 2000");
 			if (isWin2K)
 				return "Win2000";
-			var isWinXP = sUserAgent.indexOf("Windows NT 5.1") > -1 || sUserAgent.indexOf("Windows XP") > -1;
+			var isWinXP = find("Windows NT 5.1") || find("Windows XP");
 			if (isWinXP)
 				return "WinXP";
-			var isWin2003 = sUserAgent.indexOf("Windows NT 5.2") > -1 || sUserAgent.indexOf("Windows 2003") > -1;
+			var isWin2003 = find("Windows NT 5.2") || find("Windows 2003");
 			if (isWin2003)
 				return "Win2003";
-			var isWinVista = sUserAgent.indexOf("Windows NT 6.0") > -1 || sUserAgent.indexOf("Windows Vista") > -1;
+			var isWinVista = find("Windows NT 6.0") || find("Windows Vista");
 			if (isWinVista)
 				return "WinVista";
-			var isWin7 = sUserAgent.indexOf("Windows NT 6.1") > -1 || sUserAgent.indexOf("Windows 7") > -1;
+			var isWin7 = find("Windows NT 6.1") || find("Windows 7");
 			if (isWin7)
 				return "Win7";
 		}
 		return "other";
 	}
-
+	/**
+	 * 检测设备方向
+	 * @return {String} 方向
+	 */
+	Browser.direction = function () {
+		if (Math.abs(window.orientation === 90)) {
+			return 'landscape';
+		} else {
+			return 'portrait';
+		}
+	}
+	/**
+	 * 检测设备类型
+	 * @return {Object} 提供了一系列检测设备的方法
+	 * Browser.detectDevice.isios 检测ios设备
+	 * Browser.detectDevice.isiphone 检测iphone
+	 * Browser.detectDevice.isipod 检测ipod
+	 * Browser.detectDevice.isipad 检测ipad
+	 * Browser.detectDevice.isandroid 检测安卓
+	 * Browser.detectDevice.isandroidPhone 检测安卓移动设备
+	 * Browser.detectDevice.isandroidTablet 检测安卓平板
+	 * Browser.detectDevice.isblackberry 检测黑莓
+	 * Browser.detectDevice.isblackberryPhone 检测黑莓移动设备
+	 * Browser.detectDevice.isblackberryPhone 检测黑莓平板
+	 * Browser.detectDevice.iswindows 检测windows设备
+	 * Browser.detectDevice.iswindowsPhone 检测windows移动设备
+	 * Browser.detectDevice.iswindowsTablet 检测windows平板
+	 * Browser.detectDevice.ismobile 检测移动设备
+	 * Browser.detectDevice.istablet 检测平板
+	 * https://github.com/matthewhudson/device.js/blob/master/lib/device.js
+	 */
+	Browser.detectDevice = function () {
+		var support = {
+			isios : function () {
+				return support.isiphone() || support.isipod() || support.isipad();
+			},
+			isiphone : function () {
+				return find('iphone');
+			},
+			isipod = function () {
+				return find('ipod');
+			},
+			isipad = function () {
+				return find('ipad');
+			},
+			isandroid = function () {
+				return find('android');
+			},
+			isandroidPhone = function () {
+				return support.isandroid() && find('mobile');
+			},
+			isandroidTablet = function () {
+				return support.android() && !find('mobile');
+			},
+			isblackberry = function () {
+				return find('blackberry' || find('bb10' || find('rim')));
+			},
+			isblackberryPhone = function () {
+				return support.blackberry() && !find('tablet');
+			},
+			isblackberryTablet = function () {
+				return support.blackberry() && find('tablet');
+			},
+			iswindows = function () {
+				return find('windows');
+			},
+			iswindowsPhone = function () {
+				return support.windows() && find('phone');
+			},
+			iswindowsTablet = function () {
+				return support.windows() && find('touch');
+			},
+			ismobile = function () {
+				return support.androidPhone() || support.iphone() || support.ipod() || support.windowsPhone() || support.blackberryPhone();
+			},
+			istablet = function () {
+				return support.ipad() || support.androidTablet() || support.blackberryTablet() || support.windowsTablet();
+			},
+		}
+		return support
+	}
 	return Browser
-}())
+}
+	())
