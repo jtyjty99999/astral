@@ -180,6 +180,25 @@
             return true;
         }
     }
+	/**
+	 * 在指定的上下文中生成命名空间
+	 * @param {String} 命名空间表达式
+	 * @return {Object}
+	 * @public
+	 */
+	//Util.namespace('C.E.F')
+	//C.E.F.g = function a(){alert('b')}
+	//C.E.F.g()
+	Util.namespace = function(namespace,context) {
+        var namespaceParts = namespace.split('.'),
+            namespacePart,
+            cur = context || this;
+        for (var i = 0, n = namespaceParts.length; i < n; i++) {
+            namespacePart = namespaceParts[i];
+            cur = cur[namespacePart] = cur[namespacePart] || {};
+        }
+        return cur;
+    };
 
 	return Util
 }
