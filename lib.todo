@@ -20,6 +20,8 @@
 	 ☺ref
 	 ☺isPageMinimized
 	 ☺detectOS 2013.8.29
+	 ☺direction 2013.8.30
+	 ☺detectDevice 2013.8.30
  ☐ Connection
 	 ☺sendData
 	 ☺addQueryUrlParam
@@ -71,6 +73,9 @@
 	 ☺deepth 2013.8.27
 	 ☺isName 2013.8.28
 	 ☺getIframe 2013.8.29
+	 ☺hasClass 2013.8.30
+	 ☺addClass 2013.8.30
+	 ☺removeClass 2013.8.30
  ☐ NumberHelper
 	 ☺bigAdd
 	 ☺bigMutple
@@ -78,6 +83,8 @@
 	 ☺isInteger
 	 ☺pad 2013.8.27
 	 ☺isEqual 2013.8.29
+	 ☺sign 2013.8.30
+	 ☺toUint32 2013.8.30
  ☐ StringHelper
 	 ☺trim
 	 ☺ltrim
@@ -107,6 +114,7 @@
 	☺isEqual 2013.8.28
 	☺isWindow 2013.8.28
 	☺isEmpty 2013.8.28
+	@namespace 2013.8.30
  ☐ Event
  http://www.cnblogs.com/bluedream2009/archive/2010/04/07/1706564.html
 http://www.cnblogs.com/bluedream2009/archive/2010/08/23/1806865.html
@@ -145,9 +153,18 @@ http://www.cnblogs.com/bluedream2009/archive/2010/07/11/1775216.html
  
  要看的参考库
  
+ http://www.cnblogs.com/jkisjk/tag/QWrap  qwarp 解析
  https://github.com/RubyLouvre/mass-Framework
  http://sugarjs.com/api
  
  https://github.com/sunnylost/Swanks/blob/master/swanks.js
  https://github.com/chenmnkken/easyjs/blob/master/core/src
  https://github.com/zhengyinhui100/handy
+ 
+ 
+ https://github.com/kriskowal/es5-shim/blob/master/es5-shim.js
+ https://github.com/xkizer/Meeveep/tree/d95db9dcf6cf9e603c2ac0e2047d60ba5893b9ce/www/node_modules/cli-color/node_modules/es5-ext
+ 已经看完了number math了
+ 
+ https://github.com/sstephenson/prototype/blob/master/src/prototype/dom/layout.js  帮助很大
+ 
