@@ -22,7 +22,7 @@
 		 * @public
 		 */
 		trim : function (str) {
-			return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+			return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
 		},
 		ltrim : function (str) {
 			return str.replace(/(^\s*)/g, "");
