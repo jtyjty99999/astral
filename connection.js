@@ -274,6 +274,14 @@
 		 *	判断加载是否成功
 		 * @param {object XmlHttpRequest}
 		 * @return {object Boolean}
+		 *  如果得不到服务器状态，且我们正在请求本地文件，认为成功
+         *  return !r.status && location.protocol == "file:" ||
+         *   所有200到300间的状态表示为成功
+         *  (r.status >= 200 && r.status < 300) ||    
+         *   文档未修改也算成功
+         *  r.status == 304 ||
+         *   Safari 在文档未修改时返回空状态
+		 * navigator.userAgent.indexOf("Safari") >= 0 && typeof r.status == "undefined";
 		 * @private
 		 */
 	
@@ -288,6 +296,7 @@
 		 * @param {object XmlHttpRequest}
 		 * @param {object String}
 		 * @return {object String}
+		 * 判断服务器返回的是否是xml形式,若是，获得xml文档对象，否则返回文本内容
 		 * @private
 		 */
 	function httpData(r, type) {
@@ -307,6 +316,7 @@
 			@param {object Boolean} reSend : 是否开启失败重试,默认为false,
 			@param {object Number} reSendCount : 失败重试次数，默认为1,
 			@param {object Boolean} cache : 是否缓存此请求的数据 默认为 false,
+			@param {object Function} onBeforeSend ajax请求开始前触发的函数 
 			@param {object Function} onComplete ajax请求结束后触发的函数 
 			@param {object Function} onError : ajax请求失败后触发的函数 
 			@param {object Function} onSuccess : ajax请求成功后触发的函数 
@@ -333,6 +343,8 @@
 			onSuccess : options.onSuccess ||
 			function () {},
 			onTimeout : options.onTimeout ||
+			function () {},
+			onBeforeSend : options.onTimeout ||
 			function () {},
 			data : options.data || ''
 		};
@@ -377,6 +389,7 @@
 				xml = null;
 			}
 		};
+		paramStore.onBeforeSend();
 		xml.send();
 
 	}
