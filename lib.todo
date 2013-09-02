@@ -76,6 +76,7 @@
 	 ☺hasClass 2013.8.30
 	 ☺addClass 2013.8.30
 	 ☺removeClass 2013.8.30
+	 ☺toggleClass 2013.9.2
  ☐ NumberHelper
 	 ☺bigAdd
 	 ☺bigMutple
