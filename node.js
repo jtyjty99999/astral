@@ -232,7 +232,6 @@
 	};
 
 	Node.addClass = function (node,class_name) {
-	
 		if (!Node.hasClass(node, className))
 			return node.className += (node.className ? ' ' : '') + class_name;
 	};
@@ -243,8 +242,11 @@
 		}
 	};
 	
-	
-	
+	Node.toggleClass(node, class_name) {
+		var bool = !Node.hasClass(node, class_name);
+		var method = Node[bool ? 'addClass' : 'removeClass'];
+		return method(node, class_name);
+	}
 
 	return node
 }
