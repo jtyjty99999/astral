@@ -208,23 +208,41 @@
 		// 忽略大小写
 		return elem.nodeName && elem.nodeName.toUpperCase() === name.toUpperCase();
 	},
+	var regExpCache = {};
+	
+	function getRegExpForClassName(className) {
+		if (regExpCache[className])
+			return regExpCache[className];
+
+		var re = new RegExp("(?:^|\\s+)" + className + "(?:\\s+|$)");
+		regExpCache[className] = re;
+		return re;
+	}
+	function trim(str) {
+			return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+	}
+	//优化效率
 	Node.hasClass = function (node, class_name) {
-		var regex;
-		regex = new RegExp(class_name, 'i');
-		return node.className.match(regex);
+		var nodeClassName = node.className;
+		if (nodeClassName.length === 0)
+			return false;
+		if (nodeClassName === class_name)
+			return true;
+		return getRegExpForClassName(class_name).test(nodeClassName);
 	};
 
-	Node.addClass = function (class_name) {
-		if (!Node.hasClass(class_name)) {
-			return node.className += " " + class_name;
-		}
+	Node.addClass = function (node,class_name) {
+	
+		if (!Node.hasClass(node, className))
+			return node.className += (node.className ? ' ' : '') + class_name;
 	};
 
-	Node.removeClass = function (class_name) {
-		if (Node.hasClass(class_name)) {
-			return node.className = node.className.replace(class_name, "");
+	Node.removeClass = function (node,class_name) {
+		if (Node.hasClass(node,class_name)) {
+			return node.className = trim(node.className.replace(getRegExpForClassName(class_name), ' '));
 		}
 	};
+	
 	
 	
 
