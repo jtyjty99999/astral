@@ -13,6 +13,7 @@
 	☺union  2013.8.29
 	☺countToGroup  2013.8.29
  ☐ animate 2013.8.28
+	☺重构,剥离dom操作 2013.9.4
  ☐ Browser
 	 ☺eventSupported  2013.8.27
 	 ☺addFavorite
@@ -22,6 +23,7 @@
 	 ☺detectOS 2013.8.29
 	 ☺direction 2013.8.30
 	 ☺detectDevice 2013.8.30
+	 ☺browser 2013.9.4
  ☐ Connection
 	 ☺sendData
 	 ☺addQueryUrlParam
@@ -93,6 +95,7 @@
 	 ☺sign 2013.8.30
 	 ☺toUint32 2013.8.30
  ☐ StringHelper
+ 	 ☺random36 2013.9.4
 	 ☺trim
 	 ☺ltrim
 	 ☺rtrim
@@ -174,4 +177,6 @@ http://www.cnblogs.com/bluedream2009/archive/2010/07/11/1775216.html
  已经看完了number math了
  
  https://github.com/sstephenson/prototype/blob/master/src/prototype/dom/layout.js  帮助很大
+ https://github.com/dlueth/qoopido.js
  
+ https://github.com/acelan86/sinaads/blob/master/src/sinaadToolkit.js
