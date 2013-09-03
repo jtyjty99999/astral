@@ -38,6 +38,9 @@
 		☺缓存结果 2013.8.29
 		☺createXHR 2013.8.29
 		☺globalEval 2013.8.29
+	 ☺createUUID 2013.9.3
+	 ☺loadCSS 2013.9.3
+	 ☺loadJS 2013.9.3
  ☐ Css
 	 ☺dynamicInsertCss
 	 ☺addCssRule
@@ -76,6 +79,10 @@
 	 ☺hasClass 2013.8.30
 	 ☺addClass 2013.8.30
 	 ☺removeClass 2013.8.30
+	 ☺toggleClass 2013.9.2
+	 ☺parents 2013.9.3
+	 ☺nextAll 2013.9.3
+	 ☺prevAll 2013.9.3
  ☐ NumberHelper
 	 ☺bigAdd
 	 ☺bigMutple
