@@ -12,8 +12,78 @@
 		window[name] = definition;
 	}
 })('Connection', function () {
+	var Doc = document;
+	var head = DOC.head || DOC.getElementsByTagName("head")[0]; //HEAD元素
+	var W3C = document.dispatchEvent;
 
 	var C = {
+	
+		/**
+		 * 生成随机唯一UUID
+		 * @return {object String}
+		 */
+		//eg:"8b649aac-2850-466b-9d37-68880fee772c"
+	
+		createUUID : function () {
+			// http://www.ietf.org/rfc/rfc4122.txt
+			var s = [];
+			var hexDigits = "0123456789abcdef";
+			for (var i = 0; i < 36; i++) {
+				s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+			}
+			s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+			s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+			s[8] = s[13] = s[18] = s[23] = "-";
+
+			var uuid = s.join("");
+			return uuid;
+		},
+		/**
+		 * 通过url加载Css
+		 * @param {object String} url
+		 */
+		loadCSS : function (url) {
+			//通过link节点加载模块需要的CSS文件
+			var id = 'C' + C.createUUID();
+			if (!DOC.getElementById(id)) {
+				var node = DOC.createElement("link");
+				node.rel = "stylesheet";
+				node.href = url;
+				node.id = id;
+				head.insertBefore(node, head.firstChild);
+			}
+		},
+		/**
+		 * 通过url加载Js
+		 * @param {object String} url
+		 *	@param {object Function} onError : 加载js失败后触发的函数
+		 *	@param {object Function} onSuccess : 加载js成功后触发的函数
+		 *	@param {object Function} onPending: 开始加载js时触发的函数
+		 */
+		loadJS : function (url, options) {
+			var option = {
+				onPending : options.onPending ||
+				function () {},
+				onError : options.onError ||
+				function () {},
+				onSuccess : options.onSuccess ||
+				function () {}
+			};
+			//通过script节点加载目标模块
+			var node = DOC.createElement("script");
+			node[W3C ? "onload" : "onreadystatechange"] = function () {
+				if (W3C || /loaded|complete/i.test(node.readyState)) {
+					option.onSuccess.call(this, node.src);
+				}
+			}
+			node.onerror = function () {
+				option.onError.call(this, node.src);
+			}
+
+			node.src = url;
+			head.insertBefore(node, head.firstChild);
+			option.onPending.call(this, node.src);
+		},
 		/**
 		 * 发送数据(一般用于打点统计)
 		 * @param {object Object} 数据对象，key-value形式
@@ -185,6 +255,28 @@
 		 * 将JSON字符串解析为对象
 		 * @param {object String} JSON字符串
 		 * @return {object Object} JSON对象
+		 * 注意这里没有处理json数据中存在function的问题.eg:
+		var json={
+			name:'json',
+			getName:function(){
+			return this.name;
+			}
+		}
+		 *
+		JSON.stringify(json, function(key, val) {
+			if (typeof val === 'function') {
+				return val + '';
+			}
+				return val;
+		});
+		经过这么转换后会把function转为字符串.但使用parseJSON进行转换后,function会变成纯字符串而不是function对象
+		JSON.parse(s,function(k,v){
+			if(v.indexOf&&v.indexOf('function')>-1){
+				return eval("(function(){return "+v+" })()")
+			}
+			return v;
+		});
+		 * 这样处理后即可. http://www.cnblogs.com/rubylouvre/articles/2792380.html
 		 */
 		parseJSON : function (data) {
 			var res = '';
@@ -204,6 +296,7 @@
 			return res;
 
 		},
+
 		/**
 		 * 将XML字符串解析为对象
 		 * @param {object String} XML字符串
@@ -230,11 +323,11 @@
 		},
 
 	};
-		/**
-		 * YUI2的创建xhr对象的封装
-		 * @return {object XmlHttpRequest} XHR对象
-		 * @private
-		 */
+	/**
+	 * YUI2的创建xhr对象的封装
+	 * @return {object XmlHttpRequest} XHR对象
+	 * @private
+	 */
 	function createXHR() {
 		var msxml_progid = [
 			'MSXML2.XMLHTTP.6.0',
@@ -250,19 +343,18 @@
 				try {
 					req = new ActiveXObject(msxml_progid[i]);
 					break
-				}
-				catch(e2) {}
+				} catch (e2) {}
 			}
 		}
 		finally {
 			return req
 		}
 	}
-		/**
-		 *	全局eval
-		 * @return {object Object}
-		 * @private
-		 */
+	/**
+	 *	全局eval
+	 * @return {object Object}
+	 * @private
+	 */
 	function globalEval(data) {
 		if (data && /\S/.test(data)) {
 			(window.execScript || function (data) {
@@ -270,35 +362,35 @@
 			})(data);
 		}
 	}
-		/**
-		 *	判断加载是否成功
-		 * @param {object XmlHttpRequest}
-		 * @return {object Boolean}
-		 *  如果得不到服务器状态，且我们正在请求本地文件，认为成功
-         *  return !r.status && location.protocol == "file:" ||
-         *   所有200到300间的状态表示为成功
-         *  (r.status >= 200 && r.status < 300) ||    
-         *   文档未修改也算成功
-         *  r.status == 304 ||
-         *   Safari 在文档未修改时返回空状态
-		 * navigator.userAgent.indexOf("Safari") >= 0 && typeof r.status == "undefined";
-		 * @private
-		 */
-	
+	/**
+	 *	判断加载是否成功
+	 * @param {object XmlHttpRequest}
+	 * @return {object Boolean}
+	 *  如果得不到服务器状态，且我们正在请求本地文件，认为成功
+	 *  return !r.status && location.protocol == "file:" ||
+	 *   所有200到300间的状态表示为成功
+	 *  (r.status >= 200 && r.status < 300) ||
+	 *   文档未修改也算成功
+	 *  r.status == 304 ||
+	 *   Safari 在文档未修改时返回空状态
+	 * navigator.userAgent.indexOf("Safari") >= 0 && typeof r.status == "undefined";
+	 * @private
+	 */
+
 	function httpSuccess(r) {
 		try {
 			return !r.status && location.protocl == 'file:' || (r.status >= 200 && r.status < 300) || r.status == 304 || navigator.userAgent.indexOf('Safari') >= 0 && typeof r.status == 'undefined';
 		} catch (e) {}
 		return false;
 	};
-		/**
-		 *	处理ajax的返回数据
-		 * @param {object XmlHttpRequest}
-		 * @param {object String}
-		 * @return {object String}
-		 * 判断服务器返回的是否是xml形式,若是，获得xml文档对象，否则返回文本内容
-		 * @private
-		 */
+	/**
+	 *	处理ajax的返回数据
+	 * @param {object XmlHttpRequest}
+	 * @param {object String}
+	 * @return {object String}
+	 * 判断服务器返回的是否是xml形式,若是,获得xml文档对象，否则返回文本内容
+	 * @private
+	 */
 	function httpData(r, type) {
 		var ct = r.getResponseHeader('content-type');
 		var data = !type && ct && ct.indexOf('xml') >= 0;
@@ -307,22 +399,22 @@
 	}
 	//ajax部分
 	C.ajaxCache = {};
-		/**
-		 *	Ajax请求
-		 * @param {object Object}
-			@param {object String} type : ajax请求方式，默认为POST,
-			@param {object String} url : ajax请求地址 ,默认为空
-			@param {object Number} timeout 超时时间，默认为 5000,
-			@param {object Boolean} reSend : 是否开启失败重试,默认为false,
-			@param {object Number} reSendCount : 失败重试次数，默认为1,
-			@param {object Boolean} cache : 是否缓存此请求的数据 默认为 false,
-			@param {object Function} onBeforeSend ajax请求开始前触发的函数 
-			@param {object Function} onComplete ajax请求结束后触发的函数 
-			@param {object Function} onError : ajax请求失败后触发的函数 
-			@param {object Function} onSuccess : ajax请求成功后触发的函数 
-			@param {object Function} onTimeout: ajax请求超时后触发的函数 
-			@param {object String} data : ajax数据
-		 */
+	/**
+	 *	Ajax请求
+	 * @param {object Object}
+	@param {object String} type : ajax请求方式，默认为POST,
+	@param {object String} url : ajax请求地址 ,默认为空
+	@param {object Number} timeout 超时时间，默认为 5000,
+	@param {object Boolean} reSend : 是否开启失败重试,默认为false,
+	@param {object Number} reSendCount : 失败重试次数，默认为1,
+	@param {object Boolean} cache : 是否缓存此请求的数据 默认为 false,
+	@param {object Function} onBeforeSend ajax请求开始前触发的函数
+	@param {object Function} onComplete ajax请求结束后触发的函数
+	@param {object Function} onError : ajax请求失败后触发的函数
+	@param {object Function} onSuccess : ajax请求成功后触发的函数
+	@param {object Function} onTimeout: ajax请求超时后触发的函数
+	@param {object String} data : ajax数据
+	 */
 	C.ajax = function (options) {
 
 		var paramStore = {
@@ -360,7 +452,8 @@
 		xml.open(paramStore.type, paramStore.url, true);
 		var timeoutLength = paramStore.timeout;
 		//超时处理
-		var requestTimeout = false, timeoutTimer =
+		var requestTimeout = false,
+		timeoutTimer =
 			setTimeout(function () {
 				requestTimeout = true;
 				paramStore.onTimeout();
@@ -393,7 +486,7 @@
 		xml.send();
 
 	}
-//http://www.cnblogs.com/heyuquan/archive/2013/05/13/3076465.html
+	//http://www.cnblogs.com/heyuquan/archive/2013/05/13/3076465.html
 	return C
 }
 	())
