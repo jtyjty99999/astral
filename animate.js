@@ -14,14 +14,14 @@
 })('animate', function () {
 	/*此api不稳定，暂时不使用
 	var clock = (function () {
-		return window.requestAnimationFrame ||
-		window.webkitRequestAnimationFrame ||
-		window.mozRequestAnimationFrame ||
-		window.oRequestAnimationFrame ||
-		window.msRequestAnimationFrame ||
-		function (callback) {
-			window.setTimeout(callback, 1000 / 60);
-		}
+	return window.requestAnimationFrame ||
+	window.webkitRequestAnimationFrame ||
+	window.mozRequestAnimationFrame ||
+	window.oRequestAnimationFrame ||
+	window.msRequestAnimationFrame ||
+	function (callback) {
+	window.setTimeout(callback, 1000 / 60);
+	}
 	})()*/
 
 	var tween = {
@@ -34,18 +34,43 @@
 	timeLine = {};
 
 	var A = {
-		_self = this,
 		aniType : function (type) {
 			return type && typeof(type) == "string" && tween[type] ? type : "line";
 		},
-		exec : function (n, p, a, b, type,onUpdate) {
-			_self.onUpdate = onUpdate;
+		config : {
+			n : 0,
+			b : 0,
+			p : 300,
+			a : 20,
+			type : 'line',
+			onUpdate : function () {},
+			onEnd : function () {},
+			onStart : function () {}
+		},
+		//n, p, a, b, type,onUpdate,onEnd,onStart
+		setConfig : function (arg, val) {
+			if (typeof arg == 'object') {
+				for (var key in arg) {
+					A['config'][key] = arg[key];
+				}
+			} else if (typeof arg == 'string') {
+					A['config'][arg] = val;
+			} else {
+				return
+			}
+		},
+		exec : function () {
 			//从第一帧开始，持续20帧，移动的距离为300px，开始的位置为0
-			n ? t : n = 0;
-			b ? b : b = 0;
-			p ? p : p = 300;
-			a ? a : a = 20;
+			n = A.config.n;
+			p = A.config.p;
+			a = A.config.a;
+			b = A.config.b;
+			type = A.config.type;
+			onUpdate = A.config.onUpdate;
+			onEnd = A.config.onEnd;
+			onStart = A.config.onStart;
 			timeLine['now'] = [];
+			onStart();
 			ticker = setInterval(function () {
 					n <= a ? (function () {
 						var degree = tween[A.aniType(type)](n, p, a, b);
@@ -53,30 +78,37 @@
 							"n" : n,
 							"degree" : degree
 						});
-						onUpdate.call(null,degree);
+						onUpdate.call(null, degree);
 						n++;
 					})()
-					 : clearInterval(ticker);
+					 : (clearInterval(ticker), onEnd.call(null));
 				}, 25) //40帧/秒
 		},
 		backward : function () {
+			onUpdate = A.config.onUpdate;
+			onStart = A.config.onStart;
+			onEnd = A.config.onEnd;
 			var whole = timeLine['now'].length
 				if (whole == 0) {
 					return
 				};
+			onStart();
 			ticker = setInterval(function () {
 					var keyFrame = timeLine['now'].pop();
-					(whole - keyFrame['n']) <= whole ? (function () {
+					(whole - keyFrame['n']) < whole ? (function () {
 						var degree = keyFrame['degree'];
-						_self.onUpdate.call(null,degree);
+						onUpdate.call(null, degree);
 					})()
-					 : clearInterval(ticker);
+					 : (clearInterval(ticker), onEnd.call(null));
 				}, 25) //40帧/秒
+		},
+		yoyo:function(){
+		var s = A.config.onEnd;
+		A.setConfig('onEnd',A.backward);
+		A.exec();
+		A.setConfig('onEnd',s);
 		}
 	}
 	return A
-	/*A.exec(0, 300, 20, 20, "line",function(degree){
-	document.getElementById('mydiv').style.left = parseInt(degree) + "px";
-	});*/
 }
 	())
