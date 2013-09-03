@@ -12,7 +12,7 @@
 		window[name] = definition;
 	}
 })('animate', function () {
-	/*此api不稳定，暂时不使用*/
+	/*此api不稳定，暂时不使用
 	var clock = (function () {
 		return window.requestAnimationFrame ||
 		window.webkitRequestAnimationFrame ||
@@ -22,7 +22,7 @@
 		function (callback) {
 			window.setTimeout(callback, 1000 / 60);
 		}
-	})()
+	})()*/
 
 	var tween = {
 		line : function (n, p, a, b) {
@@ -34,46 +34,49 @@
 	timeLine = {};
 
 	var A = {
+		_self = this,
 		aniType : function (type) {
 			return type && typeof(type) == "string" && tween[type] ? type : "line";
 		},
-
-		exec : function (elem, n, p, a, b, type) {
+		exec : function (n, p, a, b, type,onUpdate) {
+			_self.onUpdate = onUpdate;
 			//从第一帧开始，持续20帧，移动的距离为300px，开始的位置为0
 			n ? t : n = 0;
 			b ? b : b = 0;
 			p ? p : p = 300;
 			a ? a : a = 20;
-			timeLine[elem] = [];
+			timeLine['now'] = [];
 			ticker = setInterval(function () {
 					n <= a ? (function () {
 						var degree = tween[A.aniType(type)](n, p, a, b);
-						timeLine[elem].push({
+						timeLine['now'].push({
 							"n" : n,
 							"degree" : degree
 						});
-						document.getElementById(elem).style.left = parseInt(degree) + "px";
+						onUpdate.call(null,degree);
 						n++;
 					})()
 					 : clearInterval(ticker);
 				}, 25) //40帧/秒
 		},
-		backward : function (elem) {
-			var whole = timeLine[elem].length
+		backward : function () {
+			var whole = timeLine['now'].length
 				if (whole == 0) {
 					return
 				};
 			ticker = setInterval(function () {
-					var keyFrame = timeLine[elem].pop();
+					var keyFrame = timeLine['now'].pop();
 					(whole - keyFrame['n']) <= whole ? (function () {
 						var degree = keyFrame['degree'];
-						document.getElementById(elem).style.left = parseInt(degree) + "px";
+						_self.onUpdate.call(null,degree);
 					})()
 					 : clearInterval(ticker);
 				}, 25) //40帧/秒
 		}
 	}
 	return A
-	//A.exec("mydiv", 0, 300, 20, 20, "line");
+	/*A.exec(0, 300, 20, 20, "line",function(degree){
+	document.getElementById('mydiv').style.left = parseInt(degree) + "px";
+	});*/
 }
 	())
