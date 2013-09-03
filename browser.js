@@ -243,6 +243,41 @@
 		}
 		return support
 	}
+	/**
+	 * 检测浏览器
+	 * @return {Object} 浏览器嗅探结果
+	 * obj.chrome Chrome版本号
+	 * obj.firefox firefox版本号
+	 * obj.ie ie版本号
+	 * obj.isGecko 判断是否是gecko(mozilla家的)
+	 * obj.isStrict 判断是否为严格模式 http://www.cnblogs.com/fullhouse/archive/2012/01/17/2324706.html
+	 * obj.isWebkit 判断是否是webkit浏览器
+	 * obj.opera opera版本号
+	 * obj.maxthon 傲游浏览器版本号
+	 * obj.safari safari浏览器版本号
+	 * obj.isSupportFixed 判断是否支持position.fixed 
+	 */
+	Browser.browser = function(ua){
+	var res = {
+            chrome : /chrome\/(\d+\.\d+)/i.test(ua) ? + RegExp.$1 : undefined,
+            firefox : /firefox\/(\d+\.\d+)/i.test(ua) ? + RegExp.$1 : undefined,
+            ie : /msie (\d+\.\d+)/i.test(ua) ? (document.documentMode || + RegExp.$1) : undefined,
+            isGecko : /gecko/i.test(ua) && !/like gecko/i.test(ua),
+            isStrict : document.compatMode === "CSS1Compat",
+            isWebkit : /webkit/i.test(ua),
+            opera : /opera(\/| )(\d+(\.\d+)?)(.+?(version\/(\d+(\.\d+)?)))?/i.test(ua) ?  + (RegExp.$6 || RegExp.$2) : undefined
+        };
+        try {
+            if (/(\d+\.\d+)/.test(window.external.max_version)) {
+                res.maxthon = + RegExp.$1;//遨游
+            }
+        } catch (e) {}
+        res.safari = /(\d+\.\d)?(?:\.\d)?\s+safari\/?(\d+\.\d+)?/i.test(ua) && !/chrome/i.test(ua) ? + (RegExp.$1 || RegExp.$2) : undefined;
+        res.isSupportFixed = !res.ie || res.ie >= 7;
+        return res;
+	}
+	
+	
 	return Browser
 }
 	())
