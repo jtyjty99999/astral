@@ -15,6 +15,16 @@
 })('StringHelper', function () {
 	var StringHelper = {
 		/**
+         * 随机字串生成，生成一个随机数的36进制表示方法 
+		 * @param {object Number} 位数
+         * @return {String} 生成的n位字符串
+		 * 36^n -1,根据这个最大值生成一个随机数,之后转为36进制n位字符串(包含0-9a-z)
+         * @public
+         */
+        random36 : function (n) {
+            return Math.floor(Math.random() * Math.pow(36,n)).toString(36);
+        },
+		/**
 		 * 字符串去空白
 		 *
 		 * @param {object String} 输入字符串
@@ -121,6 +131,7 @@
 				return String.fromCharCode(parseInt($1, 10));
 			});
 		},
+		
 		/**
 		 * 判断字符串是否以某部分字符串开头
 		 *
@@ -186,11 +197,53 @@
 		str += elli;
 		return str;
 
-	}
+		}
 		
 		
 	};
+	
+	var ESCAPE_MAP = {
+                '"'     : '\\"',
+                "\\"    : "\\\\",
+                "/"     : "\\/",
+                "\b"    : "\\b",
+                "\f"    : "\\f",
+                "\n"    : "\\n",
+                "\r"    : "\\r",
+                "\t"    : "\\t",
+                "\x0B"  : "\\u000b"
+            },
+    //字符串中非中文字符串
+    STR_REG =  /\uffff/.test("\uffff") ? (/[\\\"\x00-\x1f\x7f-\uffff]/g) : (/[\\\"\x00-\x1f\x7f-\xff]/g);
+		/**
+		 * 转义字符串中的特殊字符
+		 *
+		 * @param {object String} str 
+		 * @return {object String}
+		 * @public
+		 */
+	//https://github.com/acelan86/sinaads/blob/master/src/sinaadToolkit.js  formalString 
+	StringHelper.formalString = function (source) {
+		var ret = [];
+		ret.push(source.replace(STR_REG, function (str) {
+				//如果在ESCAPE_MAP中，直接替换
+				if (str in ESCAPE_MAP) {
+					return ESCAPE_MAP[str];
+				}
+				//转成对应的unicode码
+				var alphaCode = str.charCodeAt(0),
+				unicodePerfix = "\\u";
+				//需要增加几位0来补位
+				16 > alphaCode ? unicodePerfix += "000" : 256 > alphaCode ? unicodePerfix += "00" : 4096 > alphaCode && (unicodePerfix += "0");
 
+				//保存转移过的值到ESCAPE_MAP提高效率，同时返回
+				ESCAPE_MAP[str] = unicodePerfix + alphaCode.toString(16);
+
+				return ESCAPE_MAP[str];
+			}));
+		return '"' + ret.join('') + '"';
+	}
+	
 	return StringHelper
 }
 	())
