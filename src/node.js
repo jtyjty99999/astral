@@ -247,7 +247,35 @@
 		var method = Node[bool ? 'addClass' : 'removeClass'];
 		return method(node, class_name);
 	}
+	
+	//节点遍历器
+	function mapNode(node, type) {
+		var res = [],
+			cur = node[type];
 
+		while ( cur && cur.nodeType !== 9 ){
+			if ( cur.nodeType === 1 ) {
+				res.push( cur );
+			}
+			cur = cur[type];
+		}
+		return res;
+	};
+	
+	
+	Node.parents = function( node ) {
+		return mapNode( node, "parentNode" );
+	},
+	Node.nextAll = function( node ) {
+		return mapNode( node, "nextSibling");
+	},
+	Node.prevAll: function( node ) {
+		return mapNode( node, "previousSibling");
+	}
+	
+
+		
+		
 	return node
 }
 	())

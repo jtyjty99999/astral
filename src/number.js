@@ -75,7 +75,7 @@
 		},
 		toUint32 : function (value) {
 			return value >>> 0;
-		}
+		},
 	};
 	return NumberHelper
 }

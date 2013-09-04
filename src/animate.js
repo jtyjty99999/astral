@@ -2,6 +2,8 @@
  * @module animate
  *
  * 动画库
+ * http://www.mozily.net/2013/05/28/Tween.js_and_counterintuitive_design/
+ * 以我自己的方式实现的动画库，最大的优点是完全解耦dom与动画，只提供动画需要的参数值
  */
 (function (name, definition) {
 	if (typeof define == 'function') {

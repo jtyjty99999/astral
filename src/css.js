@@ -14,7 +14,7 @@
 	}
 })('Css', function () {
 	function () {
-		var Css = {};
+		var C = {};
 
 		/**
 		 * 动态加载样式
@@ -24,7 +24,7 @@
 		 * @return null
 		 * @public
 		 */
-		Css.dynamicInsertCss = function (cssContent) {
+		C.dynamicInsertCss = function (cssContent) {
 			var style = document.createElement("style");
 			(document.getElementsByTagName("head")[0] || document.body).appendChild(style);
 			if (style.styleSheet) { //for ie
@@ -41,7 +41,7 @@
 		 * @return null
 		 * @public
 		 */
-		Css.addCssRule = function (filter, cssText) {
+		C.addCssRule = function (filter, cssText) {
 			var styleSheet = document.styleSheets[0];
 			if (styleSheet.addRule) {
 				styleSheet.addRule(filter, cssText);
@@ -70,7 +70,7 @@
 		 *console.log(parseColor('#000000',0.3))
 		 *console.log(parseColor('rgb(122,34,214)',0.2))
 		 */
-		Css.parseColor = function (val, op) { //接收两个参数：颜色值跟透明度
+		C.parseColor = function (val, op) { //接收两个参数：颜色值跟透明度
 			var r,
 			g,
 			b,
@@ -124,17 +124,17 @@
 			}
 		};
 		
-	Css.setOpacity = function setOpacity(elem, opacity) {
+	C.setOpacity = function setOpacity(elem, opacity) {
 		elem.filters ? elem.style.filter = 'alpha(opacity=' + opacity + ')' : elem.style.opacity = opacity / 100;
 	}
-	Css.fadeIn = function(elem, speed, opacity) {
+	C.fadeIn = function(elem, speed, opacity) {
 		speed = speed || 20;
 		opacity = opacity || 100;
 		elem.style.display = 'block';
-		Css.setOpacity(elem, 0);
+		C.setOpacity(elem, 0);
 		var val = 0;
 		(function () {
-			Css.setOpacity(elem, val);
+			C.setOpacity(elem, val);
 			val += 5;
 			if (val <= opacity) {
 				setTimeout(arguments.callee, speed)
@@ -142,7 +142,7 @@
 		})();
 	}
 
-	Css.fadeOut(elem, speed, opacity) {
+	C.fadeOut(elem, speed, opacity) {
 		speed = speed || 20;
 		opacity = opacity || 0;
 		var val = 100;
@@ -157,9 +157,9 @@
 		})();
 	}
 	//#000000到#ffffff转为十进制后随机再转成十六进制
-	Css.getRandomColor = function () {
+	C.getRandomColor = function () {
 		return '#' + Math.floor(Math.random() * 16777215).toString(16);
 	}
 
-		return Css
+		return C
 	}())
