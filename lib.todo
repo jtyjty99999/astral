@@ -1,6 +1,6 @@
 模块:
  ☐ Array
-	☺min  2013.8.29
+	☺包装增强化 2013.9.5
 	☺min  2013.8.29
 	☺max  2013.8.29
 	☺delRepeat  2013.8.29
@@ -75,6 +75,7 @@
 	 ☺insertAdjacentHTML
 	 ☺insertAdjacentText
 	 ☺contains
+	 ☺removeHtmlTag 2013.8.27
 	 ☺deepth 2013.8.27
 	 ☺isName 2013.8.28
 	 ☺getIframe 2013.8.29
@@ -99,7 +100,6 @@
 	 ☺trim
 	 ☺ltrim
 	 ☺rtrim
-	 ☺removeHtmlTag 2013.8.27
 	 ☺chineseSubstr
 	 ☺chineseLen
 	 ☺camelize
@@ -110,6 +110,9 @@
 	 ☺endsWith
 	 ☺reverse
 	 ☺deleteLast 2013.8.27
+	 ☺ellipsis 2013.8.27
+	 ☺formalString 2013.9.4
+	 ☺包装增强化 2013.9.5
  ☐ Position
 	 ☺getScroll
 	 ☺getCoords
@@ -180,3 +183,5 @@ http://www.cnblogs.com/bluedream2009/archive/2010/07/11/1775216.html
  https://github.com/dlueth/qoopido.js
  
  https://github.com/acelan86/sinaads/blob/master/src/sinaadToolkit.js
+ 
+ http://www.cnblogs.com/nuysoft/
