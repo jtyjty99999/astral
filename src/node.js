@@ -41,6 +41,17 @@
 		return a
 	}
 	/**
+	* 去掉节点内部html的标签
+	*
+	* @param {object HtmlElement} elem node节点
+	* @return {object String} 去掉html标签后的字符串
+	* @public
+	*/
+	//此方法有危险会引发注入(去掉script标签后)
+	Node.removeHtmlTag = function (elem) {
+		elem.innerHTML.replace(/<.+?>/gim, '')
+	};
+	/**
 	 * 替换元素节点
 	 *
 	 * @param {object HTMLElement} sourceNode 原始节点
