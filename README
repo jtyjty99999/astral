@@ -24,8 +24,11 @@
 	 ☺direction 2013.8.30
 	 ☺detectDevice 2013.8.30
 	 ☺browser 2013.9.4
+	 ☺cookie 2013.9.6
+	 ☺store 2013.9.6
+	 ☺swfVersion 2013.9.9
  ☐ Connection
-	 ☺sendData
+	 ☺sendData(修正bug 2013.9.9)
 	 ☺addQueryUrlParam
 	 ☺o2Json
 	 ☺getUrlArgs
@@ -86,6 +89,8 @@
 	 ☺parents 2013.9.3
 	 ☺nextAll 2013.9.3
 	 ☺prevAll 2013.9.3
+	 ☺getDocument 2013.9.9
+	 ☺getWindow 2013.9.9
  ☐ NumberHelper
 	 ☺bigAdd
 	 ☺bigMutple
@@ -135,7 +140,7 @@ http://www.cnblogs.com/bluedream2009/archive/2010/07/11/1775216.html
  ☐ tester
 对象包装:
  ☐ 考虑对象的包装
- 
+ http://www.cnblogs.com/bluedream2009/archive/2011/07/02/2096309.html
  维护注释与进行测试:
  ☐ tester
  ☐ Array
