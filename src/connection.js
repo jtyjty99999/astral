@@ -91,10 +91,26 @@
 		 * @return null
 		 */
 		sendData : function (data, path) {
+
 			var url = C.addQueryUrlParam(data, path);
 			var img = new Image();
+			var uuid = 'CimgData' + C.createUUID();
+			// 这里一定要挂在window下
+			// 在IE中，如果没挂在window下，这个img变量又正好被GC的话，img的请求会abort
+			// 导致服务器收不到日志(来自tangram)
+			window[key] = img;
 			img.src = url;
-			img = null;
+
+			img.onload = img.onerror = img.onabort = function () {
+				// 如果这个img很不幸正好加载了一个存在的资源，又是个gif动画
+				// 则在gif动画播放过程中，img会多次触发onload
+				// 因此一定要清空(来自tangram)
+				img.onload = img.onerror = img.onabort = null;
+				window[key] = null;
+				// 防止闭包循环引用造成内存泄漏
+				img = null;
+			};
+
 		},
 		/**
 		 * 给url添加参数
