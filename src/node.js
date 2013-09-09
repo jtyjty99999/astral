@@ -120,7 +120,8 @@
 	 * 获取iframe对象
 	 *
 	 * @param {object String} id iframe元素id
-	 * @return {object HTMLElement}
+	 * @return {object HTMLElement
+	 * contentDocument  Firefox 支持，> ie8 的ie支持。可取得子窗口的 document 对象,也可以使用contentWindow.document
 	 * @public
 	 */
 	Node.getIframe = function (id) {
@@ -283,7 +284,29 @@
 	Node.prevAll: function( node ) {
 		return mapNode( node, "previousSibling");
 	}
-	
+	/*
+	Node.ELEMENT_NODE (1)
+	Node.ATTRIBUTE_NODE (2)
+	Node.TEXT_NODE (3)
+	Node.CDATA_SECTION_NODE (4)
+	Node.ENTITY_REFERENCE_NODE(5)
+	Node.ENTITY_NODE (6)
+	Node.PROCESSING_INSTRUCTION_NODE (7)
+	Node.COMMENT_NODE (8)
+	Node.DOCUMENT_NODE (9)
+	Node.DOCUMENT_TYPE_NODE (10)
+	Node.DOCUMENT_FRAGMENT_NODE (11)
+	Node.NOTATION_NODE (12)*/
+	//ownerDocument这个可以得到节点的根部(document)
+	Node.getDocument = function(node){
+        return node.nodeType == 9 ? node : node.ownerDocument || node.document;
+    }
+	//document.defaultView可以得到window 
+	//http://msdn.microsoft.com/en-us/library/ie/ms534331%28v=vs.85%29.aspx (parentWindow for IE8)
+	Node.getWindow: function(node){
+        var doc = Node.getDocument(node);
+        return doc.parentWindow || doc.defaultView;
+    }
 
 		
 		
