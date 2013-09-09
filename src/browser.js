@@ -278,6 +278,299 @@
 	}
 	
 	
+	
+	
+	
+	//https://github.com/acelan86/sinaads/blob/master/src/sinaadToolkit.js
+	//http://www.baidufe.com/item/af0bb5872f2a1ef337ce.html
+	//http://www.cnblogs.com/_franky/archive/2010/10/25/1860649.html
+	Browser.cookie = {
+        /**
+         * @private
+         * @param  {String} key 要验证的cookie的key
+         * @return {Boolean}    是否为符合规则的key
+         */
+        // http://www.w3.org/Protocols/rfc2109/rfc2109
+        // Syntax:  General
+        // The two state management headers, Set-Cookie and Cookie, have common
+        // syntactic properties involving attribute-value pairs.  The following
+        // grammar uses the notation, and tokens DIGIT (decimal digits) and
+        // token (informally, a sequence of non-special, non-white space
+        // characters) from the HTTP/1.1 specification [RFC 2068] to describe
+        // their syntax.
+        // av-pairs   = av-pair *(";" av-pair)
+        // av-pair    = attr ["=" value] ; optional value
+        // attr       = token
+        // value      = word
+        // word       = token | quoted-string
+         
+        // http://www.ietf.org/rfc/rfc2068.txt
+        // token      = 1*<any CHAR except CTLs or tspecials>
+        // CHAR       = <any US-ASCII character (octets 0 - 127)>
+        // CTL        = <any US-ASCII control character
+        //              (octets 0 - 31) and DEL (127)>
+        // tspecials  = "(" | ")" | "<" | ">" | "@"
+        //              | "," | ";" | ":" | "\" | <">
+        //              | "/" | "[" | "]" | "?" | "="
+        //              | "{" | "}" | SP | HT
+        // SP         = <US-ASCII SP, space (32)>
+        // HT         = <US-ASCII HT, horizontal-tab (9)>
+        _isValidKey : function (key) {
+            return (new RegExp("^[^\\x00-\\x20\\x7f\\(\\)<>@,;:\\\\\\\"\\[\\]\\?=\\{\\}\\/\\u0080-\\uffff]+\x24")).test(key);
+        },
+        /**
+         * 从cookie中获取key所对应的值
+         * @private
+         * @param  {String} key 要获取的cookie的key
+         * @return {String}     cookie对应该key的值
+         */
+        _getRaw : function (key) {
+            if (Browser.cookie._isValidKey(key)) {
+                var reg = new RegExp("(^| )" + key + "=([^;]*)(;|\x24)"),
+                    result = reg.exec(document.cookie);
+                     
+                if (result) {
+                    return result[2] || null;
+                }
+            }
+            return null;
+        },
+        /**
+         * 将cookie中key的值设置为value, 并带入一些参数
+         * @private
+         * @param  {String} key 要设置的cookie的key
+         * @param  {String} value 要设置的值
+         * @param  {Object} options 选项
+         */
+        _setRaw : function (key, value, options) {
+            if (!Browser.cookie._isValidKey(key)) {
+                return;
+            }
+             
+            options = options || {};
+
+            // 计算cookie过期时间
+            var expires = options.expires;
+            if ('number' === typeof options.expires) {
+                expires = new Date();
+                expires.setTime(expires.getTime() + options.expires);
+            }
+             
+            document.cookie =
+                key + "=" + value +
+                (options.path ? "; path=" + options.path : "") +
+                (expires ? "; expires=" + expires.toGMTString() : "") +
+                (options.domain ? "; domain=" + options.domain : "") +
+                (options.secure ? "; secure" : '');
+
+        },
+        /**
+         * 获取cookie中key的值
+         * @param  {String} key 要获取的key
+         * @return {String}     cookie值
+         */
+        get : function (key) {
+            var value = Browser.cookie._getRaw(key);
+            if ('string' === typeof value) {
+                value = decodeURIComponent(value);
+                return value;
+            }
+            return null;
+        },
+        /**
+         * 设置cookie值
+         * @param  {String} key     要设置的key
+         * @param  {String} value   要设置的value   
+         * @param  {object} options 选项
+         */
+        set : function (key, value, options) {
+            Browser.cookie._setRaw(key, encodeURIComponent(value), options);
+        },
+        /**
+         * 移除key相关的cookie
+         * @param  {String} key     要移除的cookie的key
+         * @param  {Object} options 选项
+         */
+        remove : function (key, options) {
+            options = options || {};
+            options.expires = new Date(0);
+            Browser.cookie._setRaw(key, '', options);
+        }
+    };
+	
+	
+	
+	Browser.store = function () {
+		
+		var storeType;
+		if (window.localStorage) {
+			//带有过期时间的本地存储方案
+			storeType = {
+				getItem : function (key) {
+					return window.localStorage.getItem(key);
+				},
+				setItem : function (key, value, expires) {
+					window.localStorage.setItem(key, value + (expires ? ';expires=' + (+new Date() + expires) : ''));
+				},
+				removeItem : function (key) {
+					window.localStorage.removeItem(key);
+				}
+			}
+
+		} else if (Browser.browser.ie && Browser.browser.ie < 8) {
+
+			storeType = {
+				node : null, //以dom节点来存储数据
+				name : location.hostname,
+
+				init : function () {
+					var node = UserData.userData;
+					if (!node) {
+						try {
+							node = document.createElement('INPUT');
+							node.type = "hidden";
+							node.style.display = "none";
+							node.addBehavior("#default#userData");
+							document.body.appendChild(node);
+							var expires = new Date();
+							expires.setDate(expires.getDate() + 365);
+							node.expires = expires.toUTCString();
+						} catch (e) {
+							return false;
+						}
+					}
+					return node; //返回这个存储节点
+				},
+
+				setItem : function (key, value, expires) {
+					var node = UserData.init();
+					if (node) {
+						node.load(UserData.name);
+						node.setAttribute(key, value + (expires ? ';expires=' + (+new Date() + expires) : '')); //存储过期时间
+						node.save(UserData.name);
+					}
+				},
+
+				getItem : function (key) {
+					var node = UserData.init();
+					if (node) {
+						node.load(UserData.name);
+						return node.getAttribute(key)
+					}
+				},
+
+				removeItem : function (key) {
+					var node = UserData.init();
+
+					if (node) {
+						node.load(UserData.name);
+						node.removeAttribute(key);
+						node.save(UserData.name);
+					}
+
+				}
+			}
+
+		} else {
+			storeType = {
+
+				getItem : function (key) {
+					return Browser.cookie.get(key);
+				},
+				setItem : function (key, value, expires) {
+					Browser.cookie.set(key, value, {
+						expires : expires || 0
+					});
+				},
+				removeItem : function (key) {
+					Browser.cookie.remove(key);
+				}
+
+			}
+
+		}
+		
+		return {
+			/**
+			 * 获取本地存储的key的值
+			 * @param  {String} key key
+			 * @return {String}     取得的值
+			 */
+			get : function (key) {
+				try {
+					var value = storeType.getItem(key);
+					if (value) {
+						value = value.split(';');
+						if (value[1] && (+ new Date()) > parseInt(value[1].split('=')[1])) {//若存在过期时间
+							storeType.removeItem(key);
+							return null;
+						} else {
+							return value[0];
+						}
+					}
+					return null;
+				} catch (e) {
+					console.log(e)
+					return null;
+				}
+			},
+			/**
+			 * 设置本地存储key的值为value
+			 * 注意：请不要设置非字符串格式形式的值到本地存储
+			 * @param  {String} key     设置的key
+			 * @param  {String} value   设置的value
+			 * @param  {Number} expires 过期时间毫秒数
+			 */
+			set : function (key, value, expires) {
+				try {
+					storeType.setItem(key, value, expires);
+				} catch (e) {
+					console.log(e)
+				}
+			},
+			/**
+			 * 移除本地存储中key的值
+			 * @param  {String} key 要移除的key
+			 */
+			remove : function (key) {
+				try {
+					storeType.removeItem(key);
+				} catch (e) {
+					console.log(e)
+				}
+			}
+
+		}
+	}
+	/**
+	* 获取浏览器的flash版本
+	* @return {String}     flash版本 eg:"11.8.800.0"
+	*/
+	Browser.swfVersion = function () {
+		var n = navigator;
+		if (n.plugins && n.mimeTypes.length) {
+			var plugin = n.plugins["Shockwave Flash"];
+			if (plugin && plugin.description) {
+				return plugin.description
+				.replace(/([a-zA-Z]|\s)+/, "")
+				.replace(/(\s)+r/, ".") + ".0";
+			}
+		} else if (window.ActiveXObject && !window.opera) {
+			for (var i = 12; i >= 2; i--) {
+				try {
+					var c = new ActiveXObject('ShockwaveFlash.ShockwaveFlash.' + i);
+					if (c) {
+						var version = c.GetVariable("$version");
+						return version.replace(/WIN/g, '').replace(/,/g, '.');
+					}
+				} catch (e) {}
+			}
+		}
+	}
+
+	
+	
+	
 	return Browser
 }
 	())
