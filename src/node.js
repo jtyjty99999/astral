@@ -307,6 +307,18 @@
         var doc = Node.getDocument(node);
         return doc.parentWindow || doc.defaultView;
     }
+	
+	
+	Node.cleanBlank(node) {
+		var children = node.childNodes,
+		blank = null;
+		for (var i = 0; i < children.length; i++) {
+			blank = children[i];
+			if (blank.nodeType == 3 && !(blank.nodeValue.replace(/\s/g, ''))) {
+				node.removeChild(blank);
+			}
+		}
+	}
 
 		
 		
