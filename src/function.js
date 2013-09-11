@@ -175,30 +175,55 @@
 				}
 			}
 		},
-		reload : function (elems, key, valOrFn, callback) {
-			var length = elems.length;
-
-			// 如果有多个属性，则迭代
-			if (typeof key === "object") {
-				for (var k in key) {
-					FnHelper.reload(elems, k, valOrFn, callback);
-				}
-				return elems;
-			}
-
-			if (value !== undefined) {
-				var isFn = Util.getType(valOrFn) == 'Function';
-
-				for (var i = 0; i < length; i++) {
-					callback(elems[i], key, isFn ? valOrFn.call(elems[i], i, callback(elems[i], key)) : valOrFn);
+		
+		inject : function (aOrgFunc, aBeforeExec, aAtferExec) {
+			return function () {
+				var Result,
+				isDenied = false,
+				args = [].slice.call(arguments);
+				if (typeof(aBeforeExec) === 'function') {
+					Result = aBeforeExec.apply(this, args);
+					if (Result instanceof Arguments) //(Result.constructor === Arguments)
+						args = Result.value;
+					else if (isDenied = Result !== undefined)
+						args.push(Result)
 				}
 
-				return elems;
-			}
+				!isDenied && args.push(aOrgFunc.apply(this, args)); //if (!isDenied) args.push(aOrgFunc.apply(this, args));
 
-			// 读取属性
-			return length ? callback(elems[0], key) : undefined;
+				if (typeof(aAtferExec) === 'function')
+					Result = aAtferExec.apply(this, args.concat(isDenied));
+				else
+					Result = undefined;
+
+				return (Result !== undefined ? Result : args.pop());
+
+			}
 		},
+			reload : function (elems, key, valOrFn, callback) {
+				var length = elems.length;
+
+				// 如果有多个属性，则迭代
+				if (typeof key === "object") {
+					for (var k in key) {
+						FnHelper.reload(elems, k, valOrFn, callback);
+					}
+					return elems;
+				}
+
+				if (value !== undefined) {
+					var isFn = Util.getType(valOrFn) == 'Function';
+
+					for (var i = 0; i < length; i++) {
+						callback(elems[i], key, isFn ? valOrFn.call(elems[i], i, callback(elems[i], key)) : valOrFn);
+					}
+
+					return elems;
+				}
+
+				// 读取属性
+				return length ? callback(elems[0], key) : undefined;
+			},
 	};
 	return FnHelper
 }

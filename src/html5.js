@@ -8,7 +8,10 @@ define(function () {
 	
 	
 	};
+	//http://diveintohtml5.info/table-of-contents.html#canvas
+	//http://www.html5rocks.com/en/
 	
+	//拖拽 https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer
 /* 	target.addEventListener("dragover", function(event) {
 		event.preventDefault();
 	}, false);
@@ -144,6 +147,86 @@ define(function () {
   	 			styleSheet.removeRule(s);
   	 	};
 	}
+	/* 缓存  https://developer.mozilla.org/zh-CN/docs/HTML/Using_the_application_cache
+	window.applicationCache.addEventListener('updateready', function(e) {
+  if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+    window.applicationCache.swapCache();
+    if (confirm('A new version of this site is available. Load it?')) {
+      window.location.reload();
+    }
+  }
+}, false);
 	
+	*/
+	
+	//webworker  
+	//http://www.silverna.org/blog/?p=271
+	
+	//main.js:
+	/*var worker = new Worker('task.js');
+	worker.onmessage = function(event) { alert(event.data); };
+	worker.postMessage('data');*/
+	//task.js:
+	/*self.onmessage = function(event) {
+	  // Do some work.
+	  self.postMessage("recv'd: " + event.data);
+	};*/
+	
+	//桌面推送
+	/*if (window.webkitNotifications.checkPermission() == 0) {
+	  // you can pass any url as a parameter
+	  window.webkitNotifications.createNotification(tweet.picture, tweet.title, 
+		  tweet.text).show();
+	} else {
+	  window.webkitNotifications.requestPermission();//获取推送信息
+	}*/
+	//https://developer.mozilla.org/en-US/docs/Web/API/LocalFileSystem  文件系统
+	//https://developer.mozilla.org/en-US/docs/WebSockets  websocket
+	
+	
+	//地理定位 https://developer.mozilla.org/zh-CN/docs/WebAPI/Using_geolocation
+	/*
+	if (navigator.geolocation) {
+	  navigator.geolocation.getCurrentPosition(function(position) {
+	  console.log(position.coords.latitude, position.coords.longitude)
+			
+	  }, errorHandler);
+	}
+*/
+
+/* classList  https://developer.mozilla.org/zh-CN/docs/DOM/element.classList
+var el = document.querySelector('#main').classList;
+el.add('highlight');
+el.remove('shadow');
+el.toggle('highlight');
+
+*/
+//https://developer.mozilla.org/zh-CN/docs/DOM/Manipulating_the_browser_history  浏览器历史记录
+
+
+//form data,xmlhttprequest2
+//http://99jty.com/?p=1235
+//https://developer.mozilla.org/zh-CN/docs/DOM/XMLHttpRequest/FormData/Using_FormData_Objects
+//https://developer.mozilla.org/zh-CN/docs/Using_files_from_web_applications
+//https://developer.mozilla.org/zh-CN/docs/DOM/File
+//https://developer.mozilla.org/zh-CN/docs/DOM/XMLHttpRequest/Using_XMLHttpRequest
+
+//获取媒体信息 (麦克风摄像头) https://developer.mozilla.org/zh-CN/docs/WebRTC/navigator.getUserMedia 
+
+//创建媒体文件api
+//https://developer.mozilla.org/zh-CN/docs/DOM/window.URL.createObjectURL   
+//https://developer.mozilla.org/zh-CN/docs/Using_files_from_web_applications
+
+
+//匹配媒体查询 https://developer.mozilla.org/en-US/docs/Web/API/window.matchMedia
+	
+//javascript类型数组	
+//http://blog.csdn.net/hfahe/article/details/7421203   
+
+//canvas转文件 
+//https://developer.mozilla.org/zh-CN/docs/DOM/HTMLCanvasElement
+
+//performanceapi
+//http://www.cnblogs.com/_franky/archive/2011/11/07/2238980.html
 	return newFeature
 }());
