@@ -19,8 +19,7 @@
 		/**
 		 * 动态加载样式
 		 *
-		 * @param {object Buffer} 文件内容，一般从input控件中取到
-		 * @param {object String} 读写方式
+		 * @param {object String} 插入的样式信息
 		 * @return null
 		 * @public
 		 */
@@ -160,6 +159,38 @@
 	C.getRandomColor = function () {
 		return '#' + Math.floor(Math.random() * 16777215).toString(16);
 	}
-
+		/**
+		 * 黄褪效果,用于颜色渐变
+		 *
+		 * @param {object Function} 当颜色变化时的回调函数
+		 * @param {object Float Number} 开始颜色
+		 * @param {object Float Number} 结束颜色
+		 * @param {object Float Number} 持续时间
+		 * @return {object Object}
+		 * @public
+		 */	
+	C.YFTfade: function(onchange, startcolour, endcolour, time_elapsed) {
+        var interval = 40;
+        var steps = time_elapsed / interval;
+        var red_change = (startcolour[0] - endcolour[0]) / steps;
+        var green_change = (startcolour[1] - endcolour[1]) / steps;
+        var blue_change = (startcolour[2] - endcolour[2]) / steps;
+        var currentcolour = startcolour;
+        var stepcount = 0;
+        var timer = setInterval(function(){
+			onchange('rgb(' + currentcolour.toString() + ')');
+            currentcolour[0] = parseInt(currentcolour[0] - red_change);
+            currentcolour[1] = parseInt(currentcolour[1] - green_change);
+            currentcolour[2] = parseInt(currentcolour[2] - blue_change);
+            stepcount += 1;
+            if (stepcount >= steps) {
+               onchange('rgb(' + endcolour.toString() + ')');
+                clearInterval(timer);
+            }
+        }, interval);
+    }
+	
+	
+	
 		return C
 	}())
