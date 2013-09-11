@@ -233,6 +233,20 @@
     			}));
     		return '"' + ret.join('') + '"';
     	}
+    	/**
+    	 * 全角字符转半角
+    	 *
+    	 * @param {object String} str
+    	 * @return {object String}
+    	 * @public
+    	 */		
+		//全角空格为12288，半角空格为32
+		//其他字符半角(33-126)与全角(65281-65374)的对应关系是：均相差65248
+		S.toHalfAngle = function (s) {
+			return s.replace(/[\uff01-\uff5e]/g, function (a) {
+				return String.fromCharCode(a.charCodeAt(0) - 65248);
+			}).replace(/\u3000/g, " ");
+		}
 
     	function wraped(str) {
     		this._s = str;
@@ -263,7 +277,7 @@
 
     		}
     	}
-    	addOn(wraped, ['ltrim', 'rtrim', 'trim', 'reverse', 'deleteLast', 'chineseSubstr', 'chineseLen', 'camelize', 'underscored', 'escapeHTML', 'unescapeHTML', 'startsWith', 'ellipsis', 'formalString', 'endsWith'], S, String);
+    	addOn(wraped, ['ltrim', 'rtrim', 'trim', 'reverse', 'deleteLast', 'chineseSubstr', 'chineseLen', 'camelize', 'underscored', 'escapeHTML', 'unescapeHTML', 'startsWith', 'ellipsis', 'formalString', 'endsWith','toHalfAngle'], S, String);
 
     	return S
 
