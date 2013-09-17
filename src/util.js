@@ -90,11 +90,11 @@
 		O = Object(O);
 		len = O.length >>> 0;
 
-		if (getType(callbackfn) != 'Function') {
+		if (Util.getType(callbackfn) != 'Function') {
 			throw new TypeError(callbackfn + ' is not a function');
 		}
 
-		if (getType(O) == 'Array') {
+		if (Util.getType(O) == 'Array') {
 			while (k < len) {
 				if (hasOwn.call(O, k)) {
 					kValue = O[k];
@@ -199,6 +199,66 @@
         }
         return cur;
     };
+	
+	
+	var tplCache = {};
+	
+	Util.render = function(tpl,data){
+	var exec;
+	if(!!!tplCache[tpl]){
+	
+	  exec = "var s='';s+=\'" +//开始拼接字符串
+            tpl.replace(/[\r\t\n]/g, " ")//去掉换行，tab
+            .split("'").join("\\'") //出现属性时,转义包裹属性的引号,因为之后进行函数拼接时引号会出错
+            .replace(/\{\{#([\w]*)\}\}(.*)\{\{\/(\1)\}\}/ig, function (match, $1, $2) {
+                return "\';var i=0,l=data." + $1 + ".length,d=data." + $1 + ";for(;i<l;i++){s+=\'" + $2.replace(/\{\{(\.|this)\}\}/g, "'+d[i]+'").replace(/\{\{([\w]*)\}\}/g, "'+d[i].$1+'") + "\'}s+=\'";
+            })
+            .replace(/\{\{(.+?)\}\}/g, "'+data.$1+'") +//把{{}}包裹的属性替换为对象相应属性的数据
+            "';return s;";
+
+        tplCache[tpl] = exec;
+	
+	}
+	return new Function("data", content)(data);
+	
+	}
+	
+	
+	var readyList = [];//为了触发多个docready做准备
+
+	function ready() {
+		Util.each(readyList, function (i, callback) {
+			callback();
+		});
+		document.removeEventListener('DOMContentLoaded', ready, false);
+	}
+
+	Util.ready = function (callback) {
+		if (document.readyState === 'complete') ////当页面加载状态为完全结束时
+		{
+			return setTimeout(callback, 1);
+		}
+		if (document.addEventListener) {
+			readyList.push(callback);
+			document.addEventListener('DOMContentLoaded', ready, false); //绑定domContentLoad事件
+
+			return;
+		}
+		//对ie进行处理
+		var domready = function () {
+			try {
+				document.documentElement.doScroll('left');
+			} catch (e) {
+				setTimeout(domready, 10);//通过不断测试doScroll方法来..你懂的
+				return;
+			}
+			callback();
+		};
+		domready();
+	},
+	
+	
+	
 
 	return Util
 }
