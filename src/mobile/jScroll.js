@@ -1,13 +1,15 @@
-var Scroller = function (element) {
+var Scroller = function (element,topLimit,bottomLimit,backTime) {
 	this.element = element;
 	this.startTouchY = 0;
-	this.animateTo(0); //设置起点为文档最顶端
+	this.topLimit = topLimit || 0;
+	this.bottomLimit = bottomLimit || 500;
+	this.backTime = backTime || 500;
+	this.animateTo(0); //设置起点为0
 	if (~navigator.userAgent.indexOf('Mobile')) { //测试用
 		element.addEventListener('touchstart', this.handleEvent.bind(this), false);
 		element.addEventListener('touchmove', this.handleEvent.bind(this), false);
 		element.addEventListener('touchend', this.handleEvent.bind(this), false);
 	} else {
-		console.log(2, element)
 		element.addEventListener('mousedown', this.handleEvent.bind(this), false);
 		element.addEventListener('mousemove', this.handleEvent.bind(this), false);
 		element.addEventListener('mouseup', this.handleEvent.bind(this), false);
@@ -78,15 +80,47 @@ Scroller.prototype.onTouchEnd = function (e) {
 
 Scroller.prototype.animateTo = function (offsetY) { //驱动元素位移
 	this.currentOffsetY = offsetY;
+//	console.log(this.currentOffsetY)
 	// 在 webkit-transforms用 translate3d 的动画会得到硬件加速,性能显著提高
 	this.element.style.webkitTransform = 'translate3d(0, ' + offsetY + 'px, 0)';
 }
 
+
+Scroller.prototype.backToTop = function () { //返回最顶部·
+this.moveTo(this.topLimit,this.backTime)
+}
+
+
+Scroller.prototype.backTobottom = function () { //返回最底部
+this.moveTo(-this.bottomLimit,this.backTime)
+}
+
+Scroller.prototype.moveTo = function(offsetY,time) {
+  this.contentOffsetY = offsetY;
+
+  this.element.style.webkitTransition = '-webkit-transform ' + time +// 设置好 transition执行 transform.
+      'ms cubic-bezier(0.33, 0.66, 0.66, 1)';
+  this.element.style.webkitTransform = 'translate3d(0, ' + offsetY + 'px, 0)';
+};
+
+
 Scroller.prototype.doMomentum = function (e) {
+
+//console.log(this.currentOffsetY,this.topLimit,this.bottomLimit)
+	if(this.currentOffsetY >this.topLimit){
+	this.backToTop();
+	return
+	}else if(Math.abs(this.currentOffsetY) >this.bottomLimit){
+	this.backTobottom();
+	return 
+	}
+
+
+
 	// 计算移动距离. 通过 开始位置和时间的比值来实现getEndVelocity方法
 	var velocity = this.getEndVelocity(e); //拿到抬起手指时的速度
 	
-	console.log(' v : ' + velocity)
+	//console.log(' v : ' + velocity)
 	
 	var acceleration = velocity < 0 ? 20 : -20; //加速度
 	var displacement =  - (velocity * velocity) / (2 * acceleration); //惯性距离(s = vot - 0.5at2),t = vo/a
@@ -94,20 +128,10 @@ Scroller.prototype.doMomentum = function (e) {
 	
 	//推导得 s = vo方/2a
 	var time =  - velocity / acceleration; //运动时间
-console.log(displacement,time)
-	// 设置好 transition执行 transform.当然你要计算出transition的停止时间是必须的否则滚动会超出.
-	this.element.style.webkitTransition = '-webkit-transform ' + time*200+
-		'ms cubic-bezier(0.33, 0.66, 0.66, 1)'; //设置变换.变换transform,变换时间time
 
 	var newY = this.currentOffsetY + displacement; //设置终点
 	
-	
-	this.currentOffsetY = newY; //设置终点
-	var _self = this;
-	setTimeout(function(){
-	_self.element.style.webkitTransform = 'translate3d(0, ' + newY + 'px, 0)'; //变换到终点
-	
-	},10)
+	this.moveTo(newY,time*200)
 	
 };
 
@@ -118,9 +142,9 @@ Scroller.prototype.stopMomentum = function () {
 	var transform = new WebKitCSSMatrix(style.webkitTransform);
 	// 清除transition以免作用到下一个transform.
 	
-	console.log('element!'+this.element,this.element.style.webkitTransition)
+	//console.log('element!'+this.element,this.element.style.webkitTransition)
 	this.element.style.webkitTransition = '';
-	console.log('element!'+this.element,this.element.style.webkitTransition)
+//	console.log('element!'+this.element,this.element.style.webkitTransition)
 	// 指定transform到目标位置.
 	this.animateTo(transform.m42);
 }
