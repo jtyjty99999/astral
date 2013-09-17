@@ -404,7 +404,10 @@
 		
 		var storeType;
 		if (window.localStorage) {
-			//带有过期时间的本地存储方案
+			//带有过期时间的本地存储方案,localStorage 的本质是同步,使用时要遵循以下最佳实践
+			//1. 使用 localStorage 的 getItem() 而不是直接通过 key 来读取数据的效率会更好。
+			//2. 频繁调用 localStorage 的 API 会影响性能。
+			//3. 数据的大小不会对 API 调用产生影响，因此应该尽量向一个条目中存储多的内容。
 			storeType = {
 				getItem : function (key) {
 					return window.localStorage.getItem(key);
