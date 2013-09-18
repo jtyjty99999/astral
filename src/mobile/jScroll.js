@@ -5,14 +5,15 @@ var Scroller = function (element,topLimit,bottomLimit,backTime) {
 	this.bottomLimit = bottomLimit || 500;
 	this.backTime = backTime || 500;
 	this.animateTo(0); //设置起点为0
+	var box = element.parentNode;
 	if (~navigator.userAgent.indexOf('Mobile')) { //测试用
-		element.addEventListener('touchstart', this.handleEvent.bind(this), false);
-		element.addEventListener('touchmove', this.handleEvent.bind(this), false);
-		element.addEventListener('touchend', this.handleEvent.bind(this), false);
+		document.body.addEventListener('touchstart', this.handleEvent.bind(this), false);
+		document.body.addEventListener('touchmove', this.handleEvent.bind(this), false);
+		document.body.addEventListener('touchend', this.handleEvent.bind(this), false);
 	} else {
-		element.addEventListener('mousedown', this.handleEvent.bind(this), false);
-		element.addEventListener('mousemove', this.handleEvent.bind(this), false);
-		element.addEventListener('mouseup', this.handleEvent.bind(this), false);
+		document.body.addEventListener('mousedown', this.handleEvent.bind(this), false);
+		document.body.addEventListener('mousemove', this.handleEvent.bind(this), false);
+		document.body.addEventListener('mouseup', this.handleEvent.bind(this), false);
 	}
 }
 
