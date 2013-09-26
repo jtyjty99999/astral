@@ -70,6 +70,43 @@
 			return ret;
 		}
 			/**
+			 * 判断元素在数组中的位置
+			 * @param  {Array}  数组
+			 * @param  {Object} 元素  
+			 * @return  {Boolean}    
+			 */
+		A.indexOf = function (arr,item){
+				if (arr === void 0 || arr === null)  
+					throw new TypeError();  
+	  
+				var t = Object(arr);  
+				var len = t.length >>> 0;  
+				if (len === 0)  
+					return -1;  
+	  
+				var n = 0;  
+				if (arguments.length > 0) {  
+					n = Number(arguments[1]);  
+					if (n !== n)  
+						n = 0;  
+					else if (n !== 0 && n !== (1 / 0) && n !== -(1 / 0))  
+						n = (n > 0 || -1) * Math.floor(Math.abs(n));  
+				}  
+	  
+				if (n >= len)  
+					return -1;  
+	  
+				var k = n >= 0  
+						? n : Math.max(len - Math.abs(n), 0);  
+	  
+				for (; k < len; k++) {  
+					if (k in t && t[k] === searchElement)  
+					return k;  
+				}  
+				return -1;  
+		}	 
+			 
+			/**
 			 * 判断元素是否在数组中
 			 * @param  {Array}  数组
 			 * @param  {Object} 元素  
@@ -77,7 +114,7 @@
 			 */
 		A.contains =  function (arr, item) {
 			//返回-1时~返回0
-			return !!~arr.indexOf(item);
+			return !!~A.indexOf(item);
 		}
 					/**
 			 * 删除数组某个位置的数组项
@@ -95,7 +132,7 @@
 			 * @return  {Boolean}   删除结果
 			 */
 		A.remove =  function (arr, item) {
-			var index = arr.indexOf(item);
+			var index = A.indexOf(item);
 			if (~index)
 				return A.removeAt(arr, index);
 			return false;
