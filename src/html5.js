@@ -159,8 +159,16 @@ define(function () {
 	
 	*/
 	
+	//message与高级应用
+	//
+	//http://www.ibm.com/developerworks/cn/web/1301_jiangjj_html5message/  
+	//http://www.imququ.com/post/ios-none-freeze-timer.html
+	
+	
 	//webworker  
 	//http://www.silverna.org/blog/?p=271
+	//http://www.cnblogs.com/_franky/archive/2010/11/23/1885773.html
+	//http://ucren.com/blog/archives/453  无外链worker
 	
 	//main.js:
 	/*var worker = new Worker('task.js');

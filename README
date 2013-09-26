@@ -103,6 +103,7 @@
 	 ☺isEqual 2013.8.29
 	 ☺sign 2013.8.30
 	 ☺toUint32 2013.8.30
+	 ☺sqrt 2013.9.26
  ☐ StringHelper
  	 ☺random36 2013.9.4
 	 ☺trim
@@ -137,10 +138,12 @@
 	☺isWindow 2013.8.28
 	☺isEmpty 2013.8.28
 	@namespace 2013.8.30
+	@template 2013.9.17
  ☐ Event
  http://www.cnblogs.com/bluedream2009/archive/2010/04/07/1706564.html
 http://www.cnblogs.com/bluedream2009/archive/2010/08/23/1806865.html
 http://www.cnblogs.com/bluedream2009/archive/2010/07/11/1775216.html
+	@customEvent 2013.9.20
  ☐ tester
 对象包装:
  ☐ 考虑对象的包装
@@ -164,6 +167,9 @@ http://www.cnblogs.com/bluedream2009/archive/2010/07/11/1775216.html
  
  async操作 http://99jty.com/?p=1152
  promise库   http://www.silverna.org/blog/?p=279
+ http://www.raychase.net/1329
+ 
+ 
  pjax https://github.com/welefen/pjax
  hashchange+dataChange
  
