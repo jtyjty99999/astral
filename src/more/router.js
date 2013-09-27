@@ -1,4 +1,4 @@
-	/**
+/**
  * @module Router
  *
  * location hash驱动的路由器
@@ -28,7 +28,7 @@
 	//拿到的哈希值为hello
 	//用户也可以使用自定义的router名字
 	//用户同样可以给router传参数.
-	//www.baidu.com/get#/test/a
+	// /test/:a
 	//当hash切换为 www.baidu.com/get#/test/bbbb 也触发
 	Router.on = function (name, path, handler) {
 		if (arguments.length === 2) {
@@ -47,20 +47,31 @@
 		};
 		console.log(routerPackage)
 	}
-
+//'/ada/ww:hello/dsa'转为 /ada/ww/dsa去匹配
 	Router.handleRegisterPath= function(path) {
-		var path = path;
+		var path = path.replace(queryParam,'')
 		return path
 	}
 
+	//Router.on('/ada/ww:hello/dsa',function(hello){alert(hello)})
+	
+	//Router.routePath('www.baidu.com/haha#/ada/ww:cccc/dsa')  //弹出cccc
+	
+	
+	
 	Router.handleRoutePath= function(path) {
-		console.log('beforeParsing' + path)
-		path = path.replace(queryStringReg, '').replace(hashStart, '');
-		console.log('afterParsing' + path);
+	var param = ''
+		path = path.replace(queryStringReg, '').replace(hashStart, '').replace(queryParam,function(a){
+		param = a.substring(1);
+		return ''
+		});
+		//var a = '/ada/ww:hello/dsa' 
+		//转为 /ada/ww/dsa,同时取回参数
+	
 		
 		return {
 			path : path,
-			param : 222
+			param : param
 		}
 	}
 	Router.routeName = function (name) {
