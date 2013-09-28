@@ -14,6 +14,13 @@
 })('FnHelper', function () {
 	var FnHelper = {
 
+		bind : function (fn, context, args) {
+			args = args || [];
+			return function () {
+				Array.prototype.push.apply(args, arguments);
+				return fn.apply(context, args)
+			}
+		},
 		/**
 		 * 函数节流,通过控制函数执行频率提高性能
 		 *
