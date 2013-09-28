@@ -8,6 +8,8 @@ define(function () {
 	
 	
 	};
+	//http://diveintohtml5.info/everything.html all in one的特性检测
+	
 	//http://diveintohtml5.info/table-of-contents.html#canvas
 	//http://www.html5rocks.com/en/
 	
@@ -237,4 +239,4 @@ el.toggle('highlight');
 //performanceapi
 //http://www.cnblogs.com/_franky/archive/2011/11/07/2238980.html
 	return newFeature
-}());
+}())

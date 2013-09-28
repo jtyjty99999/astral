@@ -1,0 +1,29 @@
+{
+  "name": "astral",
+  "version": "0.1.0",
+  "description": "a javascript toolkit",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jtyjty99999/astral.git"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "99",
+  "license": "MIT",
+  "readmeFilename": "README",
+  "gitHead": "6442c843ec52e8953ccf045f6773b0d0715501e4",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-jshint": "~0.6.4"
+  }
+}
