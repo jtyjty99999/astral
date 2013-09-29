@@ -37,14 +37,29 @@ module.exports = function(grunt){
 					module: true
 				}
 			}
-		}
+		},
+		watch: {
+		  scripts: {
+			files: ['**/*.js'],
+			tasks: ['jshint'],
+			options: {
+			  spawn: false,
+			},
+		  },
+		},
+		
     });
 
+	
+		grunt.event.on('watch', function(action, filepath) {
+		  grunt.config('jshint.files', filepath);
+		});
+	
     // 加载插件,注意第一次要用 npm install grunt --save-dev来存储依赖
     grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-concat');
-	
+	grunt.loadNpmTasks('grunt-contrib-watch');
 	
 	grunt.registerTask('test', ['jshint']);
     // 默认任务

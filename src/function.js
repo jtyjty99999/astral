@@ -5,13 +5,13 @@
  */
 (function (name, definition) {
 	if (typeof define == 'function') {
-		define(definition);
+		define(name,[],definition);
 	} else if (typeof module != 'undefined' && module.exports) {
 		module.exports = definition;
 	} else {
 		window[name] = definition;
 	}
-})('FnHelper', function () {
+})('function', function () {
 	var FnHelper = {
 
 		bind : function (fn, context, args) {
@@ -233,5 +233,4 @@
 			},
 	};
 	return FnHelper
-}
-	())
+})

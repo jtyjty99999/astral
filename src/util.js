@@ -6,7 +6,7 @@
 
 (function (name, definition) {
 	if (typeof define == 'function') {
-		define(definition);
+		define(name,[],definition);
 	} else if (typeof module != 'undefined' && module.exports) {
 		module.exports = definition;
 	} else {
@@ -261,5 +261,4 @@
 	
 
 	return Util
-}
-	())
+})

@@ -5,13 +5,13 @@
  */
 (function (name, definition) {
 	if (typeof define == 'function') {
-		define(definition);
+		define(name,[],definition);
 	} else if (typeof module != 'undefined' && module.exports) {
 		module.exports = definition;
 	} else {
 		window[name] = definition;
 	}
-})('Connection', function () {
+})('connection', function () {
 	var Doc = document;
 	var head = DOC.head || DOC.getElementsByTagName("head")[0]; //HEAD元素
 	var W3C = document.dispatchEvent;
@@ -504,5 +504,4 @@
 	}
 	//http://www.cnblogs.com/heyuquan/archive/2013/05/13/3076465.html
 	return C
-}
-	())
+})

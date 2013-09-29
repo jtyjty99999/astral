@@ -1,17 +1,17 @@
 	/**
- * @module arrayHelper
+ * @module array
  *
  * 提供操作数组相关的方法
  */
 (function (name, definition) {
 	if (typeof define == 'function') {
-		define(definition);
+		define(name,[],definition);
 	} else if (typeof module != 'undefined' && module.exports) {
 		module.exports = definition;
 	} else {
 		window[name] = definition;
 	}
-})('arrayHelper', function () {
+})('array', function () {
 
 		var A = function (obj) {
 		return new wraped(obj)
@@ -213,7 +213,7 @@
 			 * @param  {Array}  数组
 			 * @return  {Array}   一维数组
 			 */
-		A.flatten: function(target) {
+		A.flatten=function(target) {
             var result = [];
 			var l = target.length,i = 0;
 			for(;i<l;i++){
@@ -281,5 +281,4 @@
 		
 	return A
 
-}
-	())
+})
