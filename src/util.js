@@ -210,7 +210,7 @@
 	  exec = "var s='';s+=\'" +//开始拼接字符串
             tpl.replace(/[\r\t\n]/g, " ")//去掉换行，tab
             .split("'").join("\\'") //出现属性时,转义包裹属性的引号,因为之后进行函数拼接时引号会出错
-            .replace(/\{\{#([\w]*)\}\}(.*)\{\{\/(\1)\}\}/ig, function (match, $1, $2) {
+            .replace(/\{\{#([\w]*)\}\}(.*)\{\{\/(\1)\}\}/ig, function (match, $1, $2) {// 匹配{{#list}} 与{{/list}},1号捕获组作为循环的length
                 return "\';var i=0,l=data." + $1 + ".length,d=data." + $1 + ";for(;i<l;i++){s+=\'" + $2.replace(/\{\{(\.|this)\}\}/g, "'+d[i]+'").replace(/\{\{([\w]*)\}\}/g, "'+d[i].$1+'") + "\'}s+=\'";
             })
             .replace(/\{\{(.+?)\}\}/g, "'+data.$1+'") +//把{{}}包裹的属性替换为对象相应属性的数据
@@ -258,6 +258,48 @@
 	},
 	
 	
+	Util.formatDate = function (dateObj, formatter) {
+		if (!'getDate' in dateObj)
+			return
+
+			var parser = /%([a-zA-Z])/g;
+
+		function zeroPad(num) {
+			return (+num < 10 ? "0" : "") + num
+		}
+		var formats = {
+			d : function (obj) {
+				return zeroPad(obj.getDate())
+			},
+			m : function (obj) {
+				return zeroPad(obj.getMonth() + 1)
+			},
+			y : function (obj) {
+				return zeroPad(obj.getYear() % 100)
+			},
+			Y : function (obj) {
+				return obj.getFullYear()
+			},
+
+			F : '%Y-%m-%d',
+			D : '%m/%d/%y'
+		}
+
+		return formatter.replace(parser, function (whole, marker) {
+
+			var formatHandler = formats[marker];
+			if (typeof formatHandler == "function") {
+				return formatHandler(dateObj)
+			} else if (typeof formatHandler == "string") {
+
+				return formatData(dateObj, formatHandler)
+			}
+
+			return maker
+
+		})
+
+	}
 	
 
 	return Util
