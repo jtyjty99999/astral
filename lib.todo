@@ -58,6 +58,7 @@
 	 ☺getRandomColor 2013.8.29
 	 ☺YFTfade 2013.9.9
  ☐ FnHelper
+	 ☺bind 2013.10.1
 	 ☺throttle
 	 ☺uncurryThis
 	 ☺curryThis
@@ -139,12 +140,30 @@
 	☺isEmpty 2013.8.28
 	@namespace 2013.8.30
 	@template 2013.9.17
+	@formatDate 2013.10.8
  ☐ Event
  http://www.cnblogs.com/bluedream2009/archive/2010/04/07/1706564.html
 http://www.cnblogs.com/bluedream2009/archive/2010/08/23/1806865.html
 http://www.cnblogs.com/bluedream2009/archive/2010/07/11/1775216.html
 	@customEvent 2013.9.20
  ☐ tester
+   @批量测试用例执行器 2013.10.8
+   @assert 2013.10.8
+   
+#以下为附加组件
+
+
+ ☐ hasher
+   @兼容处理hachchange的路由工具库
+ ☐ loader
+   @符合amd规范的一个简单加载器实现
+ ☐ jScroll
+   @移动端平滑滚动库
+ ☐ quene
+   @类似jquery callback的一个实现
+ ☐ canvasFilter
+   @canvas滤镜库,收集了一些常用的图形与溶图算法  
+   
 对象包装:
  ☐ 考虑对象的包装
  http://www.cnblogs.com/bluedream2009/archive/2011/07/02/2096309.html
