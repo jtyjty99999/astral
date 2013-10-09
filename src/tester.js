@@ -58,6 +58,8 @@
 			return (G.innerHTML === undefined) ? false : true;
 		}
 	}
+	
+	
 
 	//判定器,若expr为真则测试通过
 	T.asserter = function (message, expr) {
@@ -81,6 +83,22 @@
 
 	}
 
+	T.runTimer = function (name, fn) {
+
+		setTimeout(function () {
+
+			var s = +new Date();
+
+			fn();
+
+			var total = +new Date() - s;
+
+			T.printTestResult(name + '执行了:' + total + '毫秒;', 'green')
+
+		}, 15)
+
+	}
+	
 	T.execTestCase = function (caseName, cases) {
 
 		var successCases = 0;

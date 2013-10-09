@@ -52,18 +52,24 @@
 			};
 		},
 		/**
-		 * 函数柯里化
-		 *
+		 * 函数局部套用,返回一个预充填函数后的函数
+		 *eg:
+		 * var sum = function(x,y){return x+y}
+		 * var a = currying(sum,2,3)
+		 * a() //5
 		 * @param {"[object Function]"} fn
 		 * @return {"[object Function]"} fn
 		 * @public
 		 */
-		curryThis : function (f) {
-			return function () {
+		currying : function (f) {
 				var a = Array.prototype.slice.call(arguments);
-				a.unshift(this);
-				return f.apply(null, a);
-			};
+				a.shift();//扔掉f
+				return function () {
+
+					args = arguments.length > 0 ? a.concat(Array.prototype.slice.call(arguments)) : a;
+
+					return f.apply(this, args)
+				}
 		},
 		/**
 		 * 连接两个函数,并覆盖原函数.执行原函数后会执行被连接的函数
