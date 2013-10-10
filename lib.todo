@@ -163,7 +163,9 @@ http://www.cnblogs.com/bluedream2009/archive/2010/07/11/1775216.html
    @类似jquery callback的一个实现
  ☐ canvasFilter
    @canvas滤镜库,收集了一些常用的图形与溶图算法  
-   
+ ☐ validator
+   @验证插件 2013.4.5 
+     
 对象包装:
  ☐ 考虑对象的包装
  http://www.cnblogs.com/bluedream2009/archive/2011/07/02/2096309.html
