@@ -13,55 +13,65 @@
 		window[name] = definition;
 	}
 })('eventHelper', function () { 
-		var E = {};
 
-		E.CustomEvent = function () {
+	var E = {};
 
-			this._listeners = {}
-		}
+	E.CustomEvent = function () {
 
-		//c.on('a',function)
-		//c.on('a b',function(){})
+		this._listeners = {}
+	}
 
-		E.CustomEvent.prototype.on = function (evType, listener) {
-			//多重事件
-			if (evType.indexOf(' ') !== -1) {
+	//c.on('a',function)
+	//c.on('a b',function(){})
 
-				var eventList = evType.split(' ');
+	E.CustomEvent.prototype.on = function (evType, listener) {
+		//多重事件绑定
+		if (evType.indexOf(' ') !== -1) {
 
-				var i = 0,
-				l = eventList.length;
+			var eventList = evType.split(' ');
 
-				for (; i < l; i++) {
+			var i = 0,
+			l = eventList.length;
 
-					if (typeof this._listeners[eventList[i]] === 'undefined') {
+			for (; i < l; i++) {
 
-						this._listeners[eventList[i]] = [];
-
-					}
-
-					this._listeners[eventList[i]].push(listener);
-
-				}
-
-			} else {
-
-				if (typeof this._listeners[evType] === 'undefined') {
-
-					this._listeners[evType] = [];
-				}
-
-				this._listeners[evType].push(listener);
+				this.on(eventList[i], listener)
 
 			}
 
+		} else {
+
+			if (typeof this._listeners[evType] === 'undefined') {
+
+				this._listeners[evType] = [];
+			}
+
+			this._listeners[evType].push(listener);
+
 		}
 
-		//c.off('a',test)
-		//c.off('a')
-		//c.off('all')
+	}
 
-		E.CustomEvent.prototype.off = function (evType, whichListener) {
+	//c.off('a',test)
+	//c.off('a')
+	//c.off('all')
+
+	E.CustomEvent.prototype.off = function (evType, whichListener) {
+
+		if (evType.indexOf(' ') !== -1) { //多重取消事件绑定
+
+			var eventList = evType.split(' ');
+
+			var i = 0,
+			l = eventList.length;
+
+			for (; i < l; i++) {
+
+				this.off(eventList[i], whichListener)
+
+			}
+
+		} else {
 
 			if (whichListener !== undefined) {
 
@@ -100,22 +110,56 @@
 				}
 
 			}
-
 		}
-		//c.trigger('a')
-		//c.trigger('a',1,2,3)
-		//c.trigger('a',[1,2,3])
-		//c.off(abc)
-		//c.trigger('abc')  //event not bind
-		E.CustomEvent.prototype.trigger = function () {
 
-			var arg = arguments,
-			event = null;
+	}
+	//c.trigger('a')
+	//c.trigger('a',1,2,3)
+	//c.trigger('a',[1,2,3])
+	//c.off(abc)
+	//c.trigger('abc')
 
-			if (arg[0] && typeof arg[0] === 'string') {
+	function convertToArray(arrLike) {
+		try {
+			return Array.prototype.slice.call(arrLike);
+		} catch (e) {
+			var arr = [];
+			for (var i = 0, len = arrLike.length; i < len; i++) {
+				arr[i] = arrLike[i];
+			}
+			return arr;
+		}
+	}
+
+	E.CustomEvent.prototype.trigger = function () {
+
+		var arg = arguments,
+		event = null;
+
+		var evType = arg[0];
+
+		if (evType && evType.indexOf(' ') !== -1) { //多重trigger
+
+			var eventList = evType.split(' ');
+
+			var i = 0,
+			l = eventList.length;
+
+			for (; i < l; i++) { //拼装参数
+
+				var argsCache = convertToArray(arg);
+				argsCache.shift();
+				argsCache.unshift(eventList[i]); //把新的事件重新传入trigger函数
+				this.trigger.apply(this, argsCache); //传入新的参数数组,包含事件与参数
+
+			}
+
+		} else {
+
+			if (evType && typeof evType === 'string') {
 
 				event = {
-					type : arg[0],
+					type : evType,
 					arg : []
 				};
 			}
@@ -123,11 +167,12 @@
 			if (typeof event == null) {
 
 				throw new Error("missing event")
+
 			}
 
 			if (this._listeners[event.type] == undefined) { //删除绑定后不应该触发东西
 
-				throw new Error("event not bind")
+				return
 
 			} else {
 
@@ -135,19 +180,19 @@
 
 				if (param !== undefined) {
 
-					if (Object.prototype.toString.call(param) !== "[object Array]") {
+					if (Object.prototype.toString.call(param) !== "[object Array]") {//传入的参数不是数组
 
 						var j = 1,
 						ln = arg.length;
 
 						for (; j < ln; j++) {
 
-							event.arg.push(arg[1]);
+							event.arg.push(arg[j])
 
 						}
 					} else {
 
-						event.arg = param;
+						event.arg = param;//传入数组
 					}
 
 				}
@@ -158,7 +203,7 @@
 
 				i = 0;
 
-				for (; i < n; i++) {
+				for (; i < n; i++) {//循环执行事件回调
 
 					listeners[i].apply(this, event.arg || null)
 				}
@@ -166,6 +211,8 @@
 			}
 
 		}
+
+	}
 	
 	
 	return E
