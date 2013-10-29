@@ -141,7 +141,7 @@
 		})();
 	}
 
-	C.fadeOut(elem, speed, opacity) {
+	C.fadeOut= function(elem, speed, opacity) {
 		speed = speed || 20;
 		opacity = opacity || 0;
 		var val = 100;
@@ -169,7 +169,7 @@
 		 * @return {object Object}
 		 * @public
 		 */	
-	C.YFTfade: function(onchange, startcolour, endcolour, time_elapsed) {
+	C.YFTfade = function(onchange, startcolour, endcolour, time_elapsed) {
         var interval = 40;
         var steps = time_elapsed / interval;
         var red_change = (startcolour[0] - endcolour[0]) / steps;

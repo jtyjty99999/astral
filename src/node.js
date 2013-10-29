@@ -281,7 +281,7 @@
 	Node.nextAll = function( node ) {
 		return mapNode( node, "nextSibling");
 	},
-	Node.prevAll: function( node ) {
+	Node.prevAll =  function( node ) {
 		return mapNode( node, "previousSibling");
 	}
 	/*
@@ -303,13 +303,13 @@
     }
 	//document.defaultView可以得到window 
 	//http://msdn.microsoft.com/en-us/library/ie/ms534331%28v=vs.85%29.aspx (parentWindow for IE8)
-	Node.getWindow: function(node){
+	Node.getWindow = function(node){
         var doc = Node.getDocument(node);
         return doc.parentWindow || doc.defaultView;
     }
 	
 	
-	Node.cleanBlank(node) {
+	Node.cleanBlank = function(node) {
 		var children = node.childNodes,
 		blank = null;
 		for (var i = 0; i < children.length; i++) {
