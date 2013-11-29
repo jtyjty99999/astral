@@ -227,6 +227,43 @@
 
             return result;
         }
+		
+		
+		/**
+		 * 查找指定元素在数组内的索引
+		 * @param {Array} arr
+		 * @param {String|Number|Object|Boolean|Function} val
+		 * @return {Array}索引值的数组
+		 */
+
+		A.findOut = function (arr, val) {
+			var k = [];
+			for (var i = 0, len = arr.length; i < len; i += 1) {
+				if (arr[i] === val) {
+					k.push(i);
+				}
+			}
+			return k;
+		}
+
+		/**
+		 * 清理数组中的空数据。
+		 * @param  {Array}  数组
+		 * @return  {Array}   数组
+		 */
+		A.clean = function (arr) {
+			var result = [],
+			empty = [undefined, null, ''];
+			for (var i = 0, len = arr.length; i < len; i += 1) {
+				if (!(A.findOut(empty, arr[i]).length)) {
+					result.push(arr[i]);
+				}
+			}
+			return result;
+		}
+		
+
+
 
 		
 		function wraped(str) {
@@ -276,7 +313,7 @@
 
 	}
 		
-		addOn(wraped, ['min','max','delRepeat','unique','contains','removeAt','remove','resortArray','merge','union','countToGroup','moveTo'], A)
+		addOn(wraped, ['min','max','delRepeat','unique','contains','removeAt','remove','resortArray','merge','union','countToGroup','moveTo','findOut','clean'], A)
 		
 		
 	return A
