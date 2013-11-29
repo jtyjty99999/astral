@@ -123,9 +123,13 @@
 			}
 		};
 		
+	var likeie = 'filters' in document.createElement('div');	
+
+	
 	C.setOpacity = function setOpacity(elem, opacity) {
-		elem.filters ? elem.style.filter = 'alpha(opacity=' + opacity + ')' : elem.style.opacity = opacity / 100;
+		likeie ? elem.style.filter = 'alpha(opacity=' + opacity + ')' : elem.style.opacity = opacity / 100;
 	}
+	
 	C.fadeIn = function(elem, speed, opacity) {
 		speed = speed || 20;
 		opacity = opacity || 100;
@@ -191,6 +195,81 @@
     }
 	
 	
+	/**
+	 * 设置元素样式
+	 * 通过判断div元素的filters属性来判断是否是ie浏览器，使用alpha设置滤镜，使用styleFloat设置浮动。
+	 * @param {Element} node
+	 * @param {String} property
+	 * @param {String} val
+	 */
 	
+	C.setCss = function(node, property, val){
+		if (likeie) {
+			switch (property) {
+				case "opacity":
+					node.style.filter = "alpha(opacity=" + (val * 100) + ")";
+					if (!node.currentStyle || !node.currentStyle.hasLayout) {
+						node.style.zoom = 1;
+					}//让滤镜生效元素必需是有布局的，這在 IE 中为 layout，利用hasLayout 这个属性来判断，当 hasLayout 为 true 時，filter 的效果才能生效。
+					break;
+				case "float":
+					property = "styleFloat";
+				default:
+					node.style[property] = val;
+			}
+		}
+		else {
+			if (property == "float") {//标准浏览器
+				property = "cssFloat";
+			}
+			node.style[property] = val;
+		}
+	}
+	
+	/**
+	 * 获取元素样式
+	 *
+	 * @param {Element} node
+	 * @param {String} property
+	 */
+	C.getCss =function(node,property){
+	
+	if (likeie) {
+			switch (property) {
+				// 透明度
+				case "opacity":
+					var val = 100;
+					try {
+						val = node.filters['DXImageTransform.Microsoft.Alpha'].opacity;
+					}
+					catch (e) {
+						try {
+							val = node.filters('alpha').opacity;
+						} 
+						catch (e) {
+						}
+					}
+					return val / 100;
+				// 浮动
+				case "float":
+					property = "styleFloat";
+				default:
+					var value = node.currentStyle ? node.currentStyle[property] : null;
+					return (node.style[property] || value);
+			}
+		}
+		else {
+			// 浮动
+			if (property == "float") {
+				property = "cssFloat";
+			}
+			// 获取集合
+			try {
+				var computed = document.defaultView.getComputedStyle(node, "");
+			} 
+			catch (e) {}
+			return node.style[property] || computed ? computed[property] : null;
+		}
+	}
 		return C
 	})
