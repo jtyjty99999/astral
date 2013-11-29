@@ -213,11 +213,70 @@
 		}
 
 	}
-	
+	//修正各种讨厌的不兼容,很多参考的jquery
+    function fix(e) {
+
+    	e = e || E.getEvent();
+    	var originalEvent = e;
+
+    	e.preventDefault = function () { // 在原始事件上运行
+    		if (originalEvent.preventDefault) {
+    			originalEvent.preventDefault();
+    			originalEvent.returnValue = false;
+    		}
+    		　　　
+    	};
+    	e.stopPropagation = function () { // 在原始事件上运行
+    		if (originalEvent.stopPropagation) {
+    			originalEvent.stopPropagation();
+    			originalEvent.cancelBubble = true;
+    		}
+    		　　　
+    	};
+
+    	//fix target
+    	if (!e.target) {
+    		e.target = e.srcElement || document;
+    	}
+    	//fix pageX & pageY
+    	if (e.pageX == null && e.clientX != null) {
+    		var html = document.documentElement;
+    		var body = document.body;
+
+    		e.pageX = e.clientX + (html.scrollLeft || body && body.scrollLeft || 0) - (html.clientLeft || body && body.clientLeft || 0);
+    		e.pageY = e.clientY + (html.scrollTop || body && body.scrollTop || 0) - (html.clientTop || body && body.clientTop || 0);
+    	}
+    	//注意ie里面没有which,只有keycode  http://blog.sina.com.cn/s/blog_6cbbde3f0101757m.html
+
+    	if (!event.which && ((event.charCode || event.charCode === 0)
+    			　 　　　　　　　　　 ? event.charCode : event.keyCode)) {
+    		event.which = event.charCode || event.keyCode
+    	};
+    	//判断左右中键点击
+    	if (!e.which && e.button) {
+    		if (e.button & 1) {
+    			e.which = 1;
+    		} // Left
+    		else if (e.button & 4) {
+    			e.which = 2;
+    		} // Middle
+    		else if (e.button & 2) {
+    			e.which = 3;
+    		} // Right
+    	}
+    	//修正ctrl
+    	if (!event.metaKey && event.ctrlKey) {
+    		event.metaKey = event.ctrlKey;
+    	}
+
+    	//fix relatedTarget
+    	if (e.relatedTarget === undefined) {
+    		e.relatedTarget = e.fromElement || e.toElement;
+    	}
+    	return e;
+    }
 	
 	return E
 })
-
-
 
 
