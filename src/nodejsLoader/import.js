@@ -1,86 +1,111 @@
-	var fs = require('fs');
+				var fs = require('fs');
 
-	//解析import为路径
-	function getImport(line) {
-		//@import   ('core.dom.get');
-		var reg = /\s*@import\s*\(?\s*[\"\']?([a-z_\-\.\/]+)[\"\']?\s*\)?\s*;?/i;
+				//解析import为路径
+				function getImport(line) {
+					//@import   ('core.dom.get');
+					var reg = /\s*@import\s*\(?\s*[\"\']?([a-z_\-\.\/]+)[\"\']?\s*\)?\s*;?/i;
 
-		var matched = line.match(reg);
+					var matched = line.match(reg);
 
-		if (matched && matched[1]) {
-			return matched[1];
-		}
-	}
+					if (matched && matched[1]) {
+						return matched[1];
+					}
+				}
 
-	//把路径转为真实路径
-	function getImportPath(path) {
-		return path.replace(/\./g, '/') + '.js'
-	}
+				//把路径转为真实路径
+				function getImportPath(path) {
+					return path.replace(/\./g, '/') + '.js'
+				}
 
-	//按照行读取文件，返回文件数组
+				
+				
+				
+				var LineByLineReader = require('line-by-line');
+	
+				
+				
+				
+				
+				//按照行读取文件，返回文件数组
 
-	var ndir = require('ndir');
+				var ndir = require('ndir');
 
-	var fileContent = [];
+				var fileContent = [],outName;
 
-	//判断是否为真实路径
+				//判断是否为真实路径
 
-	function isRealPath(path) {
-		if (path.indexOf('.js') !== -1) {
-			return true
-		} else {
-			return false
-		}
-	}
-	//合并文件内容
-	function concatFile(filePath) {
+				function isRealPath(path) {
+					if (path.indexOf('.js') !== -1) {
+						return true
+					} else {
+						return false
+					}
+				}
+				var seed = 1,whole = [],num=0;
+				
+				//合并文件内容
+				function concatFile(filePath) {
+					outName = outName || filePath;
+					var path;
 
-		var path;
+					if (!isRealPath(filePath)) {
+						filePath = getImportPath(getImport(filePath)); //解析路径
+					} else {
+						path = filePath;
+					}
+					
+					
+					var lr = new LineByLineReader(filePath);
 
-		if (!isRealPath(filePath)) {
-			filePath = getImportPath(getImport(filePath)); //解析路径
-		} else {
-			path = filePath;
-		}
-		ndir.createLineReader(filePath)
-		.on('line', function (line) {
-			var content = line.toString();
-			if (content.indexOf('@') !== -1) { //读到import
-				concatFile(content);
-			} else {
-				fileContent.unshift(content);
-			}
+lr.on('error', function (err) {
+    // 'err' contains error object
+});
 
-		})
-		.on('end', function () {
-			console.log('end');
-			ep.emit('line-read-end');
-			//writeFile(fileContent, path) 啥时候能调用?
-		})
-		.on('error', function (err) {
-			console.error(err);
-		});
+lr.on('line', function (line) {
+						var content = line.toString();
+						
+						if (content.indexOf('@') !== -1) { //读到import
+							seed+=1;
+							concatFile(content);
+						} else {
 
-	}
-	//写文件
-	function writeFile(content, path) {
+							fileContent.push(content);
+						}
+});
 
-		console.log(content, path)
+lr.on('end', function () {
+seed-=1;
+num+=1;
+whole[num]=fileContent;
+fileContent = [];
+						if(seed==0){
+						
+						
+						writeFile(fileContent.join('\n'), outName)
+						
+						
+						}
+});}
+			
+				//写文件
+				function writeFile(content, path) {
 
-	}
+					console.log(content, path)
 
-	concatFile('test.js');
+				}
 
-	var EventProxy = require('eventproxy');
+				concatFile('test.js');
+				
 
-	var ep = new EventProxy();
-
-	ep.after('line-read-end', 3, function (list) { //这里的3是我随便写的，但实际是不知道要执行多少次的
-		console.log(fileContent)
-	});
-
-
-
+				
+				
+				
+				
+				
+				
+				
+				
+				
 
 
 /*
