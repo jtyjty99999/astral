@@ -307,6 +307,12 @@
         var doc = Node.getDocument(node);
         return doc.parentWindow || doc.defaultView;
     }
+	/**
+	 * 清理空白节点
+	 * 判断节点的nodeType及nodeValue来清理空节点
+	 * @param {object HTMLElement} node
+	 * @public
+	 */
 	
 	
 	Node.cleanBlank = function(node) {
@@ -319,8 +325,29 @@
 			}
 		}
 	}
+	
+	/**
+	 * 制造一个dom节点
+	 * @param {object String} tagName
+	 * @return {object HtmlElement} node
+	 * @public
+	 */
+	
+	Node.createNode = function (tagName) {
+
+		var node;
+		tagName = tagName.toUpperCase();
+		if (tagName == 'TEXT') {
+			node = document.createTextNode('');
+		} else if (tagName == 'BUFFER') {
+			node = document.createDocumentFragment();
+		} else {
+			node = document.createElement(tagName);
+		}
+		return node;
+	}
 
 		
 		
-	return node
+	return Node
 })
