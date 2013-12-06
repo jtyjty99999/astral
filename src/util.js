@@ -255,50 +255,6 @@
 			callback();
 		};
 		domready();
-	},
-	
-	
-	Util.formatDate = function (dateObj, formatter) {
-		if (!'getDate' in dateObj)
-			return
-
-			var parser = /%([a-zA-Z])/g;
-
-		function zeroPad(num) {
-			return (+num < 10 ? "0" : "") + num
-		}
-		var formats = {
-			d : function (obj) {
-				return zeroPad(obj.getDate())
-			},
-			m : function (obj) {
-				return zeroPad(obj.getMonth() + 1)
-			},
-			y : function (obj) {
-				return zeroPad(obj.getYear() % 100)
-			},
-			Y : function (obj) {
-				return obj.getFullYear()
-			},
-
-			F : '%Y-%m-%d',
-			D : '%m/%d/%y'
-		}
-
-		return formatter.replace(parser, function (whole, marker) {
-
-			var formatHandler = formats[marker];
-			if (typeof formatHandler == "function") {
-				return formatHandler(dateObj)
-			} else if (typeof formatHandler == "string") {
-
-				return formatData(dateObj, formatHandler)
-			}
-
-			return maker
-
-		})
-
 	}
 	
 

@@ -256,7 +256,9 @@
 	 * obj.maxthon 傲游浏览器版本号
 	 * obj.safari safari浏览器版本号
 	 * obj.isSupportFixed 判断是否支持position.fixed 
-	 */
+	 * http://browserhacks.com/这里有大量hack	
+	*/
+	
 	Browser.browser = function(ua){
 	var res = {
             chrome : /chrome\/(\d+\.\d+)/i.test(ua) ? + RegExp.$1 : undefined,
@@ -276,6 +278,36 @@
         res.isSupportFixed = !res.ie || res.ie >= 7;
         return res;
 	}
+	
+	
+	
+	
+	
+	//https://github.com/maxzhang/maxzhang.github.com/issues/7
+	Browser.isSupportFixed = function () {
+		var userAgent = window.navigator.userAgent,
+		ios = userAgent.match(/(iPad|iPhone|iPod)\s+OS\s([\d_\.]+)/),
+		ios5below = ios && ios[2] && (parseInt(ios[2].replace(/_/g, '.'), 10) < 5),
+		operaMini = /Opera Mini/i.test(userAgent),
+		body = document.body,
+		div,
+		isFixed;
+
+		div = document.createElement('div');
+		div.style.cssText = 'display:none;position:fixed;z-index:100;';
+		body.appendChild(div);
+		isFixed = window.getComputedStyle(div).position === 'fixed';
+		body.removeChild(div);
+		div = null;
+
+		return !!(isFixed || ios5below || operaMini);
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	
