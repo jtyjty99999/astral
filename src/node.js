@@ -347,7 +347,61 @@
 		return node;
 	}
 
-		
-		
+	/**
+	 * 制造一个debug dom节点
+	 *   try{
+     *        debug[type](text);
+     *         }catch(e){
+     *            }
+	 * debug函数运行时调用createDebug
+	 * @param {object String} text 调试信息
+	 * @param {object String} debugOnPage 是否显示在页面上
+	 * @param {object String} type 调试类型
+	 * @public
+	 */		
+	Node.createDebug = function(text,debugOnPage,type){
+                type = type||'log';
+                //输出到页面
+                if(debugOnPage){
+                        var sDivId = 'debugDiv';
+                        var oDocument = window.top.document; //https://developer.mozilla.org/zh-CN/docs/Web/API/Window.top  返回最顶层引用
+                        var oDebugDiv = oDocument.getElementById(sDivId);
+                        if(!oDebugDiv){
+                                oDebugDiv = oDocument.createElement("DIV");
+                                oDebugDiv.id = sDivId;
+                                oDebugDiv.innerHTML = '<a href="javascript:void(0)" onclick="this.parentNode.style.display=\'none\'">关闭</a>&nbsp;<a href="javascript:void(0)" onclick="this.parentNode.getElementsByTagName(\'DIV\')[0].innerHTML=\'\';">清空</a>&nbsp;<a href="javascript:void(0)" onclick="this.parentNode.style.height=\''+oDocument.body.offsetHeight+'px\';">全屏</a>&nbsp;<a href="javascript:void(0)" onclick="this.parentNode.style.height=\'100px\';">恢复</a><div></div>';
+                                oDebugDiv.style.position = 'absolute';
+                                oDebugDiv.style.width = (oDocument.body.offsetWidth-20)+'px';
+                                oDebugDiv.style.left = 0;
+                                oDebugDiv.style.top = 0;
+                                oDebugDiv.style.right = 0;
+                                oDebugDiv.style.height = '100px';
+                                oDebugDiv.style.backgroundColor = '#aaa';
+                                oDebugDiv.style.fontSize = '12px';
+                                oDebugDiv.style.padding = '10px';
+                                oDebugDiv.style.overflow = 'auto';
+                                oDebugDiv.style.zIndex = 999;
+                                oDocument.body.appendChild(oDebugDiv);
+                        }else{
+                                oDebugDiv.style.display = 'block';
+                        }
+                        oDebugDiv.getElementsByTagName('DIV')[0].innerHTML = type+":"+text+ '<br/>';
+                }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 	return Node
 })

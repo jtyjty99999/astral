@@ -97,7 +97,7 @@
     this.PreDraw(new Date(this.Year + 1, this.Month - 1, 1));
   },
 	
-	*
+	*/
 	
 	return D
 })
