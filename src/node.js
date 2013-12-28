@@ -144,6 +144,29 @@
 		iObj.document.writeln(content);
 		iObj.document.close();
 	}
+	
+	/**
+	 * Iframe动态自适应高度(同域)
+	 * 同域下父页面内的js能获取到iframe页面的高度
+	 * window.setInterval(function(){reinitIframe(iframe1)}, 200);
+	 * @param {object String} id iframe元素id
+	 * @return null
+	 * @public
+	*/
+
+	Node.reinitIframe = function(id) {
+		var iframe = document.getElementById(id);
+		try {
+			var bHeight = iframe.contentWindow.document.body.scrollHeight;
+			var dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+			var height = Math.max(bHeight, dHeight);
+			iframe.height = height;
+			////ie中，若用iframe.style设置高度，属性改了，框架高度没变，用height方法改动样式的高度
+		} catch (ex) {}
+	}
+
+	
+	
 
 	var insertAdjacentNode = function (target, swhere, node) {
 		switch (swhere) {
