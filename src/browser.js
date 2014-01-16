@@ -256,7 +256,10 @@
 	 * obj.maxthon 傲游浏览器版本号
 	 * obj.safari safari浏览器版本号
 	 * obj.isSupportFixed 判断是否支持position.fixed 
-	 * http://browserhacks.com/这里有大量hack	
+	 * http://browserhacks.com/这里有大量hack
+	 * ie11不可用此方法了，改变了ua，注意 !(window.ActiveXObject) && "ActiveXObject" in window
+	 * http://social.microsoft.com/Forums/zh-CN/10d1f40a-bb46-419f-9116-d05b67e5dfad/useragentie11?forum=267
+	 * 
 	*/
 	
 	Browser.browser = function(ua){
