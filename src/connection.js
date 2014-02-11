@@ -317,6 +317,15 @@
 		 * 将XML字符串解析为对象
 		 * @param {object String} XML字符串
 		 * @return {object Object} XML对象
+		 * 下面代码可以用来载入一个xml文件。
+		 * if (typeof document.implementation.createDocument != "undefined") {
+			docObj = document.implementation.createDocument("", "", null);
+			}
+			else if (window.ActiveXObject) {
+			docObj = new ActiveXObject("Microsoft.XMLDOM");
+			}
+			
+			docObj.load("books.xml");
 		 */
 		parseXML : function (data, xml) {
 			var tmp;
