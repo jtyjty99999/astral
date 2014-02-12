@@ -20,6 +20,18 @@
 //http://www.cnblogs.com/enein/archive/2012/08/23/2651312.html
 //http://blog.jobbole.com/38614/
 //http://lodash.com/docs#at
+
+  OO.keys = function(map) {
+    var keys = [];
+    for (var key in map) keys.push(key);
+    return keys;
+  };
+  OO.values = function(map) {
+    var values = [];
+    for (var key in map) values.push(map[key]);
+    return values;
+  };
+
 	return OO
 }
 	())
