@@ -23,6 +23,12 @@
 	var clientTop = html.clientTop || body.clientTop || 0,
 	clientLeft = html.clientLeft || body.clientLeft || 0;
 
+
+	//window.pageYOffset 被所有浏览器支持除了 IE 6, IE 7, IE 8, 不关doctype的事， 注IE9 开始支持此属性。
+	//window.scrollY 被Firefox, Google Chrome , Safari支持 不关doctype的事, 注IE9 不支持此属性
+	//在（quirk 模式）的时候 document.body.scrollTop 在 Internet Explorer, Firefox, Opera, Google Chrome Safari 返回正确的值。
+	//在（quirk 模式）的时候 document.documentElement.scrollTop 永远是零
+	//非quirk模式的时候 document.documentElement.scrollTop Internet Explorer, Firefox and Opera 返回正确的值 但是在 Google Chrome ，Safari 中永远是零
 	Position.getScroll = function () {
 		var x = (pageXjudge !== undefined) ? pageXjudge : (html || body.parentNode || body).scrollLeft;
 		var y = (pageYjudge !== undefined) ? pageYjudge : (html || body.parentNode || body).scrollTop;
