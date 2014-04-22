@@ -612,7 +612,7 @@
 	 * @return {Boolean} true/false
 	 */
 	 
-	Browser.supportCss3(style) {
+	Browser.supportCss3 = function(style) {
 		var prefix = ['webkit', 'Moz', 'ms', 'o'],
 			i,
 			humpString = [],
