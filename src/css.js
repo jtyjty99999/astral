@@ -159,6 +159,21 @@
 			}
 		})();
 	}
+	//获取滚动条宽度，用于计算
+	c.getScrollbarWidth=function() {
+		var oP = document.createElement('p'),
+			styles = {
+				width: '100px',
+				height: '100px',
+				overflowY: 'scroll'
+			}, i, scrollbarWidth;
+		for (i in styles) oP.style[i] = styles[i];
+		document.body.appendChild(oP);
+		scrollbarWidth = oP.offsetWidth - oP.clientWidth;
+		oP.remove();
+		return scrollbarWidth;
+	}
+	
 	//#000000到#ffffff转为十进制后随机再转成十六进制
 	C.getRandomColor = function () {
 		return '#' + Math.floor(Math.random() * 16777215).toString(16);
