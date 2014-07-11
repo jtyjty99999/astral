@@ -201,44 +201,44 @@
 			isiphone : function () {
 				return find('iphone');
 			},
-			isipod = function () {
+			isipod : function () {
 				return find('ipod');
 			},
-			isipad = function () {
+			isipad : function () {
 				return find('ipad');
 			},
-			isandroid = function () {
+			isandroid : function () {
 				return find('android');
 			},
-			isandroidPhone = function () {
+			isandroidPhone : function () {
 				return support.isandroid() && find('mobile');
 			},
-			isandroidTablet = function () {
-				return support.android() && !find('mobile');
+			isandroidTablet : function () {
+				return support.isandroid() && !find('mobile');
 			},
-			isblackberry = function () {
+			isblackberry : function () {
 				return find('blackberry' || find('bb10' || find('rim')));
 			},
-			isblackberryPhone = function () {
-				return support.blackberry() && !find('tablet');
+			isblackberryPhone : function () {
+				return support.isblackberry() && !find('tablet');
 			},
-			isblackberryTablet = function () {
-				return support.blackberry() && find('tablet');
+			isblackberryTablet : function () {
+				return support.isblackberry() && find('tablet');
 			},
-			iswindows = function () {
+			iswindows : function () {
 				return find('windows');
 			},
-			iswindowsPhone = function () {
-				return support.windows() && find('phone');
+			iswindowsPhone : function () {
+				return support.iswindows() && find('phone');
 			},
-			iswindowsTablet = function () {
-				return support.windows() && find('touch');
+			iswindowsTablet : function () {
+				return support.iswindows() && find('touch');
 			},
-			ismobile = function () {
-				return support.androidPhone() || support.iphone() || support.ipod() || support.windowsPhone() || support.blackberryPhone();
+			ismobile : function () {
+				return support.isandroidPhone() || support.isiphone() || support.isipod() || support.iswindowsPhone() || support.isblackberryPhone();
 			},
-			istablet = function () {
-				return support.ipad() || support.androidTablet() || support.blackberryTablet() || support.windowsTablet();
+			istablet : function () {
+				return support.isipad() || support.isandroidTablet() || support.isblackberryTablet() || support.iswindowsTablet();
 			},
 		}
 		return support
