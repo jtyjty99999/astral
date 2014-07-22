@@ -635,6 +635,20 @@
 	 
 		return false;
 	}
+	/*http://www.cnblogs.com/mrsunny/archive/2012/09/04/2670727.html*/
+	Browser.Performance = function (){
+	   var perf = (window.webkitPerformance ? window.webkitPerformance : window.msPerformance ),
+	      points = ['navigationStart','unloadEventStart','unloadEventEnd','redirectStart','redirectEnd','fetchStart','domainLookupStart','connectStart','requestStart','responseStart','responseEnd','domLoading','domInteractive','domContentLoadedEventEnd','domComplete','loadEventStart','loadEventEnd'];
+	   var timing = pref.timing;
+	   perf = perf  ? perf : window.performance;
+	   if( perf  && timing ) {
+	      var arr = [];
+	      var navigationStart = timing[points[0]];
+	      for(var i=0,l=points.length;i<l;i++){
+	         arr[i] = timing[points[i]] - navigationStart;
+	      }
+	   return arr
+	}
 	
 	
 	return Browser
