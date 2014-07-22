@@ -240,6 +240,37 @@
 			node.style[property] = val;
 		}
 	}
+
+	/*解析css声明的工具类*/
+	function cssFormat(c){
+	  //块级定义
+	  var cssBlockDefitionReg = /[^{]*\s*{([^}]*)}\s*/g;
+	  var cssBlockDefition;
+	 
+	  //样式定义
+	  var styleDefition;
+	  var styleDefitionReg = /([^:\{\}\s]+)\s*:\s*([^;]+);/g;
+	  var styleClaration;
+	 
+	  //拿到块级定义
+	  while(cssBlockDefition = cssBlockDefitionReg.exec(c)){
+	    //拿到样式定义
+	    styleDefition = cssBlockDefition[1];
+	 
+	    console.log("样式定义块是: " + cssBlockDefition[0]);
+	 
+	    while(styleClaration = styleDefitionReg.exec(styleDefition)){
+	      console.log("属性是： " + styleClaration[1]);
+	      console.log("值是： " + styleClaration[2]);
+	    }
+	 
+	    console.log("\n\n");
+	  }
+	}
+	//var css = "body{color: red; font-size: 12px;} .banner{ width: 12px; height: 16px; background: url(img/banner.png);}";
+
+	//cssFormat(css);
+	
 	
 	/**
 	 * 获取元素样式
