@@ -650,6 +650,73 @@
 	   return arr
 	}
 	
+	Browser.parseURL = function (url) {
+	    var a =  document.createElement('a');
+	    a.href = url;
+	    return {
+	        source: url,
+	        protocol: a.protocol.replace(':',''),
+	        host: a.hostname,
+	        port: a.port,
+	        query: a.search,
+	        params: (function(){
+	            var ret = {},
+	                seg = a.search.replace(/^\?/,'').split('&'),
+	                len = seg.length, i = 0, s;
+	            for (;i<len;i++) {
+	                if (!seg[i]) { continue; }
+	                s = seg[i].split('=');
+	                ret[s[0]] = s[1];
+	            }
+	            return ret;
+	        })(),
+	        file: (a.pathname.match(/\/([^\/?#]+)$/i) || [,''])[1],
+	        hash: a.hash.replace('#',''),
+	        path: a.pathname.replace(/^([^\/])/,'/$1'),
+	        relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [,''])[1],
+	        segments: a.pathname.replace(/^\//,'').split('/')
+	    };
+	}
 	
+	Browser.querystring= function (qs){ 
+		this.p={}; 
+		if(!qs) 
+			url=location.search; 
+		if(qs) { 
+			var b = qs.indexOf('?'); 
+			var e = qs.indexOf('#'); 
+			if(b >= 0){ 
+				qs = e < 0 ? qs.substr(b + 1) : qs.substring(b + 1,e); 
+				if(qs.length > 0){ 
+					qs = qs.replace(/\+/g, ' '); 
+					var a = qs.split('&'); 
+					for (var i = 0; i < a.length; i++) { 
+						var t = a[i].split('='); 
+						var n = decodeURIComponent(t[0]); 
+						var v = (t.length == 2) ? decodeURIComponent(t[1]) : n; 
+						this.p[n] = v; 
+					} 
+				} 
+			} 
+		} 
+		this.set = function(name, value){ 
+			this.p[name] = value; 
+			return this; 
+		}; 
+		this.get = function(name, def){ 
+			var v = this.p[name]; 
+			return (v != null) ? v : def; 
+		}; 
+		this.has = function(name) { 
+			return this.p[name] != null; 
+		}; 
+		this.toStr = function() { 
+			var r='?'; 
+			for (var k in this.p) { 
+				r += encodeURIComponent(k) + '=' + encodeURIComponent(this.p[k]) + '&'; 
+			} 
+			return r; 
+		}; 
+	}
 	return Browser
 })
