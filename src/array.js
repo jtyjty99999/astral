@@ -315,6 +315,37 @@
 		
 		addOn(wraped, ['min','max','delRepeat','unique','contains','removeAt','remove','resortArray','merge','union','countToGroup','moveTo','findOut','clean'], A)
 		
+	/*数组合并并去重且去掉undefined及
+	var concat = (function () {
+			// concat arr1 and arr2 without duplication.
+			var concat_ = function (arr1, arr2) {
+				for (var i = arr2.length - 1; i >= 0; i--) {
+					// escape undefined and null element
+					if (arr2[i] === undefined || arr2[i] === null) {
+						continue;
+					}
+					// recursive deal with array element
+					// can also handle multi-level array wrapper
+					if (Object.prototype.toString.call(arr2[i]) === '[object Array]') {
+						for (var j = arr2[i].length - 1; j >= 0; j--) {
+							concat_(arr1, arr2[i][j]);
+						}
+						continue;
+					}
+					arr1.indexOf(arr2[i]) === -1 ? arr1.push(arr2[i]) : 0;
+				}
+			};
+			// concat arbitrary arrays.
+			// Instead of alter supplied arrays, return a new one.
+			return function (arr) {
+				var result = arr.slice();
+				for (var i = arguments.length - 1; i >= 1; i--) {
+					concat_(result, arguments[i]);
+				}
+				return result;
+			};
+		}
+			());*/
 		
 	return A
 
