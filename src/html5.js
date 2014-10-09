@@ -238,5 +238,43 @@ el.toggle('highlight');
 
 //performanceapi
 //http://www.cnblogs.com/_franky/archive/2011/11/07/2238980.html
+//setImmediate兼容
+var setImmediate=setImmediate||function(handle){
+  var args=Array.prototype.slice.call(arguments,1);
+  var invoke=function(){ handle.apply(self,args); };
+  if(window.Promise)
+    Promise.resolve().then(invoke);
+  else if(!-[1,]){
+    var head=document.documentElement.firstChild;
+    var script=document.createElement("script");
+    script.onreadystatechange=function(){
+      script.onreadystatechange=null;
+      head.removeChild(script);
+      invoke();
+    };
+    head.appendChild(script);
+  }else setTimeout(invoke);
+};
+
+var t=new Date;
+setImmediate(function(){
+  console.log(Date.now()-t);
+});
+//原生 sha1  http://www.web-tinker.com/article/20721.html
+//node irtator,treewalker 遍历元素  http://www.web-tinker.com/article/20300.html http://www.web-tinker.com/article/20301.html
+//土电话  http://www.web-tinker.com/article/20320.html
+//animate 的js接口 http://www.web-tinker.com/article/20338.html
+
+//cors,postmessage,eventsource相关
+//http://www.ibm.com/developerworks/cn/web/1301_jiangjj_html5message/
+//https://developer.mozilla.org/zh-CN/docs/Server-sent_events/Using_server-sent_events
+//https://github.com/Yaffle/EventSource
+ 
+//ajax分段上传
+//http://www.atatech.org/article/detail/11502/0
+ 
+//cors
+//http://www.atatech.org/article/detail/9010/0
+
 	return newFeature
 }())
