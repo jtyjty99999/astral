@@ -227,7 +227,10 @@
 
             return result;
         }
-		
+        /*一次打遍
+var flatten = function (array){
+  return Array.prototype.concat.apply([],array)
+}*/
 		
 		/**
 		 * 查找指定元素在数组内的索引
