@@ -83,6 +83,7 @@
 	 *判断页面是否最小化
 	 * @return {object Boolean}
 	 * thanks to franky
+	 * http://stackoverflow.com/questions/1060008/is-there-a-way-to-detect-if-a-browser-window-is-not-currently-active  判断页面是否active，这是另一种场景。
 	 */
 	Browser.isPageMinimized = function () { //判断窗口是否最小化.
 		/*
