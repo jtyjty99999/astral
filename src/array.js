@@ -317,7 +317,26 @@ var flatten = function (array){
 	}
 		
 		addOn(wraped, ['min','max','delRepeat','unique','contains','removeAt','remove','resortArray','merge','union','countToGroup','moveTo','findOut','clean'], A)
+	
+	/* 参考排序法，var order = [2,3,1]; var arr = [1,2,3,1,3,2]  return [2,2,3,3,1,1]
+		function sortArrayByArray(arr, order,key) {
+			var res = [],unsorted,placeholder;
+			order.forEach(function(d) {
 		
+				for (var i = 0, l = arr.length; i < l; i++) {
+		
+					unsorted = key?arr[i][key]:arr[i];
+					placeholder = key?arr[i]:unsorted;
+					if (unsorted === d){
+						res.push(placeholder)
+					}
+				};
+		
+		
+			})
+			return res
+		
+		}*/		
 	/*数组合并并去重且去掉undefined及
 	var concat = (function () {
 			// concat arr1 and arr2 without duplication.
